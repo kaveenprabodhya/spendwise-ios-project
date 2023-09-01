@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		944958982AA25ED40000DD47 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944958972AA25ED40000DD47 /* Launch Screen.storyboard */; };
 		9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */; };
 		9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFCC2AA20B8900A193DB /* ContentView.swift */; };
 		9453FFCF2AA20B8F00A193DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9453FFCE2AA20B8F00A193DB /* Assets.xcassets */; };
@@ -34,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		944958942AA25C4D0000DD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		944958972AA25ED40000DD47 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		9453FFC72AA20B8900A193DB /* spendwise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spendwise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseApp.swift; sourceTree = "<group>"; };
 		9453FFCC2AA20B8900A193DB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +74,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		942D22002AA2424200E3CF9D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9453FFCC2AA20B8900A193DB /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		942D22012AA2425900E3CF9D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		942D22022AA2426A00E3CF9D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		9453FFBE2AA20B8800A193DB = {
 			isa = PBXGroup;
 			children = (
@@ -94,10 +119,14 @@
 		9453FFC92AA20B8900A193DB /* spendwise */ = {
 			isa = PBXGroup;
 			children = (
+				944958942AA25C4D0000DD47 /* Info.plist */,
+				942D22022AA2426A00E3CF9D /* ViewModels */,
+				942D22012AA2425900E3CF9D /* Models */,
+				942D22002AA2424200E3CF9D /* Views */,
 				9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */,
-				9453FFCC2AA20B8900A193DB /* ContentView.swift */,
 				9453FFCE2AA20B8F00A193DB /* Assets.xcassets */,
 				9453FFD02AA20B8F00A193DB /* Preview Content */,
+				944958972AA25ED40000DD47 /* Launch Screen.storyboard */,
 			);
 			path = spendwise;
 			sourceTree = "<group>";
@@ -231,6 +260,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				944958982AA25ED40000DD47 /* Launch Screen.storyboard in Resources */,
 				9453FFD22AA20B8F00A193DB /* Preview Assets.xcassets in Resources */,
 				9453FFCF2AA20B8F00A193DB /* Assets.xcassets in Resources */,
 			);
@@ -417,13 +447,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"spendwise/Preview Content\"";
+				DEVELOPMENT_TEAM = JKJR3RLZTZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = spendwise/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpendWise;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,13 +481,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"spendwise/Preview Content\"";
+				DEVELOPMENT_TEAM = JKJR3RLZTZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = spendwise/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpendWise;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
