@@ -35,6 +35,8 @@
 		946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCA2AA3651800474ABE /* TransactionView.swift */; };
 		946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCC2AA3654300474ABE /* InsightsView.swift */; };
 		946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCE2AA3656F00474ABE /* FinancialReportView.swift */; };
+		946AADD22AA369E900474ABE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD12AA369E900474ABE /* Constants.swift */; };
+		946AADD42AA3D33000474ABE /* CurvedSideRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		946AADCA2AA3651800474ABE /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
 		946AADCC2AA3654300474ABE /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		946AADCE2AA3656F00474ABE /* FinancialReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialReportView.swift; sourceTree = "<group>"; };
+		946AADD12AA369E900474ABE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurvedSideRectangle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,7 @@
 		9453FFC92AA20B8900A193DB /* spendwise */ = {
 			isa = PBXGroup;
 			children = (
+				946AADD02AA3697E00474ABE /* Utilities */,
 				944958942AA25C4D0000DD47 /* Info.plist */,
 				942D22022AA2426A00E3CF9D /* ViewModels */,
 				942D22012AA2425900E3CF9D /* Models */,
@@ -294,6 +299,15 @@
 				946AADA32AA3484200474ABE /* ForgetPasswordView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		946AADD02AA3697E00474ABE /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				946AADD12AA369E900474ABE /* Constants.swift */,
+				946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -433,6 +447,7 @@
 				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
 				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
 				9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */,
+				946AADD22AA369E900474ABE /* Constants.swift in Sources */,
 				946AADC92AA363CF00474ABE /* BudgetView.swift in Sources */,
 				946AADBF2AA3630100474ABE /* AccountView.swift in Sources */,
 				946AADB42AA3602A00474ABE /* OnboardingView.swift in Sources */,
@@ -449,6 +464,7 @@
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
 				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
+				946AADD42AA3D33000474ABE /* CurvedSideRectangle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
