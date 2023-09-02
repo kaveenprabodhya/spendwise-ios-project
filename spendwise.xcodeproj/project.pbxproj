@@ -16,6 +16,25 @@
 		9453FFDC2AA20B9000A193DB /* spendwiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFDB2AA20B9000A193DB /* spendwiseTests.swift */; };
 		9453FFE62AA20B9000A193DB /* spendwiseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFE52AA20B9000A193DB /* spendwiseUITests.swift */; };
 		9453FFE82AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */; };
+		946AADA02AA347A800474ABE /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AAD9F2AA347A800474ABE /* SigninView.swift */; };
+		946AADA22AA347D800474ABE /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADA12AA347D800474ABE /* SignupView.swift */; };
+		946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADA32AA3484200474ABE /* ForgetPasswordView.swift */; };
+		946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADAC2AA34C5700474ABE /* HomeView.swift */; };
+		946AADB22AA35FFD00474ABE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB12AA35FFD00474ABE /* NotificationView.swift */; };
+		946AADB42AA3602A00474ABE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB32AA3602A00474ABE /* OnboardingView.swift */; };
+		946AADB72AA3607100474ABE /* NewExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB62AA3607100474ABE /* NewExpenseView.swift */; };
+		946AADB92AA360E900474ABE /* DetailExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB82AA360E900474ABE /* DetailExpenseView.swift */; };
+		946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBA2AA3614E00474ABE /* NewIncomeView.swift */; };
+		946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */; };
+		946AADBF2AA3630100474ABE /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBE2AA3630100474ABE /* AccountView.swift */; };
+		946AADC12AA3632F00474ABE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC02AA3632F00474ABE /* ProfileView.swift */; };
+		946AADC32AA3633E00474ABE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC22AA3633E00474ABE /* SettingsView.swift */; };
+		946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC42AA3636600474ABE /* NewBudgetView.swift */; };
+		946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC62AA3639200474ABE /* DetailBudgetView.swift */; };
+		946AADC92AA363CF00474ABE /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC82AA363CF00474ABE /* BudgetView.swift */; };
+		946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCA2AA3651800474ABE /* TransactionView.swift */; };
+		946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCC2AA3654300474ABE /* InsightsView.swift */; };
+		946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCE2AA3656F00474ABE /* FinancialReportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +68,25 @@
 		9453FFE12AA20B9000A193DB /* spendwiseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = spendwiseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9453FFE52AA20B9000A193DB /* spendwiseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseUITests.swift; sourceTree = "<group>"; };
 		9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		946AAD9F2AA347A800474ABE /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
+		946AADA12AA347D800474ABE /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		946AADA32AA3484200474ABE /* ForgetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordView.swift; sourceTree = "<group>"; };
+		946AADAC2AA34C5700474ABE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		946AADB12AA35FFD00474ABE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		946AADB32AA3602A00474ABE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		946AADB62AA3607100474ABE /* NewExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseView.swift; sourceTree = "<group>"; };
+		946AADB82AA360E900474ABE /* DetailExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailExpenseView.swift; sourceTree = "<group>"; };
+		946AADBA2AA3614E00474ABE /* NewIncomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIncomeView.swift; sourceTree = "<group>"; };
+		946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeDetailView.swift; sourceTree = "<group>"; };
+		946AADBE2AA3630100474ABE /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		946AADC02AA3632F00474ABE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		946AADC22AA3633E00474ABE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		946AADC42AA3636600474ABE /* NewBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBudgetView.swift; sourceTree = "<group>"; };
+		946AADC62AA3639200474ABE /* DetailBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBudgetView.swift; sourceTree = "<group>"; };
+		946AADC82AA363CF00474ABE /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		946AADCA2AA3651800474ABE /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
+		946AADCC2AA3654300474ABE /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		946AADCE2AA3656F00474ABE /* FinancialReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialReportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,8 +117,9 @@
 		942D22002AA2424200E3CF9D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				946AADAB2AA34B9B00474ABE /* MainVIew */,
+				946AADA52AA348CF00474ABE /* OnboardingView */,
 				9453FFCC2AA20B8900A193DB /* ContentView.swift */,
-				944958992AA280E80000DD47 /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -157,6 +196,104 @@
 				9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */,
 			);
 			path = spendwiseUITests;
+			sourceTree = "<group>";
+		};
+		946AADA52AA348CF00474ABE /* OnboardingView */ = {
+			isa = PBXGroup;
+			children = (
+				946AADAF2AA35E8400474ABE /* Onboarding */,
+				946AADB02AA35EA900474ABE /* Authentication */,
+			);
+			path = OnboardingView;
+			sourceTree = "<group>";
+		};
+		946AADA62AA349CD00474ABE /* Expense */ = {
+			isa = PBXGroup;
+			children = (
+				946AADB62AA3607100474ABE /* NewExpenseView.swift */,
+				946AADB82AA360E900474ABE /* DetailExpenseView.swift */,
+			);
+			path = Expense;
+			sourceTree = "<group>";
+		};
+		946AADA72AA349D700474ABE /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				946AADC42AA3636600474ABE /* NewBudgetView.swift */,
+				946AADC62AA3639200474ABE /* DetailBudgetView.swift */,
+				946AADC82AA363CF00474ABE /* BudgetView.swift */,
+			);
+			path = Budget;
+			sourceTree = "<group>";
+		};
+		946AADA82AA349E700474ABE /* Income */ = {
+			isa = PBXGroup;
+			children = (
+				946AADBA2AA3614E00474ABE /* NewIncomeView.swift */,
+				946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */,
+			);
+			path = Income;
+			sourceTree = "<group>";
+		};
+		946AADA92AA349F100474ABE /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				946AADBE2AA3630100474ABE /* AccountView.swift */,
+				946AADC02AA3632F00474ABE /* ProfileView.swift */,
+				946AADC22AA3633E00474ABE /* SettingsView.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		946AADAA2AA34A5100474ABE /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				946AADCA2AA3651800474ABE /* TransactionView.swift */,
+				946AADCC2AA3654300474ABE /* InsightsView.swift */,
+				946AADCE2AA3656F00474ABE /* FinancialReportView.swift */,
+			);
+			path = Transaction;
+			sourceTree = "<group>";
+		};
+		946AADAB2AA34B9B00474ABE /* MainVIew */ = {
+			isa = PBXGroup;
+			children = (
+				946AADAE2AA34C8700474ABE /* Notifications */,
+				946AADAA2AA34A5100474ABE /* Transaction */,
+				946AADA92AA349F100474ABE /* Account */,
+				946AADA82AA349E700474ABE /* Income */,
+				946AADA72AA349D700474ABE /* Budget */,
+				946AADA62AA349CD00474ABE /* Expense */,
+				946AADAC2AA34C5700474ABE /* HomeView.swift */,
+			);
+			path = MainVIew;
+			sourceTree = "<group>";
+		};
+		946AADAE2AA34C8700474ABE /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				946AADB12AA35FFD00474ABE /* NotificationView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		946AADAF2AA35E8400474ABE /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				944958992AA280E80000DD47 /* WelcomeView.swift */,
+				946AADB32AA3602A00474ABE /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		946AADB02AA35EA900474ABE /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				946AAD9F2AA347A800474ABE /* SigninView.swift */,
+				946AADA12AA347D800474ABE /* SignupView.swift */,
+				946AADA32AA3484200474ABE /* ForgetPasswordView.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,9 +427,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
+				946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */,
+				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
+				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
 				9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */,
+				946AADC92AA363CF00474ABE /* BudgetView.swift in Sources */,
+				946AADBF2AA3630100474ABE /* AccountView.swift in Sources */,
+				946AADB42AA3602A00474ABE /* OnboardingView.swift in Sources */,
+				946AADB22AA35FFD00474ABE /* NotificationView.swift in Sources */,
+				946AADC12AA3632F00474ABE /* ProfileView.swift in Sources */,
+				946AADB92AA360E900474ABE /* DetailExpenseView.swift in Sources */,
+				946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */,
+				946AADC32AA3633E00474ABE /* SettingsView.swift in Sources */,
+				946AADB72AA3607100474ABE /* NewExpenseView.swift in Sources */,
+				946AADA02AA347A800474ABE /* SigninView.swift in Sources */,
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
+				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
+				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
+				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
+				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
+				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
