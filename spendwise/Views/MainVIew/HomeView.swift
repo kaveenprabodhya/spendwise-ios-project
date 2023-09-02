@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     var body: some View {
-        Text("Home View")
+        VStack {
+            VStack{
+                CurvedSideRectangle()
+                    .fill(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTurquoiseBlue")]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 430, height: 491)
+                    .edgesIgnoringSafeArea(.top)
+                    .overlay {
+                        Text("Hello")
+                            .foregroundColor(.white)
+                    }
+                Spacer()
+            }
+            VStack{
+                Text("Something")
+                Spacer()
+            }
+        }
     }
 }
 
