@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
+		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
+		944010B02AA525E000648E4A /* BottomNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */; };
 		944958982AA25ED40000DD47 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944958972AA25ED40000DD47 /* Launch Screen.storyboard */; };
 		9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944958992AA280E80000DD47 /* WelcomeView.swift */; };
 		9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */; };
@@ -36,7 +39,7 @@
 		946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCC2AA3654300474ABE /* InsightsView.swift */; };
 		946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADCE2AA3656F00474ABE /* FinancialReportView.swift */; };
 		946AADD22AA369E900474ABE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD12AA369E900474ABE /* Constants.swift */; };
-		946AADD42AA3D33000474ABE /* CurvedSideRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */; };
+		946AADD42AA3D33000474ABE /* CurvedSideRectangleViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +60,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
+		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
+		944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigationBarView.swift; sourceTree = "<group>"; };
 		944958942AA25C4D0000DD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		944958972AA25ED40000DD47 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		944958992AA280E80000DD47 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -90,7 +96,7 @@
 		946AADCC2AA3654300474ABE /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		946AADCE2AA3656F00474ABE /* FinancialReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialReportView.swift; sourceTree = "<group>"; };
 		946AADD12AA369E900474ABE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurvedSideRectangle.swift; sourceTree = "<group>"; };
+		946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurvedSideRectangleViewShape.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,7 +311,10 @@
 			isa = PBXGroup;
 			children = (
 				946AADD12AA369E900474ABE /* Constants.swift */,
-				946AADD32AA3D33000474ABE /* CurvedSideRectangle.swift */,
+				946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */,
+				944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */,
+				944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */,
+				944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -444,6 +453,7 @@
 				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
 				946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */,
+				944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */,
 				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
 				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
 				9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */,
@@ -459,12 +469,14 @@
 				946AADB72AA3607100474ABE /* NewExpenseView.swift in Sources */,
 				946AADA02AA347A800474ABE /* SigninView.swift in Sources */,
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
+				944010B02AA525E000648E4A /* BottomNavigationBarView.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
+				944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */,
 				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
-				946AADD42AA3D33000474ABE /* CurvedSideRectangle.swift in Sources */,
+				946AADD42AA3D33000474ABE /* CurvedSideRectangleViewShape.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,7 +647,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -669,7 +681,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
