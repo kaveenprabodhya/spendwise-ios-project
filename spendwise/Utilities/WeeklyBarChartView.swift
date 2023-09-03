@@ -14,23 +14,27 @@ struct WeeklyBarChartView: View {
             HStack{
                 Text("This Week Overview")
                     .font(.title2)
+                    .frame(maxWidth: 120)
+                    .foregroundColor(.black)
                     .fontWeight(.semibold)
                 Spacer()
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("ColorJadeGreen"))
                     .frame(width: 8, height: 42)
                 Text("Income")
+                    .foregroundColor(.black)
                     .font(.title3)
                     .fontWeight(.semibold)
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color("ColorFireEngineRed"))
                     .frame(width: 8, height: 42)
                 Text("Expense")
+                    .foregroundColor(.black)
                     .font(.title3)
                     .fontWeight(.semibold)
             }
             .padding(.horizontal, 15)
-            .padding(.bottom, 20)
+            .padding(.bottom, 15)
             VStack {
                 HStack(spacing: 50){
                     ForEach(days, id: \.self) { day in
@@ -51,6 +55,7 @@ struct WeeklyBarChartView: View {
                             }
                             Text(day)
                                 .font(.system(size: 16))
+                                .foregroundColor(.black)
                                 .fontWeight(.semibold)
                         }
                     }
@@ -71,5 +76,6 @@ struct WeeklyBarChartView: View {
 struct WeeklyBarChart_Previews: PreviewProvider {
     static var previews: some View {
         WeeklyBarChartView()
+            .preferredColorScheme(.light)
     }
 }
