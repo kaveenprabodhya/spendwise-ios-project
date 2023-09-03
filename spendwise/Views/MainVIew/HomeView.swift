@@ -22,7 +22,7 @@ struct HomeView: View {
                                 VStack{
                                     CustomTopNavigationView()
                                 }
-                                .padding(.top, 50)
+                                .padding(.top, 40)
                                 VStack(spacing: 15){
                                     Spacer()
                                     RoundedRectangle(cornerRadius: 15)
@@ -112,7 +112,7 @@ struct HomeView: View {
                             }
                         }
                 }
-                .padding(.bottom, 40)
+                .padding(.bottom, 30)
                 VStack{
                     WeeklyBarChartView()
                 }
@@ -125,5 +125,6 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .preferredColorScheme(.light)
     }
 }
