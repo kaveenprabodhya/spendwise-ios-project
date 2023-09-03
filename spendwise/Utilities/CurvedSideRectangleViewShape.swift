@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CurvedSideRectangle: Shape {
+struct CurvedSideRectangleViewShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.move(to: CGPoint.zero)
@@ -21,7 +21,7 @@ struct CurvedSideRectangle: Shape {
 
 struct CurvedSideRectangle_Previews: PreviewProvider {
     static var previews: some View {
-        CurvedSideRectangle()
+        CurvedSideRectangleViewShape()
             .frame(height: 300)
     }
 }
