@@ -15,7 +15,7 @@ struct HomeView: View {
                 VStack{
                     CurvedSideRectangleViewShape()
                         .fill(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTurquoiseBlue")]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .frame(width: 430, height: 470)
+                        .frame(width: 430, height: 480)
                         .edgesIgnoringSafeArea(.top)
                         .overlay {
                             VStack{
@@ -36,7 +36,6 @@ struct HomeView: View {
                                             }.background(Color.clear)
                                             
                                         }
-                                        .padding(5)
                                     Ellipse()
                                         .fill(Color("ColorSnowWhite"))
                                         .frame(width: 72, height: 72)
