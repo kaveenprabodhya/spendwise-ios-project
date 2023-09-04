@@ -10,34 +10,36 @@ import SwiftUI
 struct HomeView: View {
     
     var body: some View {
-        ScrollView{
+        VStack{
             VStack(spacing: 20) {
                 VStack{
                     CurvedSideRectangleViewShape()
                         .fill(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTurquoiseBlue")]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .frame(width: 430, height: 491)
+                        .frame(width: 430, height: 470)
                         .edgesIgnoringSafeArea(.top)
                         .overlay {
                             VStack{
                                 VStack{
                                     CustomTopNavigationView()
                                 }
-                                .padding(.top, 40)
+                                .padding(.top, 35)
                                 VStack(spacing: 15){
-                                    Spacer()
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Color("ColorLightGray"), lineWidth: 3)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color("ColorWhite"), lineWidth: 3)
                                         .frame(width: 130, height: 41)
                                         .overlay {
-                                            Text("Octomber")
-                                                .font(.system(size: 22))
-                                                .foregroundColor(.white)
-                                                .fontWeight(.medium)
+                                            VStack {
+                                                Text("Octomber")
+                                                    .font(.system(size: 18))
+                                                    .foregroundColor(.white)
+                                                    .fontWeight(.medium)
+                                            }.background(Color.clear)
+                                            
                                         }
                                         .padding(5)
                                     Ellipse()
                                         .fill(Color("ColorSnowWhite"))
-                                        .frame(width: 52, height:52)
+                                        .frame(width: 72, height: 72)
                                     VStack(spacing: 8) {
                                         Text("Your available balance is")
                                             .foregroundColor(.white)
@@ -112,11 +114,14 @@ struct HomeView: View {
                             }
                         }
                 }
-                .padding(.bottom, 30)
-                VStack{
-                    WeeklyBarChartView()
+                .padding(.bottom, 10)
+                ScrollView {
+                    VStack{
+                        WeeklyBarChartView()
+                    }
                 }
             }
+            Spacer()
         }
         .ignoresSafeArea(.all)
     }

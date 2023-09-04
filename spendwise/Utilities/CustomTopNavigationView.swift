@@ -12,9 +12,9 @@ struct CustomTopNavigationView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Hello, Kaveen")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.system(size: 20, weight: .semibold))
                 Text("Welcome back.")
-                    .font(.system(size: 18, weight: .regular))
+                    .font(.system(size: 16, weight: .regular))
             }
             Spacer()
             Button {
@@ -29,6 +29,7 @@ struct CustomTopNavigationView: View {
         .foregroundColor(.white)
         .background(Color.clear)
         .padding(15)
+        .padding(.horizontal,5)
         .frame(height: 64)
     }
 }
