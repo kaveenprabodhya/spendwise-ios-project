@@ -9,7 +9,13 @@ import SwiftUI
 
 struct BottomNavigationBarView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.blue.background(.ultraThinMaterial)
+            Text("Overlay at the Bottom")
+                .foregroundColor(.white)
+        }
+        .frame(height: 81)
+        .frame(maxHeight: .infinity, alignment: .bottom)
     }
 }
 
