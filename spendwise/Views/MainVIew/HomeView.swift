@@ -23,7 +23,7 @@ struct HomeView: View {
                                     CustomTopNavigationView()
                                 }
                                 .padding(.top, 35)
-                                VStack(spacing: 15){
+                                VStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color("ColorWhite"), lineWidth: 3)
                                         .frame(width: 130, height: 41)
@@ -34,8 +34,10 @@ struct HomeView: View {
                                                     .foregroundColor(.white)
                                                     .fontWeight(.medium)
                                             }.background(Color.clear)
-                                            
                                         }
+                                        .offset(y:-10)
+                                }
+                                VStack {
                                     Ellipse()
                                         .fill(Color("ColorSnowWhite"))
                                         .frame(width: 72, height: 72)
@@ -53,6 +55,8 @@ struct HomeView: View {
                                             .fixedSize(horizontal: false, vertical: true)
                                     }
                                 }
+                                
+                                
                                 VStack {
                                     Spacer()
                                     Spacer()
@@ -117,10 +121,16 @@ struct HomeView: View {
                 ScrollView {
                     VStack{
                         WeeklyBarChartView()
+                        VStack {
+                            Text("My Budgets")
+                                .font(.system(size: 20))
+                        }
                     }
                 }
+                .overlay{
+                    BottomNavigationBarView()
+                }
             }
-            Spacer()
         }
         .ignoresSafeArea(.all)
     }
