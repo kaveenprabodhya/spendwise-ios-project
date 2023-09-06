@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
 		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
-		944010B02AA525E000648E4A /* BottomNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */; };
 		944958982AA25ED40000DD47 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944958972AA25ED40000DD47 /* Launch Screen.storyboard */; };
 		9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944958992AA280E80000DD47 /* WelcomeView.swift */; };
 		9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */; };
@@ -62,7 +61,6 @@
 /* Begin PBXFileReference section */
 		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
 		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
-		944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigationBarView.swift; sourceTree = "<group>"; };
 		944958942AA25C4D0000DD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		944958972AA25ED40000DD47 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		944958992AA280E80000DD47 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -314,7 +312,6 @@
 				946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */,
 				944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */,
 				944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */,
-				944010AF2AA525E000648E4A /* BottomNavigationBarView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -469,7 +466,6 @@
 				946AADB72AA3607100474ABE /* NewExpenseView.swift in Sources */,
 				946AADA02AA347A800474ABE /* SigninView.swift in Sources */,
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
-				944010B02AA525E000648E4A /* BottomNavigationBarView.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
