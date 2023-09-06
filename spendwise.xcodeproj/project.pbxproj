@@ -18,6 +18,8 @@
 		9453FFDC2AA20B9000A193DB /* spendwiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFDB2AA20B9000A193DB /* spendwiseTests.swift */; };
 		9453FFE62AA20B9000A193DB /* spendwiseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFE52AA20B9000A193DB /* spendwiseUITests.swift */; };
 		9453FFE82AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */; };
+		94672F252AA900C40076EE60 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94672F242AA900C40076EE60 /* TabBar.swift */; };
+		94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */; };
 		946AADA02AA347A800474ABE /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AAD9F2AA347A800474ABE /* SigninView.swift */; };
 		946AADA22AA347D800474ABE /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADA12AA347D800474ABE /* SignupView.swift */; };
 		946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADA32AA3484200474ABE /* ForgetPasswordView.swift */; };
@@ -74,6 +76,8 @@
 		9453FFE12AA20B9000A193DB /* spendwiseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = spendwiseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9453FFE52AA20B9000A193DB /* spendwiseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseUITests.swift; sourceTree = "<group>"; };
 		9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		94672F242AA900C40076EE60 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigationBarView.swift; sourceTree = "<group>"; };
 		946AAD9F2AA347A800474ABE /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
 		946AADA12AA347D800474ABE /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		946AADA32AA3484200474ABE /* ForgetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordView.swift; sourceTree = "<group>"; };
@@ -312,6 +316,8 @@
 				946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */,
 				944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */,
 				944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */,
+				94672F242AA900C40076EE60 /* TabBar.swift */,
+				94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -447,6 +453,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94672F252AA900C40076EE60 /* TabBar.swift in Sources */,
 				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
 				946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */,
@@ -467,6 +474,7 @@
 				946AADA02AA347A800474ABE /* SigninView.swift in Sources */,
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
+				94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */,
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
