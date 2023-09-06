@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
+    // MARK: - Properties
+    @State var index = 0
+    @State var expand = false
     
+    // MARK: - Body
     var body: some View {
         VStack{
             VStack(spacing: 20) {
@@ -22,7 +26,7 @@ struct HomeView: View {
                                 VStack{
                                     CustomTopNavigationView()
                                 }
-                                .padding(.top, 35)
+                                .padding(.top, 26)
                                 VStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color("ColorWhite"), lineWidth: 3)
@@ -55,8 +59,6 @@ struct HomeView: View {
                                             .fixedSize(horizontal: false, vertical: true)
                                     }
                                 }
-                                
-                                
                                 VStack {
                                     Spacer()
                                     Spacer()
@@ -118,24 +120,184 @@ struct HomeView: View {
                         }
                 }
                 .padding(.bottom, 10)
-                ScrollView {
-                    VStack{
-                        WeeklyBarChartView()
-                        VStack {
-                            Text("My Budgets")
-                                .font(.system(size: 20))
+                VStack {
+                    ScrollView {
+                        VStack{
+                            WeeklyBarChartView()
+                            VStack {
+                                Text("My Budgets")
+                                    .font(.system(size: 20))
+                            }
                         }
                     }
-                }
-                .overlay{
-                    BottomNavigationBarView()
+                }.overlay {
+                    ZStack(alignment: .bottom) {
+                        ZStack(alignment: .bottom) {
+//                            GeometryReader { _ in
+//                                VStack {
+//                                    Text("")
+//                                }
+//                            }.background(Color.black.opacity(0.06))
+                            ZStack(alignment: .top) {
+                                Circle()
+                                    .trim(from: 0.5, to: 1)
+                                    .fill(Color.white.opacity(0.1))
+//                                    .fill(Color.accentColor)
+                                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                                ZStack {
+                                    Button {
+                                        
+                                    } label: {
+                                        VStack(spacing: 10){
+                                            Circle()
+                                                .fill(Color("ColorEmeraldGreen"))
+                                                .frame(width: 95, height: 95)
+                                                .overlay {
+                                                    VStack {
+                                                        Image(systemName: "square.and.arrow.down.fill")
+                                                            .resizable()
+                                                            .foregroundColor(.white)
+                                                            .frame(width: 30, height: 30)
+                                                            .scaledToFit()
+                                                        Text("Income").fontWeight(.bold).foregroundColor(.white)
+                                                    }
+                                                }
+                                        }
+                                    }
+                                    .offset(x:-100, y: 95)
+                                    Button {
+                                        
+                                    } label: {
+                                        VStack(spacing: 10){
+                                            Circle()
+                                                .fill(Color("ColorAzureBlue"))
+                                                .frame(width: 95, height: 95)
+                                                .overlay {
+                                                    VStack {
+                                                        Image(systemName: "chart.pie.fill")
+                                                            .resizable()
+                                                            .foregroundColor(.white)
+                                                            .frame(width: 30, height: 30)
+                                                            .scaledToFit()
+                                                        Text("Budget").fontWeight(.bold).foregroundColor(.white)
+                                                    }
+                                                }
+                                        }
+                                    }
+                                    .offset(y: 15)
+                                    Button {
+                                        
+                                    } label: {
+                                        VStack(spacing: 10){
+                                            Circle()
+                                                .fill(Color("ColorRustyRed"))
+                                                .frame(width: 95, height: 95)
+                                                .overlay {
+                                                    VStack {
+                                                        Image(systemName: "square.and.arrow.up.fill")
+                                                            .resizable()
+                                                            .foregroundColor(.white)
+                                                            .frame(width: 30, height: 30)
+                                                            .scaledToFit()
+                                                        Text("Expense").fontWeight(.bold).foregroundColor(.white)
+                                                    }
+                                                }
+                                        }
+                                    }
+                                    .offset(x:100, y: 95)
+                                }
+                                
+                            }
+                            .offset(y: UIScreen.main.bounds.width / 4)
+                            .opacity(self.expand ? 1 : 0)
+                        }.clipped()
+                        // .border(.red, width: 3)
+                        TabBar(index: self.$index, expand: self.$expand)
+                            .background(Color("ColorElectricIndigo"))
+                    }.frame(maxHeight: .infinity, alignment: .bottom)
                 }
             }
         }
-        .ignoresSafeArea(.all)
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
+struct TabBar: View {
+    @Binding var index: Int
+    @Binding var expand: Bool
+    var body: some View {
+        HStack(alignment: .center, spacing: 0) {
+            Button {
+                self.index = 0
+            } label: {
+                Image(systemName: "house.fill")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(self.index == 0 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .scaledToFit()
+            }
+            
+            Spacer(minLength: 0)
+            
+            Button {
+                self.index = 1
+            } label: {
+                Image(systemName: "arrow.left.arrow.right.square")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(self.index == 1 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .scaledToFit()
+            }
+            
+            Spacer(minLength: 0)
+            
+            Button {
+                withAnimation(Animation.linear(duration: 0.7)) {
+                    self.expand.toggle()
+                }
+            } label: {
+                Image(systemName: self.expand ? "xmark" : "plus")
+                    .font(.system(size: 42, weight: .medium))
+                    .foregroundColor(Color("ColorElectricIndigo"))
+                    .padding()
+                    .background(.white)
+                    .clipShape(Circle())
+                    .shadow(radius: 4)
+            }
+            .offset(y: -5)
+            
+            Spacer(minLength: 0)
+            
+            Button {
+                self.index = 2
+            } label: {
+                Image(systemName: "chart.pie.fill")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(self.index == 2 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .scaledToFit()
+            }
+            
+            Spacer(minLength: 0)
+            
+            Button {
+                
+                self.index = 3
+            } label: {
+                Image(systemName: "person.crop.circle")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(self.index == 3 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .scaledToFit()
+            }
+        }
+        .padding(.horizontal, 15)
+        .padding(.top, 15)
+        .padding(.bottom, 12)
+    }
+}
+
+// MARK: - Preview
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
