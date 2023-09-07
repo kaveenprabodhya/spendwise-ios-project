@@ -13,23 +13,11 @@ struct TabBar: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             Button {
-                self.index = 0
+                self.index = 1
             } label: {
                 Image(systemName: "house.fill")
                     .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(self.index == 0 ? Color("ColorWhite") : Color("ColorPaleGray"))
-                    .scaledToFit()
-            }
-            
-            Spacer(minLength: 0)
-            
-            Button {
-                self.index = 1
-            } label: {
-                Image(systemName: "arrow.left.arrow.right.square")
-                    .resizable()
-                    .frame(width: 25, height: 25)
+                    .frame(width: 28, height: 28)
                     .foregroundColor(self.index == 1 ? Color("ColorWhite") : Color("ColorPaleGray"))
                     .scaledToFit()
             }
@@ -37,7 +25,19 @@ struct TabBar: View {
             Spacer(minLength: 0)
             
             Button {
-                withAnimation(Animation.linear(duration: 0.7)) {
+                self.index = 2
+            } label: {
+                Image(systemName: "arrow.left.arrow.right.square")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(self.index == 2 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .scaledToFit()
+            }
+            
+            Spacer(minLength: 0)
+            
+            Button {
+                withAnimation(Animation.linear(duration: 0.3)) {
                     self.expand.toggle()
                 }
             } label: {
@@ -54,25 +54,24 @@ struct TabBar: View {
             Spacer(minLength: 0)
             
             Button {
-                self.index = 2
+                self.index = 3
             } label: {
                 Image(systemName: "chart.pie.fill")
                     .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(self.index == 2 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(self.index == 3 ? Color("ColorWhite") : Color("ColorPaleGray"))
                     .scaledToFit()
             }
             
             Spacer(minLength: 0)
             
             Button {
-                
-                self.index = 3
+                self.index = 4
             } label: {
                 Image(systemName: "person.crop.circle")
                     .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(self.index == 3 ? Color("ColorWhite") : Color("ColorPaleGray"))
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(self.index == 4 ? Color("ColorWhite") : Color("ColorPaleGray"))
                     .scaledToFit()
             }
         }
