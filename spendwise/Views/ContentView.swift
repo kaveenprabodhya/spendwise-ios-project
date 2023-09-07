@@ -9,38 +9,44 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = false
+    @State var index = 1
     var body: some View {
-        ZStack {
-            if isOnboardingViewActive {
-                OnboardingView()
-            } else {
-                ZStack {
-//                    TabView{
-//                        Group {
-//                            HomeView()
-//                                .tabItem {
-//                                    Label("Home", systemImage: "house.fill")
-//                                }
-//                            TransactionView()
-//                                .tabItem {
-//                                    Label("Transactions", systemImage: "arrow.left.arrow.right.square")
-//                                }
-//                            BudgetView()
-//                                .tabItem {
-//                                    Label("Budget", systemImage: "chart.pie.fill")
-//                                }
-//                            AccountView()
-//                                .tabItem {
-//                                    Label("Budget", systemImage: "person.crop.circle")
-//                                }
-//                        }
-//                        .toolbarBackground(Color("ColorElectricIndigo"), for: .tabBar)
-//                        .toolbarBackground(.visible, for: .tabBar)
-//                    }
-                    HomeView()
-                    
+        NavigationStack{
+            ZStack {
+                if isOnboardingViewActive {
+                    OnboardingView()
+                } else {
+                    ZStack {
+                        TabView(selection: $index){
+                            HomeView()
+                            //                            .tabItem {
+                            //                                Label("Home", systemImage: "house.fill")
+                            //                            }
+                                .tag(1)
+                            TransactionView()
+                            //                            .tabItem {
+                            //                                Label("Transactions", systemImage: "arrow.left.arrow.right.square")
+                            //                            }
+                                .tag(2)
+                            BudgetView()
+                            //                            .tabItem {
+                            //                                Label("Budget", systemImage: "chart.pie.fill")
+                            //                            }
+                                .tag(3)
+                            AccountView()
+                            //                            .tabItem {
+                            //                                Label("Budget", systemImage: "person.crop.circle")
+                            //                            }
+                                .tag(4)
+                        }
+                        .overlay(alignment: .bottom) {
+                            BottomNavigationBarView(index: $index)
+                                .padding(.bottom, 12)
+                        }
+                    }.edgesIgnoringSafeArea(.bottom)
                 }
             }
+            
         }
     }
 }
