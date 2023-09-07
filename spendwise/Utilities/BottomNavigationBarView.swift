@@ -8,19 +8,29 @@
 import SwiftUI
 
 struct BottomNavigationBarView: View {
-    @State var expand: Bool
-    @State var index: Int
+    @State private var expand = false
+    @Binding var index: Int
     var body: some View {
         ZStack(alignment: .bottom) {
             ZStack(alignment: .bottom) {
+                if expand {
+                    Rectangle()
+                        .foregroundColor(Color.black.opacity(0.3))
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            expand = false
+                        }
+                }
                 ZStack(alignment: .top) {
                     Circle()
                         .trim(from: 0.5, to: 1)
                         .fill(Color.white.opacity(0.1))
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     ZStack {
-                        Button {
-                            
+                        NavigationLink {
+                            NewIncomeView().onAppear{
+                                expand = false
+                            }
                         } label: {
                             VStack(spacing: 10){
                                 Circle()
@@ -39,8 +49,10 @@ struct BottomNavigationBarView: View {
                             }
                         }
                         .offset(x:-100, y: 95)
-                        Button {
-                            
+                        NavigationLink {
+                            NewBudgetView().onAppear{
+                                expand = false
+                            }
                         } label: {
                             VStack(spacing: 10){
                                 Circle()
@@ -59,8 +71,10 @@ struct BottomNavigationBarView: View {
                             }
                         }
                         .offset(y: 15)
-                        Button {
-                            
+                        NavigationLink {
+                            NewExpenseView().onAppear{
+                                expand = false
+                            }
                         } label: {
                             VStack(spacing: 10){
                                 Circle()
@@ -80,12 +94,13 @@ struct BottomNavigationBarView: View {
                         }
                         .offset(x:100, y: 95)
                     }
-                    
                 }
-                .offset(y: UIScreen.main.bounds.width / 3)
+                .offset(y: UIScreen.main.bounds.width / 3.2)
                 .opacity(self.expand ? 1 : 0)
-            }.clipped()
-            TabBar(index: self.$index, expand: self.$expand)
+            }
+            .edgesIgnoringSafeArea(.all)
+//            .clipped()
+            TabBar(index: $index, expand: $expand)
                 .background(Color("ColorElectricIndigo"))
         }
         
@@ -94,6 +109,6 @@ struct BottomNavigationBarView: View {
 
 struct BottomNavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomNavigationBarView(expand: false, index: 0)
+        BottomNavigationBarView(index: .constant(1))
     }
 }
