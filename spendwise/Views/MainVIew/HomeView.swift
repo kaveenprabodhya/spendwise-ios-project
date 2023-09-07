@@ -137,8 +137,6 @@ struct HomeView: View {
                                     .padding(.horizontal, 20)
                                 }
                     Spacer()
-                }.overlay {
-                    BottomNavigationBarView(expand: self.expand, index: self.index)
                 }
             }
         }
