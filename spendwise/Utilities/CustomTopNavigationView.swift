@@ -18,8 +18,8 @@ struct CustomTopNavigationView: View {
                         .font(.system(size: 16, weight: .regular))
                 }
                 Spacer()
-                Button {
-                    
+                NavigationLink {
+                    NotificationView()
                 } label: {
                     Image(systemName: "bell")
                         .font(.title)
