@@ -125,19 +125,18 @@ struct HomeView: View {
                 .padding(.bottom, 16)
                 VStack {
                     Spacer()
-                    ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 20) {
-                                        ForEach(1..<3) { index in
-                                            VStack {
-                                                WeeklyBarChartView()
-                                                Spacer()
-                                            }.padding(.top, 10)
-                                        }
-                                    }
-                                    .padding(.horizontal, 20)
-                                }
+                    ScrollView(showsIndicators: false) {
+                            VStack {
+                                WeeklyBarChartView()
+                                Spacer()
+                            }
+                            VStack {
+                                BudgetChartView()
+                                Spacer()
+                            }
+                    }
                     Spacer()
-                }
+                }.padding(.top, 15)
             }
         }
         .edgesIgnoringSafeArea(.top)

@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
 		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
+		9443A0062AAB235D00902E88 /* BudgetChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0052AAB235D00902E88 /* BudgetChartView.swift */; };
+		9443A0082AAB81BC00902E88 /* BudgetCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0072AAB81BC00902E88 /* BudgetCategory.swift */; };
+		9443A00A2AAB87EA00902E88 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0092AAB87EA00902E88 /* User.swift */; };
+		9443A00C2AAB90B300902E88 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A00B2AAB90B300902E88 /* Expense.swift */; };
+		9443A00E2AAB90C300902E88 /* Income.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A00D2AAB90C300902E88 /* Income.swift */; };
 		944958982AA25ED40000DD47 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 944958972AA25ED40000DD47 /* Launch Screen.storyboard */; };
 		9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944958992AA280E80000DD47 /* WelcomeView.swift */; };
 		9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */; };
@@ -63,6 +68,11 @@
 /* Begin PBXFileReference section */
 		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
 		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
+		9443A0052AAB235D00902E88 /* BudgetChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetChartView.swift; sourceTree = "<group>"; };
+		9443A0072AAB81BC00902E88 /* BudgetCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetCategory.swift; sourceTree = "<group>"; };
+		9443A0092AAB87EA00902E88 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9443A00B2AAB90B300902E88 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		9443A00D2AAB90C300902E88 /* Income.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Income.swift; sourceTree = "<group>"; };
 		944958942AA25C4D0000DD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		944958972AA25ED40000DD47 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		944958992AA280E80000DD47 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -139,6 +149,10 @@
 		942D22012AA2425900E3CF9D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9443A0072AAB81BC00902E88 /* BudgetCategory.swift */,
+				9443A0092AAB87EA00902E88 /* User.swift */,
+				9443A00B2AAB90B300902E88 /* Expense.swift */,
+				9443A00D2AAB90C300902E88 /* Income.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -318,6 +332,7 @@
 				944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */,
 				94672F242AA900C40076EE60 /* TabBar.swift */,
 				94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */,
+				9443A0052AAB235D00902E88 /* BudgetChartView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -453,10 +468,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9443A00C2AAB90B300902E88 /* Expense.swift in Sources */,
 				94672F252AA900C40076EE60 /* TabBar.swift in Sources */,
 				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
+				9443A00E2AAB90C300902E88 /* Income.swift in Sources */,
 				946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */,
+				9443A00A2AAB87EA00902E88 /* User.swift in Sources */,
 				944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */,
 				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
 				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
@@ -471,12 +489,14 @@
 				946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */,
 				946AADC32AA3633E00474ABE /* SettingsView.swift in Sources */,
 				946AADB72AA3607100474ABE /* NewExpenseView.swift in Sources */,
+				9443A0062AAB235D00902E88 /* BudgetChartView.swift in Sources */,
 				946AADA02AA347A800474ABE /* SigninView.swift in Sources */,
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
 				94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */,
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
+				9443A0082AAB81BC00902E88 /* BudgetCategory.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
 				944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */,
 				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
