@@ -22,7 +22,7 @@ struct CustomTopNavigationView: View {
                     NotificationView()
                 } label: {
                     Image(systemName: "bell")
-                        .font(.title)
+                        .font(.system(size: 26))
                         .foregroundColor(.white)
                 }
                 
