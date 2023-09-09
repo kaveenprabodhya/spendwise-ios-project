@@ -24,7 +24,7 @@ struct BottomNavigationBarView: View {
                 ZStack(alignment: .top) {
                     Circle()
                         .trim(from: 0.5, to: 1)
-                        .fill(Color.white.opacity(0.1))
+                        .fill(Color.clear)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     ZStack {
                         NavigationLink {
@@ -101,7 +101,7 @@ struct BottomNavigationBarView: View {
             .edgesIgnoringSafeArea(.all)
 //            .clipped()
             TabBar(index: $index, expand: $expand)
-                .background(Color("ColorElectricIndigo"))
+                .background(Color("ColorVividBlue"))
         }
         
     }
