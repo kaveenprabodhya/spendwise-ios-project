@@ -73,6 +73,7 @@
 		9443A0092AAB87EA00902E88 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9443A00B2AAB90B300902E88 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		9443A00D2AAB90C300902E88 /* Income.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Income.swift; sourceTree = "<group>"; };
+		9443A00F2AABA5DC00902E88 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		944958942AA25C4D0000DD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		944958972AA25ED40000DD47 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		944958992AA280E80000DD47 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -157,16 +158,10 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		942D22022AA2426A00E3CF9D /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 		9453FFBE2AA20B8800A193DB = {
 			isa = PBXGroup;
 			children = (
+				9443A00F2AABA5DC00902E88 /* README.md */,
 				9453FFC92AA20B8900A193DB /* spendwise */,
 				9453FFDA2AA20B9000A193DB /* spendwiseTests */,
 				9453FFE42AA20B9000A193DB /* spendwiseUITests */,
@@ -189,7 +184,6 @@
 			children = (
 				946AADD02AA3697E00474ABE /* Utilities */,
 				944958942AA25C4D0000DD47 /* Info.plist */,
-				942D22022AA2426A00E3CF9D /* ViewModels */,
 				942D22012AA2425900E3CF9D /* Models */,
 				942D22002AA2424200E3CF9D /* Views */,
 				9453FFCA2AA20B8900A193DB /* spendwiseApp.swift */,
