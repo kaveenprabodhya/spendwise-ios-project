@@ -13,9 +13,9 @@ struct BudgetChartView: View {
     @State var progressValue: Float = 0.3
     
     let categoryArray: [BudgetCategory] = [
-        BudgetCategory(id: "1", name: "Groceries"),
-        BudgetCategory(id: "2", name: "Utilities"),
-        BudgetCategory(id: "3", name: "Rent")
+        BudgetCategory(id: "1", name: "Groceries", allocatedAmount: 100000.00, currentAmountSpent: 10.00),
+        BudgetCategory(id: "2", name: "Utilities", allocatedAmount: 100000.00, currentAmountSpent: 10.00),
+        BudgetCategory(id: "3", name: "Rent", allocatedAmount: 100000.00, currentAmountSpent: 10.00)
     ]
     
     var body: some View {
