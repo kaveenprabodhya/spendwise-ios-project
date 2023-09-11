@@ -8,8 +8,31 @@
 import SwiftUI
 
 struct CurrencyView: View {
+    @Environment(\.dismiss) private var dismiss
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VStack {
+                    Text("Currency")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(Color.black)
+                }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 20, weight: .semibold))
+                }
+                
+            }
+        }
     }
 }
 

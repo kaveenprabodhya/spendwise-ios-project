@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		941328E22AADCA8500C50DFA /* UnevenRoundedRectangleViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941328E12AADCA8400C50DFA /* UnevenRoundedRectangleViewShape.swift */; };
 		941328E52AAE1C9B00C50DFA /* currencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */; };
+		9421C30B2AAF8401004F0A65 /* CurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421C30A2AAF8401004F0A65 /* CurrencyView.swift */; };
+		9421C30D2AAF8428004F0A65 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421C30C2AAF8428004F0A65 /* LanguageView.swift */; };
+		9421C30F2AAF8450004F0A65 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421C30E2AAF8450004F0A65 /* ThemeView.swift */; };
+		9421C3112AAF84A7004F0A65 /* SecurityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421C3102AAF84A7004F0A65 /* SecurityView.swift */; };
 		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
 		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
 		9443A0062AAB235D00902E88 /* BudgetChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0052AAB235D00902E88 /* BudgetChartView.swift */; };
@@ -70,6 +74,10 @@
 /* Begin PBXFileReference section */
 		941328E12AADCA8400C50DFA /* UnevenRoundedRectangleViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnevenRoundedRectangleViewShape.swift; sourceTree = "<group>"; };
 		941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = currencyFormatter.swift; sourceTree = "<group>"; };
+		9421C30A2AAF8401004F0A65 /* CurrencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyView.swift; sourceTree = "<group>"; };
+		9421C30C2AAF8428004F0A65 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
+		9421C30E2AAF8450004F0A65 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
+		9421C3102AAF84A7004F0A65 /* SecurityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityView.swift; sourceTree = "<group>"; };
 		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
 		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
 		9443A0052AAB235D00902E88 /* BudgetChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetChartView.swift; sourceTree = "<group>"; };
@@ -147,6 +155,18 @@
 				941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		9421C3092AAF8247004F0A65 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				946AADC22AA3633E00474ABE /* SettingsView.swift */,
+				9421C30A2AAF8401004F0A65 /* CurrencyView.swift */,
+				9421C30C2AAF8428004F0A65 /* LanguageView.swift */,
+				9421C30E2AAF8450004F0A65 /* ThemeView.swift */,
+				9421C3102AAF84A7004F0A65 /* SecurityView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		942D22002AA2424200E3CF9D /* Views */ = {
@@ -274,7 +294,7 @@
 			children = (
 				946AADBE2AA3630100474ABE /* AccountView.swift */,
 				946AADC02AA3632F00474ABE /* ProfileView.swift */,
-				946AADC22AA3633E00474ABE /* SettingsView.swift */,
+				9421C3092AAF8247004F0A65 /* Settings */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -476,6 +496,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9421C30F2AAF8450004F0A65 /* ThemeView.swift in Sources */,
 				9443A00C2AAB90B300902E88 /* Expense.swift in Sources */,
 				941328E52AAE1C9B00C50DFA /* currencyFormatter.swift in Sources */,
 				94672F252AA900C40076EE60 /* TabBar.swift in Sources */,
@@ -483,6 +504,7 @@
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
 				9443A00E2AAB90C300902E88 /* Income.swift in Sources */,
 				946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */,
+				9421C30B2AAF8401004F0A65 /* CurrencyView.swift in Sources */,
 				9443A00A2AAB87EA00902E88 /* User.swift in Sources */,
 				944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */,
 				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
@@ -503,6 +525,8 @@
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
 				94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */,
+				9421C3112AAF84A7004F0A65 /* SecurityView.swift in Sources */,
+				9421C30D2AAF8428004F0A65 /* LanguageView.swift in Sources */,
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
 				9443A0082AAB81BC00902E88 /* BudgetCategory.swift in Sources */,
