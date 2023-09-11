@@ -99,7 +99,6 @@ struct BottomNavigationBarView: View {
                 .opacity(self.expand ? 1 : 0)
             }
             .edgesIgnoringSafeArea(.all)
-//            .clipped()
             TabBar(index: $index, expand: $expand)
                 .background(Color("ColorVividBlue"))
         }

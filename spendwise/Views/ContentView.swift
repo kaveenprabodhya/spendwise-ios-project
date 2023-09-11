@@ -19,24 +19,12 @@ struct ContentView: View {
                     ZStack {
                         TabView(selection: $index){
                             HomeView()
-                            //                            .tabItem {
-                            //                                Label("Home", systemImage: "house.fill")
-                            //                            }
                                 .tag(1)
                             TransactionView()
-                            //                            .tabItem {
-                            //                                Label("Transactions", systemImage: "arrow.left.arrow.right.square")
-                            //                            }
                                 .tag(2)
                             BudgetView()
-                            //                            .tabItem {
-                            //                                Label("Budget", systemImage: "chart.pie.fill")
-                            //                            }
                                 .tag(3)
                             AccountView()
-                            //                            .tabItem {
-                            //                                Label("Budget", systemImage: "person.crop.circle")
-                            //                            }
                                 .tag(4)
                         }
                         .overlay(alignment: .bottom) {
