@@ -9,7 +9,13 @@ import SwiftUI
 
 struct AccountView: View {
     var body: some View {
-        Text("Account View")
+        VStack {
+            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]){
+                VStack {
+                    Text("Hellooooo")
+                }
+            }
+        }
     }
 }
 
@@ -18,3 +24,5 @@ struct AccountView_Previews: PreviewProvider {
         AccountView()
     }
 }
+
+
