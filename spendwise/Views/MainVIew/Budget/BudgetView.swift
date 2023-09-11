@@ -11,63 +11,64 @@ struct BudgetView: View {
     @State var index = 2
     
     var body: some View {
-        TabView(selection: $index){
-            WeeklyPageTabView()
-                .tag(1)
-            MonthlyPageTabView()
-                .tag(2)
-            YearlyPageTabView()
-                .tag(3)
-        }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .edgesIgnoringSafeArea(.bottom)
-        .overlay(alignment: .top) {
-            Rectangle()
-                .fill(.clear)
-                .overlay(alignment: .center) {
-                    HStack(spacing: 25) {
-                        Button {
-                            self.index = 1
-                        } label: {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(self.index == 1 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                .frame(width: 108, height: 46)
-                                .overlay {
-                                    Text("Weekly")
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(self.index == 1 ? .white : .black)
-                                }
+        ZStack {
+            TabView(selection: $index){
+                WeeklyPageTabView()
+                    .tag(1)
+                MonthlyPageTabView()
+                    .tag(2)
+                YearlyPageTabView()
+                    .tag(3)
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .overlay(alignment: .top) {
+                Rectangle()
+                    .fill(.clear)
+                    .overlay(alignment: .center) {
+                        HStack(spacing: 25) {
+                            Button {
+                                self.index = 1
+                            } label: {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(self.index == 1 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                    .frame(width: 108, height: 46)
+                                    .overlay {
+                                        Text("Weekly")
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(self.index == 1 ? .white : .black)
+                                    }
+                            }
+                            Button {
+                                self.index = 2
+                            } label: {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(self.index == 2 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                    .frame(width: 108, height: 46)
+                                    .overlay {
+                                        Text("Monthly")
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(self.index == 2 ? .white : .black)
+                                    }
+                            }
+                            Button {
+                                self.index = 3
+                            } label: {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(self.index == 3 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                    .frame(width: 108, height: 46)
+                                    .overlay {
+                                        Text("Yearly")
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(self.index == 3 ? .white : .black)
+                                    }
+                            }
                         }
-                        Button {
-                            self.index = 2
-                        } label: {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(self.index == 2 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                .frame(width: 108, height: 46)
-                                .overlay {
-                                    Text("Monthly")
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(self.index == 2 ? .white : .black)
-                                }
-                        }
-                        Button {
-                            self.index = 3
-                        } label: {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(self.index == 3 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                .frame(width: 108, height: 46)
-                                .overlay {
-                                    Text("Yearly")
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(self.index == 3 ? .white : .black)
-                                }
-                        }
+                        .frame(width: UIScreen.main.bounds.size.width, height: 65)
+                        .background(.white.opacity(0.3))
                     }
-                    .frame(width: UIScreen.main.bounds.size.width, height: 65)
-                    .background(.white.opacity(0.3))
-                }
-                .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
-                .frame(height: 95)
+                    .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
+                    .frame(height: 95)
+        }
         }
     }
 }
@@ -92,7 +93,7 @@ struct MonthlyPageTabView: View {
 
 
 struct BottomBudgetOverView: View {
-    var heightOfSheet: CGFloat = 752
+    var heightOfSheet: CGFloat = 672
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -141,7 +142,7 @@ struct BottomBudgetSheet: View {
     var sheetHeight: CGFloat
     
     
-    var budgetArray: [BudgetCategory] = []
+    var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
     
     var body: some View{
         UnevenRoundedRectangleViewShape(topLeftRadius: 30,topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
@@ -206,7 +207,7 @@ struct BottomBudgetSheet: View {
                                     }
                                 }
                                 
-                            }.frame(width: geometry.size.width, height: 240)
+                            }.frame(width: geometry.size.width, height: 260)
                         }
                     }
                 }
