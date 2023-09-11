@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		941328E22AADCA8500C50DFA /* UnevenRoundedRectangleViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941328E12AADCA8400C50DFA /* UnevenRoundedRectangleViewShape.swift */; };
+		941328E52AAE1C9B00C50DFA /* currencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */; };
 		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
 		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
 		9443A0062AAB235D00902E88 /* BudgetChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0052AAB235D00902E88 /* BudgetChartView.swift */; };
@@ -66,6 +68,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		941328E12AADCA8400C50DFA /* UnevenRoundedRectangleViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnevenRoundedRectangleViewShape.swift; sourceTree = "<group>"; };
+		941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = currencyFormatter.swift; sourceTree = "<group>"; };
 		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
 		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
 		9443A0052AAB235D00902E88 /* BudgetChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetChartView.swift; sourceTree = "<group>"; };
@@ -137,6 +141,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		941328E32AAE1C7D00C50DFA /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		942D22002AA2424200E3CF9D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +194,7 @@
 		9453FFC92AA20B8900A193DB /* spendwise */ = {
 			isa = PBXGroup;
 			children = (
+				941328E32AAE1C7D00C50DFA /* Helper */,
 				946AADD02AA3697E00474ABE /* Utilities */,
 				944958942AA25C4D0000DD47 /* Info.plist */,
 				942D22012AA2425900E3CF9D /* Models */,
@@ -327,6 +340,7 @@
 				94672F242AA900C40076EE60 /* TabBar.swift */,
 				94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */,
 				9443A0052AAB235D00902E88 /* BudgetChartView.swift */,
+				941328E12AADCA8400C50DFA /* UnevenRoundedRectangleViewShape.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -463,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9443A00C2AAB90B300902E88 /* Expense.swift in Sources */,
+				941328E52AAE1C9B00C50DFA /* currencyFormatter.swift in Sources */,
 				94672F252AA900C40076EE60 /* TabBar.swift in Sources */,
 				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
@@ -491,6 +506,7 @@
 				946AADCF2AA3656F00474ABE /* FinancialReportView.swift in Sources */,
 				946AADCB2AA3651800474ABE /* TransactionView.swift in Sources */,
 				9443A0082AAB81BC00902E88 /* BudgetCategory.swift in Sources */,
+				941328E22AADCA8500C50DFA /* UnevenRoundedRectangleViewShape.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewIncomeView.swift in Sources */,
 				944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */,
 				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
@@ -581,7 +597,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -635,7 +651,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
