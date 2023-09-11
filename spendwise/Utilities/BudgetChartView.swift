@@ -48,7 +48,7 @@ struct BudgetChartView: View {
                                     }
                                 }.padding(.top, 15)
                                 ProgressView(value: 90, total: 100)
-                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorFreshMintGreen"))
+                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorFreshMintGreen", width: 360))
                                     .accentColor(Color("ColorFreshMintGreen"))
                             }.frame(height: 74).padding(.top, 8).padding(.bottom, 5)
                             VStack(spacing: 0) {
@@ -67,11 +67,6 @@ struct BudgetChartView: View {
             }
         }.padding()
     }
-    func formatCurrency(value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: value)) ?? ""
-    }
 }
 
 struct CategoryProgressView: View {
@@ -79,7 +74,7 @@ struct CategoryProgressView: View {
     @State var categoryName: String
     var body: some View {
         VStack(spacing: 0) {
-            ProgressBar(progress: self.$progressValue)
+            ProgressBarViewOne(progress: self.$progressValue)
                 .frame(width: 75, height: 75)
                 .padding(.bottom, 5)
             Text(categoryName)
@@ -91,7 +86,7 @@ struct CategoryProgressView: View {
     }
 }
 
-struct ProgressBar: View {
+struct ProgressBarViewOne: View {
     @Binding var progress: Float
     var body: some View {
         ZStack {
@@ -119,10 +114,11 @@ struct ProgressBar: View {
 
 struct RoundedRectProgressViewStyle: ProgressViewStyle {
     var color: String
+    var width: CGFloat
     func makeBody(configuration: Configuration) -> some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 14)
-                .frame(width: 360, height: 8)
+                .frame(width: CGFloat(width), height: 8)
                 .foregroundColor(.blue)
                 .overlay(Color.black.opacity(0.5)).cornerRadius(14)
             
