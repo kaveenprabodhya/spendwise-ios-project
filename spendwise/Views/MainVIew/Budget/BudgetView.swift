@@ -92,6 +92,7 @@ struct MonthlyPageTabView: View {
 
 
 struct BottomBudgetOverView: View {
+    var heightOfSheet: CGFloat = 752
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -116,9 +117,9 @@ struct BottomBudgetOverView: View {
                 .overlay(content: {
                     GeometryReader { geometry in
                         VStack {
-                            BottomBudgetSheet(sheetHeight: 752)
+                            BottomBudgetSheet(sheetHeight: heightOfSheet)
                         }
-                        .frame(width: geometry.size.width, height: 752)
+                        .frame(width: geometry.size.width, height: heightOfSheet)
                         .frame(maxHeight: .infinity, alignment: .bottom )
                     }
                 })
@@ -140,7 +141,7 @@ struct BottomBudgetSheet: View {
     var sheetHeight: CGFloat
     
     
-    var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
+    var budgetArray: [BudgetCategory] = []
     
     var body: some View{
         UnevenRoundedRectangleViewShape(topLeftRadius: 30,topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
