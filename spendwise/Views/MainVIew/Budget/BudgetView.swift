@@ -12,75 +12,79 @@ struct BudgetView: View {
     
     var body: some View {
         TabView(selection: $index){
-            BottomWeeklyView()
+            WeeklyPageTabView()
                 .tag(1)
-            BottomMonthlyView()
+            MonthlyPageTabView()
                 .tag(2)
-            BottomYearlyView()
+            YearlyPageTabView()
                 .tag(3)
         }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .edgesIgnoringSafeArea(.bottom)
         .overlay(alignment: .top) {
             Rectangle()
-                .fill(Color.clear)
-                .overlay(alignment: .top) {
-                        HStack {
-                            Button {
-                                self.index = 1
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Weekly")
-                                            .fontWeight(.semibold)
-                                    }
-                            }
-                            Button {
-                                self.index = 2
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Monthly")
-                                            .fontWeight(.semibold)
-                                    }
-                            }
-                            Button {
-                                self.index = 3
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Yearly")
-                                            .fontWeight(.semibold)
-                                    }
-                            }
+                .fill(.clear)
+                .overlay(alignment: .center) {
+                    HStack(spacing: 25) {
+                        Button {
+                            self.index = 1
+                        } label: {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(self.index == 1 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                .frame(width: 108, height: 46)
+                                .overlay {
+                                    Text("Weekly")
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(self.index == 1 ? .white : .black)
+                                }
                         }
+                        Button {
+                            self.index = 2
+                        } label: {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(self.index == 2 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                .frame(width: 108, height: 46)
+                                .overlay {
+                                    Text("Monthly")
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(self.index == 2 ? .white : .black)
+                                }
+                        }
+                        Button {
+                            self.index = 3
+                        } label: {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(self.index == 3 ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+                                .frame(width: 108, height: 46)
+                                .overlay {
+                                    Text("Yearly")
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(self.index == 3 ? .white : .black)
+                                }
+                        }
+                    }
+                    .frame(width: UIScreen.main.bounds.size.width, height: 65)
+                    .background(.white.opacity(0.3))
                 }
-                .frame(height: 65)
+                .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
+                .frame(height: 95)
         }
     }
 }
 
-struct BottomWeeklyView: View {
+struct WeeklyPageTabView: View {
     var body: some View {
-        ZStack {
-//            BottomBudgetOverView()
-        }
+        BottomBudgetOverView()
     }
 }
 
-struct BottomYearlyView: View {
+struct YearlyPageTabView: View {
     var body: some View {
-        ZStack {
-//            BottomBudgetOverView()
-        }
+        BottomBudgetOverView()
     }
 }
 
-struct BottomMonthlyView: View {
+struct MonthlyPageTabView: View {
     var body: some View {
         BottomBudgetOverView()
     }
@@ -88,6 +92,43 @@ struct BottomMonthlyView: View {
 
 
 struct BottomBudgetOverView: View {
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(.clear)
+                    .background(LinearGradient(
+                        gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]),
+                        startPoint: .topTrailing,
+                        endPoint: .bottomLeading
+                    ))
+                    .frame(width: geometry.size.width, height: 220)
+                
+            }
+            ZStack(alignment: .top) {
+                VStack(spacing: 0) {
+                    GeometryReader { geometry in
+                        Color.clear.frame(width: geometry.size.width, height: geometry.size.height)
+                    }
+                    
+                }
+                .overlay(content: {
+                    GeometryReader { geometry in
+                        VStack {
+                            BottomBudgetSheet(sheetHeight: 752)
+                        }
+                        .frame(width: geometry.size.width, height: 752)
+                        .frame(maxHeight: .infinity, alignment: .bottom )
+                    }
+                })
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
+    }
+}
+
+struct BottomBudgetSheet: View {
     @State var progressValue:Float = 0
     @State var date: String = "Month"
     @State var usedAmount: Double = 0.00
@@ -96,87 +137,79 @@ struct BottomBudgetOverView: View {
     var spentAmountForLast7Days: Double = 300000.00
     var leftToSpend: Int = 17500
     var limitPerDay: Int = 3000
+    var sheetHeight: CGFloat
     
     
     var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
-    var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(.clear)
-                .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
-                .frame(height: 260)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .edgesIgnoringSafeArea(.top)
-            UnevenRoundedRectangleViewShape(topLeftRadius: 30, topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
-                .fill(.white)
-                .frame(height: 620)
-                .overlay {
-                    if budgetArray.isEmpty {
+    
+    var body: some View{
+        UnevenRoundedRectangleViewShape(topLeftRadius: 30,topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
+            .fill(.white)
+            .frame(height: sheetHeight)
+            .overlay {
+                if budgetArray.isEmpty {
+                    VStack {
+                        BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
                         VStack {
-                            BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
+                            Image("budget-empty-screen")
+                                .resizable()
+                                .scaledToFit()
+                        }.overlay {
                             VStack {
-                                Image("budget-empty-screen")
-                                    .resizable()
-                                    .scaledToFit()
-                            }.overlay {
-                                VStack {
-                                    Text(
-                                    """
-                                    Looks Like, You don’t have a budget.
-                                    Let’s make one so you in control.
-                                    """
-                                    )
-                                    .multilineTextAlignment(.center)
-                                    .font(.system(size: 18, weight: .medium))
-                                    Spacer()
+                                Text(
+                                     """
+                                     Looks Like, You don’t have a budget.
+                                     Let’s make one so you in control.
+                                     """
+                                )
+                                .multilineTextAlignment(.center)
+                                .font(.system(size: 18, weight: .medium))
+                                Spacer()
+                            }.padding()
+                        }
+                        Spacer()
+                    }
+                }
+                else {
+                    VStack {
+                        BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
+                        VStack {
+                            if !spentAmountForLast7Days.isNaN {
+                                HStack {
+                                    Text("You’ve spent")
+                                        .font(.system(size: 14, weight: .medium))
+                                    Text("LKR \(formatCurrency(value: spentAmountForLast7Days))")
+                                        .foregroundColor(Color("ColorVividBlue"))
+                                        .font(.system(size: 16, weight: .bold))
+                                    
+                                    Text("for the past 7 days")
+                                        .font(.system(size: 14, weight: .medium))
                                 }.padding()
                             }
-                            Spacer()
-                        }
-                    }
-                    else {
-                        VStack {
-                            BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
-                            VStack {
-                                if !spentAmountForLast7Days.isNaN {
-                                    HStack {
-                                        Text("You’ve spent")
-                                            .font(.system(size: 14, weight: .medium))
-                                        Text("LKR \(formatCurrency(value: spentAmountForLast7Days))")
-                                            .foregroundColor(Color("ColorVividBlue"))
-                                            .font(.system(size: 16, weight: .bold))
-                                        
-                                        Text("for the past 7 days")
-                                            .font(.system(size: 14, weight: .medium))
-                                    }.padding()
+                            HStack {
+                                Text("What’s left to spend").font(.system(size: 14, weight: .medium))
+                                Spacer()
+                                Text("\(leftToSpend)").font(.system(size: 16, weight: .bold))
+                            }.padding(.horizontal, 10).padding(.bottom, 4)
+                            HStack {
+                                Text("Spend Limit per Day").font(.system(size: 14, weight: .medium))
+                                Spacer()
+                                Text("\(limitPerDay)").font(.system(size: 16, weight: .bold))
+                            }.padding(.horizontal, 10).padding(.bottom, 4)
+                        }.padding(.bottom, 20)
+                        GeometryReader { geometry in
+                            ScrollView(showsIndicators: false) {
+                                VStack {
+                                    ForEach(0..<8){index in
+                                        OverallBudgetCategoryCardView()
+                                    }
                                 }
-                                HStack {
-                                    Text("What’s left to spend").font(.system(size: 14, weight: .medium))
-                                    Spacer()
-                                    Text("\(leftToSpend)").font(.system(size: 16, weight: .bold))
-                                }.padding(.horizontal, 10).padding(.bottom, 4)
-                                HStack {
-                                    Text("Spend Limit per Day").font(.system(size: 14, weight: .medium))
-                                    Spacer()
-                                    Text("\(limitPerDay)").font(.system(size: 16, weight: .bold))
-                                }.padding(.horizontal, 10).padding(.bottom, 4)
-                            }.padding(.bottom, 20)
-                            VStack {
-                                ScrollView {
-                                    VStack {
-                                        OverallBudgetCategoryCardView()
-                                    }
-                                    VStack {
-                                        OverallBudgetCategoryCardView()
-                                    }
-                                }.frame(maxHeight: .infinity)
-                            }
+                                
+                            }.frame(width: geometry.size.width, height: 240)
                         }
                     }
                 }
-        }
-        .frame(maxHeight: .infinity, alignment: .bottom)
-        .edgesIgnoringSafeArea(.bottom)
+            }
     }
 }
 
@@ -282,12 +315,6 @@ struct ProgressBarViewTwo: View {
     }
 }
 
-struct BudgetView_Previews: PreviewProvider {
-    static var previews: some View {
-        BudgetView()
-    }
-}
-
 struct BudgetOverView: View {
     @Binding var totalBudgetAmount: Double
     @Binding var progressValue: Float
@@ -320,3 +347,10 @@ struct BudgetOverView: View {
         .padding(.top, 20)
     }
 }
+
+struct BudgetView_Previews: PreviewProvider {
+    static var previews: some View {
+        BudgetView()
+    }
+}
+
