@@ -9,7 +9,9 @@ import SwiftUI
 
 struct TransactionView: View {
     var body: some View {
-        Text("Transaction View")
+        Rectangle()
+            .fill(Color.clear)
+            .background(LinearGradient(gradient: Gradient(colors: [Color("ColorElectricIndigo"), Color("ColorCerulean")]), startPoint: .topTrailing, endPoint: .bottomLeading))
     }
 }
 
