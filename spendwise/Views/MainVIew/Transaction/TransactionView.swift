@@ -9,9 +9,12 @@ import SwiftUI
 
 struct TransactionView: View {
     var body: some View {
-        Rectangle()
-            .fill(Color.clear)
+        ZStack {
+            Rectangle()
+                .fill(Color.clear)
             .background(LinearGradient(gradient: Gradient(colors: [Color("ColorElectricIndigo"), Color("ColorCerulean")]), startPoint: .topTrailing, endPoint: .bottomLeading))
+        }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
