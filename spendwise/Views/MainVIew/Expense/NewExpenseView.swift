@@ -19,7 +19,7 @@ struct NewExpenseView: View {
             ToolbarItem(placement: .principal) {
                 VStack {
                     Text("Expense")
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 22, weight: .semibold))
                         .foregroundColor(Color.black)
                 }
             }

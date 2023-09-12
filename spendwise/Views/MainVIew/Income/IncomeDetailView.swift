@@ -19,7 +19,7 @@ struct IncomeDetailView: View {
             ToolbarItem(placement: .principal) {
                 VStack {
                     Text("Detail Transaction")
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 22, weight: .semibold))
                         .foregroundColor(Color.black)
                 }
             }
