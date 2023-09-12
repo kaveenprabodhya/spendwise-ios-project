@@ -68,7 +68,7 @@ struct BudgetView: View {
                     }
                     .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
                     .frame(height: 95)
-        }
+            }
         }
     }
 }
@@ -142,7 +142,9 @@ struct BottomBudgetSheet: View {
     var sheetHeight: CGFloat
     
     
-    var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
+//    var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
+    
+    var budgetArray: [BudgetCategory] = []
     
     var body: some View{
         UnevenRoundedRectangleViewShape(topLeftRadius: 30,topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
@@ -150,14 +152,14 @@ struct BottomBudgetSheet: View {
             .frame(height: sheetHeight)
             .overlay {
                 if budgetArray.isEmpty {
-                    VStack {
+                    VStack(spacing: 0) {
                         BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
-                        VStack {
+                        VStack(spacing: 0) {
                             Image("budget-empty-screen")
                                 .resizable()
                                 .scaledToFit()
                         }.overlay {
-                            VStack {
+                            VStack(spacing: 0) {
                                 Text(
                                      """
                                      Looks Like, You don’t have a budget.
@@ -167,15 +169,17 @@ struct BottomBudgetSheet: View {
                                 .multilineTextAlignment(.center)
                                 .font(.system(size: 18, weight: .medium))
                                 Spacer()
-                            }.padding()
+                            }
+                            .offset(y: -10)
+                            .padding()
                         }
                         Spacer()
                     }
                 }
                 else {
-                    VStack {
+                    VStack(spacing : 0) {
                         BudgetOverView(totalBudgetAmount: self.$totalBudgetAmount, progressValue: self.$progressValue, date: self.$date, usedAmount: self.$usedAmount)
-                        VStack {
+                        VStack(spacing : 0) {
                             if !spentAmountForLast7Days.isNaN {
                                 HStack {
                                     Text("You’ve spent")
@@ -322,32 +326,77 @@ struct BudgetOverView: View {
     @Binding var progressValue: Float
     @Binding var date: String
     @Binding var usedAmount: Double
+    @State private var scrollOffset: CGFloat = 0
+    @State private var currentPage = 0
+    
+    let months: [String] = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ]
     
     var body: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 60) {
-                Image(systemName: "chevron.left.circle")
-                    .font(.system(size: 35))
-                    .foregroundColor(Color("ColorVividBlue"))
-                BudgetProgressView(progressValue: progressValue, date: date, usedAmount: usedAmount)
-                    .frame(width: 175, height: 175)
-                Image(systemName: "chevron.right.circle")
-                    .font(.system(size: 35))
-                    .foregroundColor(Color("ColorVividBlue"))
+            HStack(spacing: 0) {
+                Button {
+                    scrollToPage(page: currentPage - 1)
+                } label: {
+                    Image(systemName: "chevron.left.circle")
+                        .font(.system(size: 35))
+                        .foregroundColor(Color("ColorVividBlue"))
+                }
+                GeometryReader { geometry in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 0){
+                            ForEach(months, id: \.self) { month in
+                                VStack(spacing: 15) {
+                                    BudgetProgressView(progressValue: progressValue, date: month, usedAmount: usedAmount)
+                                        .frame(width: 175, height: 175)
+                                    VStack {
+                                        Text("Monthly Budget")
+                                            .font(.system(size: 16, weight: .bold))
+                                        Text("LKR \(formatCurrency(value: totalBudgetAmount))")
+                                            .font(.system(size: 18, weight: .bold))
+                                            .multilineTextAlignment(.center)
+                                    }
+                                }.frame(width: geometry.size.width, alignment: .center)
+                        }
+                        .padding(.vertical, 5)
+                        .frame(width: 300, alignment: .leading)
+                        .offset(x: scrollOffset)
+                        .animation(.easeInOut, value: scrollOffset)
+                        }
+                    }
+                    .coordinateSpace(name: "scroll")
+                    .onAppear() {
+                        scrollToCurrentMonth()
+                    }
+                }
+                
+                Button {
+                    scrollToPage(page: currentPage + 1)
+                } label: {
+                    Image(systemName: "chevron.right.circle")
+                        .font(.system(size: 35))
+                        .foregroundColor(Color("ColorVividBlue"))
+                }
+                
             }
-            .padding(.bottom, 15)
-            Text(
-                """
-                Monthly Budget
-                LKR \(formatCurrency(value: totalBudgetAmount))
-                """
-            )
-            .font(.system(size: 18, weight: .bold))
-            .multilineTextAlignment(.center)
-        }
-        .padding(.bottom, 10)
-        .padding(.top, 20)
+            .frame(height: 235)
+            .padding()
+    
     }
+    
+    private func scrollToPage(page: Int) {
+        withAnimation {
+            currentPage = min(max(page, 0), months.count - 1)
+            scrollOffset = -CGFloat(currentPage) * 300
+        }
+    }
+    
+    func scrollToCurrentMonth() {
+            if let currentMonthIndex = Calendar.current.dateComponents([.month], from: Date()).month {
+                scrollToPage(page: currentMonthIndex - 1)
+            }
+        }
 }
 
 struct BudgetView_Previews: PreviewProvider {
