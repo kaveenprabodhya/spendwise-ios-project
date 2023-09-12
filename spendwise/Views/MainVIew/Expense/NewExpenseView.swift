@@ -11,7 +11,11 @@ struct NewExpenseView: View {
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack{
-            
+            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorBrickRed"), Color("ColorDeepEspressoBrown")]){
+                VStack {
+                    Text("Hellooooo")
+                }
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -20,7 +24,7 @@ struct NewExpenseView: View {
                 VStack {
                     Text("Expense")
                         .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color.black)
+                        .foregroundColor(.white)
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
@@ -29,6 +33,7 @@ struct NewExpenseView: View {
                 } label: {
                     Image(systemName: "arrow.left")
                         .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
                 }
             }
         }

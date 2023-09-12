@@ -10,7 +10,7 @@ import SwiftUI
 struct AccountView: View {
     var body: some View {
         VStack {
-            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]){
+            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorDeepTeal"), Color("ColorRoyalBlue")]){
                 VStack {
                     Text("Hellooooo")
                 }

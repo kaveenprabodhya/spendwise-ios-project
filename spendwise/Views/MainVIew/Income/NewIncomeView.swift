@@ -11,7 +11,11 @@ struct NewIncomeView: View {
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack{
-            
+                CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")]){
+                    VStack {
+                        Text("Hellooooo")
+                    }
+                }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -20,7 +24,7 @@ struct NewIncomeView: View {
                 VStack {
                     Text("Income")
                         .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color.black)
+                        .foregroundColor(.white)
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {
@@ -29,6 +33,7 @@ struct NewIncomeView: View {
                 } label: {
                     Image(systemName: "arrow.left")
                         .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
                 }
             }
         }
