@@ -11,6 +11,7 @@ struct HomeView: View {
     // MARK: - Properties
     @State var index = 0
     @State var expand = false
+    @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
     
     // MARK: - Body
     var body: some View {
@@ -131,13 +132,16 @@ struct HomeView: View {
                                 Spacer()
                             }
                             VStack {
-                                BudgetChartView()
+                                BudgetChartView(budgetArray: viewModel.budgetArray)
                                 Spacer()
                             }
                     }
                     Spacer()
                 }.padding(.top, 15)
             }
+        }
+        .onAppear{
+            viewModel.fetchData()
         }
         .edgesIgnoringSafeArea(.top)
     }
