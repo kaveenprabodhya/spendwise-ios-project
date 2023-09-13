@@ -12,23 +12,7 @@ struct BudgetChartView: View {
     @State var totalSpendFromBudget: Double = 29000.00
     @State var progressValue: Float = 0.3
     
-    let budgetArray: [Budget] = [
-        Budget(
-            id: "qwerty1234",
-            category:
-                [
-                    BudgetCategory(
-                        id: "1",
-                        name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod"
-                    )
-                ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
-        )
-    ]
+    let budgetArray: [Budget]
     
     var body: some View {
         VStack {
@@ -128,7 +112,7 @@ struct ProgressBarViewOne: View {
 
 struct BudgetChartView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetChartView()
+        BudgetChartView(budgetArray: [])
     }
 }
 
