@@ -12,10 +12,22 @@ struct BudgetChartView: View {
     @State var totalSpendFromBudget: Double = 29000.00
     @State var progressValue: Float = 0.3
     
-    let categoryArray: [BudgetCategory] = [
-        BudgetCategory(id: "1", name: "Groceries", allocatedAmount: 100000.00, currentAmountSpent: 10.00),
-        BudgetCategory(id: "2", name: "Utilities", allocatedAmount: 100000.00, currentAmountSpent: 10.00),
-        BudgetCategory(id: "3", name: "Rent", allocatedAmount: 100000.00, currentAmountSpent: 10.00)
+    let budgetArray: [Budget] = [
+        Budget(
+            id: "qwerty1234",
+            category:
+                [
+                    BudgetCategory(
+                        id: "1",
+                        name: "Shopping",
+                        primaryBackgroundColor: "ColorGoldenrod"
+                    )
+                ],
+            allocatedAmount: 300000.00,
+            currentAmountSpent: 100000.00,
+            numberOfDaysSpent: 8,
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+        )
     ]
     
     var body: some View {
@@ -54,9 +66,11 @@ struct BudgetChartView: View {
                             VStack(spacing: 0) {
                                 ScrollView(.horizontal) {
                                     HStack(spacing: 0) {
-                                        ForEach(categoryArray) { category in
-                                            VStack {
-                                                CategoryProgressView(progressValue: progressValue, categoryName: category.name)
+                                        ForEach(budgetArray) { budget in
+                                            ForEach(budget.category) { category in
+                                                VStack {
+                                                    CategoryProgressView(progressValue: progressValue, categoryName: category.name)
+                                                }
                                             }
                                         }
                                     }
@@ -108,23 +122,6 @@ struct ProgressBarViewOne: View {
                 .frame(width: 60)
                 .fixedSize(horizontal: false, vertical: true)
                 .bold()
-        }
-    }
-}
-
-struct RoundedRectProgressViewStyle: ProgressViewStyle {
-    var color: String
-    var width: CGFloat
-    func makeBody(configuration: Configuration) -> some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 14)
-                .frame(width: CGFloat(width), height: 8)
-                .foregroundColor(.blue)
-                .overlay(Color.black.opacity(0.5)).cornerRadius(14)
-            
-            RoundedRectangle(cornerRadius: 14)
-                .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * 360, height: 8)
-                .foregroundColor(Color(color))
         }
     }
 }
