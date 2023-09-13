@@ -142,9 +142,25 @@ struct BottomBudgetSheet: View {
     var sheetHeight: CGFloat
     
     
-//    var budgetArray: [BudgetCategory] = [BudgetCategory(id: "qwerty1234", name: "Shopping", allocatedAmount: 300000.00, currentAmountSpent: 100000.00)]
+    var budgetArray: [Budget] = [
+        Budget(
+            id: "qwerty1234",
+            category:
+                [
+                    BudgetCategory(
+                        id: "1",
+                        name: "Shopping",
+                        primaryBackgroundColor: "ColorGoldenrod"
+                    )
+                ],
+            allocatedAmount: 300000.00,
+            currentAmountSpent: 100000.00,
+            numberOfDaysSpent: 8,
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+        )
+    ]
     
-    var budgetArray: [BudgetCategory] = []
+//    var budgetArray: [BudgetCategory] = []
     
     var body: some View{
         UnevenRoundedRectangleViewShape(topLeftRadius: 30,topRightRadius: 30, bottomLeftRadius: 0, bottomRightRadius: 0)
@@ -206,12 +222,16 @@ struct BottomBudgetSheet: View {
                         GeometryReader { geometry in
                             ScrollView(showsIndicators: false) {
                                 VStack {
-                                    ForEach(0..<8){index in
-                                        OverallBudgetCategoryCardView()
+                                    ForEach(budgetArray) { budget in
+                                        ForEach(budget.category) { category in
+                                            OverallBudgetCategoryCardView(
+                                                 primaryBackgroundColor: category.primaryBackgroundColor, budgetCategoryName: category.name, amountAllocated: budget.allocatedAmount, amountSpent: budget.currentAmountSpent, numberOfDaysSpent: budget.numberOfDaysSpent, footerMessage: budget.footerMessage
+                                            )
+                                        }
                                     }
                                 }
                                 
-                            }.frame(width: geometry.size.width, height: 260)
+                            }.frame(width: geometry.size.width, height: geometry.size.height)
                         }
                     }
                 }
@@ -220,20 +240,26 @@ struct BottomBudgetSheet: View {
 }
 
 struct OverallBudgetCategoryCardView: View {
-    var remainingAmount: Int = 1000
+    var primaryBackgroundColor: String
+    var budgetCategoryName: String
+    var amountAllocated: Double
+    var amountSpent: Double
+    var numberOfDaysSpent: Int
+    var footerMessage: FooterMessage
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
-            .fill(Color("ColorGoldenrod"))
+            .fill(Color(primaryBackgroundColor))
             .frame(width: 400, height: 191)
             .overlay {
                 VStack {
                     HStack(alignment: .center) {
                         HStack{
                             Circle()
-                                .fill(Color("ColorGoldenrod"))
+                                .fill(Color(primaryBackgroundColor))
                                 .frame(width: 14, height: 14)
-                            Text("Shopping")
+                            Text(budgetCategoryName)
+                                .font(.system(size: 16, weight: .semibold))
                         }.padding(.vertical, 5)
                             .padding(.horizontal, 8)
                             .background(
@@ -242,38 +268,61 @@ struct OverallBudgetCategoryCardView: View {
                                 
                             )
                         Spacer()
-                        Image(systemName: "exclamationmark.circle.fill")
-                            .foregroundColor(Color("ColorCrimsonRed"))
-                            .font(.system(size: 24))
-                        
+                        NavigationLink {
+                            DetailBudgetView()
+                        } label: {
+                            Image(systemName: "arrow.forward.circle")
+                                .font(.system(size: 28, weight: .semibold))
+                                .foregroundColor(Color("ColorWhite"))
+                        }
                     }
                     VStack {
-                        Text("Remaining LKR \(remainingAmount)")
+                        Text("Remaining LKR \(formatCurrency(value: calculateRemainingAmount(amountAllocated: amountAllocated, spent: amountSpent)))")
                             .font(.system(size: 24, weight: .bold))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.white)
                         VStack {
                             GeometryReader { geometry in
-                                ProgressView(value: 90, total: 100)
-                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorFreshMintGreen", width: geometry.size.width))
+                                ProgressView(value: calculateProgressBarValue(amountAllocated: amountAllocated, spent: amountSpent), total: 100)
+                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorDarkBlue", width: geometry.size.width))
                                     .accentColor(Color("ColorFreshMintGreen"))
-                            }.padding(.bottom, 5)
+                            }.padding(.bottom, 10)
                             HStack {
-                                Text("$1200 of $1200")
+                                Text("\(formatCurrency(value: amountSpent)) of \(formatCurrency(value: amountAllocated))")
                                 Spacer()
-                                Text("140 daily")
+                                Text("\(numberOfDaysSpent) days")
                             }
                         }
                         .padding(.bottom, 5)
-                        Text("You’ve exceed the limit!")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(Color("ColorCrimsonRed"))
+                        HStack {
+                            if(footerMessage.warning){
+                                Image(systemName: "exclamationmark.circle.fill")
+                                    .foregroundColor(Color("ColorCrimsonRed"))
+                                    .font(.system(size: 24))
+                            }
+                            Text(footerMessage.message)
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(Color("ColorCrimsonRed"))
                             .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                            Spacer()
+                        }
                     }
                     Spacer()
                 }.padding()
             }
     }
+    private func calculateProgressBarValue(amountAllocated: Double, spent: Double) -> Double {
+           guard amountAllocated > 0 else {
+               return 0.0
+           }
+           let progress = (spent / amountAllocated) * 100.0
+           return min(max(progress, 0.0), 100.0)
+       }
+    private func calculateRemainingAmount(amountAllocated: Double, spent: Double) -> Double {
+            let remainingAmount = amountAllocated - spent
+            return max(remainingAmount, 0.0)
+        }
 }
 
 struct BudgetProgressView: View {
