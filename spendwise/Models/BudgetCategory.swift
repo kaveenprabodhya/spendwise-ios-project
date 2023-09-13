@@ -8,7 +8,8 @@
 import Foundation
 
 struct Budget: Identifiable {
-    let id: String
+    let id: UUID
+    let budgetType: BudgetType
     let category: [BudgetCategory]
     let allocatedAmount: Double
     let currentAmountSpent: Double
@@ -22,7 +23,26 @@ struct FooterMessage {
 }
 
 struct BudgetCategory: Identifiable {
-    let id: String
+    let id: UUID
     let name: String
     let primaryBackgroundColor: String
+}
+
+struct BudgetType {
+    let type: BudgetTypeOption
+    let date: BudgetDateOption
+    let limit: Double
+}
+
+enum BudgetTypeOption: String {
+    case monthly = "monthly"
+    case weekly = "weekly"
+    case yearly = "yearly"
+}
+
+enum BudgetDateOption {
+    case yearOnly(Int)
+    case monthOnly(Int)
+    // month, start-date, end-date
+    case dateRange(Int, Int, Int)
 }
