@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetView: View {
-    @State private var selectedTab: BudgetTypeOption = .weekly
+    @State private var selectedTab: BudgetTypeOption = .monthly
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
     
     var yearlyBudgets: [Budget] {
@@ -157,6 +157,7 @@ struct BottomBudgetOverView: View {
 struct BottomBudgetSheet: View {
     @State var limitPerDay: Double = 0
     @Binding var selectedTab: BudgetTypeOption
+    @State private var date: String = "date"
     
     var spentAmountForLast7Days: Double = 0
     var sheetHeight: CGFloat
@@ -206,6 +207,7 @@ struct BottomBudgetSheet: View {
                         progressValue: progressValue,
                         usedAmount: totalAmountSpent,
                         selectedTab: $selectedTab,
+                        date: $date,
                         budgetArray: budgetArray
                     )
                     VStack(spacing: 0) {
@@ -237,6 +239,7 @@ struct BottomBudgetSheet: View {
                         progressValue: progressValue,
                         usedAmount: totalAmountSpent,
                         selectedTab: $selectedTab,
+                        date: $date,
                         budgetArray: budgetArray
                     )
                     VStack(spacing : 0) {
@@ -269,7 +272,12 @@ struct BottomBudgetSheet: View {
                                 ForEach(budgetArray) { budget in
                                     ForEach(budget.category) { category in
                                         OverallBudgetCategoryCardView(
-                                            primaryBackgroundColor: category.primaryBackgroundColor, budgetCategoryName: category.name, amountAllocated: budget.allocatedAmount, amountSpent: budget.currentAmountSpent, numberOfDaysSpent: budget.numberOfDaysSpent, footerMessage: budget.footerMessage
+                                            primaryBackgroundColor: category.primaryBackgroundColor,
+                                            budgetCategoryName: category.name,
+                                            amountAllocated: budget.allocatedAmount,
+                                            amountSpent: budget.currentAmountSpent,
+                                            numberOfDaysSpent: budget.numberOfDaysSpent,
+                                            footerMessage: budget.footerMessage
                                         )
                                     }
                                 }
@@ -292,6 +300,7 @@ struct BudgetOverView: View {
     @State private var currentPage = 0
     @State private var isScrollEnabled = false
     @Binding var selectedTab: BudgetTypeOption
+    @Binding var date: String
     
     var budgetArray: [Budget]
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -305,7 +314,7 @@ struct BudgetOverView: View {
     
     func getDateOptionAndLabel(for budgets: [Budget]) -> (BudgetDateOption, String) {
         let dateOption = budgets[0].budgetType.date
-
+        
         switch dateOption {
         case .monthOnly(let month):
             let label = Calendar.current.monthSymbols[month - 1]
@@ -331,6 +340,7 @@ struct BudgetOverView: View {
     }
     
     var body: some View {
+        Text("\(date)")
         HStack(spacing: 0) {
             Button {
                 if selectedTab == .weekly || selectedTab == .monthly {
@@ -421,7 +431,7 @@ struct BudgetOverView: View {
                                 .frame(width: 300, alignment: .leading)
                                 .offset(x: scrollOffset)
                                 .animation(.easeInOut, value: scrollOffset)
-                            
+                                
                             }
                         }
                         else if selectedTab == .yearly {
@@ -429,39 +439,39 @@ struct BudgetOverView: View {
                                 let (_, label) = getDateOptionAndLabel(for: budgetArray)
                                 VStack {
                                     if label == year {
-                                    VStack(spacing: 15) {
-                                        BudgetProgressView(progressValue: $progressValue, date: label, usedAmount: $usedAmount)
-                                            .frame(width: 175, height: 175)
-                                        VStack {
-                                            Text("Yearly Budget")
-                                                .font(.system(size: 16, weight: .bold))
-                                            Text("LKR \(formatCurrency(value: totalBudgetAmount))")
-                                                .font(.system(size: 18, weight: .bold))
-                                                .multilineTextAlignment(.center)
+                                        VStack(spacing: 15) {
+                                            BudgetProgressView(progressValue: $progressValue, date: label, usedAmount: $usedAmount)
+                                                .frame(width: 175, height: 175)
+                                            VStack {
+                                                Text("Yearly Budget")
+                                                    .font(.system(size: 16, weight: .bold))
+                                                Text("LKR \(formatCurrency(value: totalBudgetAmount))")
+                                                    .font(.system(size: 18, weight: .bold))
+                                                    .multilineTextAlignment(.center)
+                                            }
                                         }
+                                        .frame(width: geometry.size.width, alignment: .center)
                                     }
-                                    .frame(width: geometry.size.width, alignment: .center)
-                                }
                                     else {
-                                       VStack(spacing: 15) {
-                                           BudgetProgressView(progressValue: .constant(0), date: year, usedAmount: .constant(0))
-                                               .frame(width: 175, height: 175)
-                                           VStack {
-                                               Text("Weekly Budget")
-                                                   .font(.system(size: 16, weight: .bold))
-                                               Text("LKR \(formatCurrency(value: 0))")
-                                                   .font(.system(size: 18, weight: .bold))
-                                                   .multilineTextAlignment(.center)
-                                           }
-                                       }
-                                       .frame(width: geometry.size.width, alignment: .center)
-                                   }
+                                        VStack(spacing: 15) {
+                                            BudgetProgressView(progressValue: .constant(0), date: year, usedAmount: .constant(0))
+                                                .frame(width: 175, height: 175)
+                                            VStack {
+                                                Text("Weekly Budget")
+                                                    .font(.system(size: 16, weight: .bold))
+                                                Text("LKR \(formatCurrency(value: 0))")
+                                                    .font(.system(size: 18, weight: .bold))
+                                                    .multilineTextAlignment(.center)
+                                            }
+                                        }
+                                        .frame(width: geometry.size.width, alignment: .center)
+                                    }
+                                }
+                                .padding(.vertical, 5)
+                                .frame(width: 300, alignment: .leading)
+                                .offset(x: scrollOffset)
+                                .animation(.easeInOut, value: scrollOffset)
                             }
-                            .padding(.vertical, 5)
-                            .frame(width: 300, alignment: .leading)
-                            .offset(x: scrollOffset)
-                            .animation(.easeInOut, value: scrollOffset)
-                        }
                         }
                     }
                 }
@@ -616,7 +626,7 @@ struct OverallBudgetCategoryCardView: View {
 
 struct BudgetProgressView: View {
     @Binding var progressValue:Float
-     var date: String
+    var date: String
     @Binding var usedAmount: Double
     
     var body: some View {
@@ -628,7 +638,7 @@ struct BudgetProgressView: View {
 
 struct ProgressBarViewTwo: View {
     @Binding var progress: Float
-     var date: String
+    var date: String
     @Binding var usedAmount: Double
     
     var body: some View {
