@@ -9,37 +9,18 @@ import SwiftUI
 
 struct BudgetView: View {
     @State private var selectedTab: BudgetTypeOption = .monthly
-    @State private var date: String = DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1]
     @State private var currentPage: Int = 0
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
     
-    var yearlyBudgets: [Budget] {
-        viewModel.budgetArray.filter { $0.budgetType.type == .yearly }
-    }
-    
-    var monthlyBudgets: [Budget] {
-        viewModel.budgetArray.filter { $0.budgetType.type == .monthly }
-    }
-    
-    var weeklyBudgets: [Budget] {
-        viewModel.budgetArray.filter { $0.budgetType.type == .weekly }
-    }
-    //    func printBudgets() {
-    //        for budget in monthlyBudgets {
-    //            print(budget.budgetType.type)
-    //            print(budget.category[0].name)
-    //            print(budget.allocatedAmount)
-    //        }
-    //    }
     var body: some View {
         
         ZStack {
             TabView(selection: $selectedTab){
-                WeeklyPageTabView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: weeklyBudgets)
+                PageTabView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: viewModel.budgetArray)
                     .tag(BudgetTypeOption.weekly)
-                MonthlyPageTabView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: monthlyBudgets)
+                PageTabView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: viewModel.budgetArray)
                     .tag(BudgetTypeOption.monthly)
-                YearlyPageTabView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: yearlyBudgets)
+                PageTabView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: viewModel.budgetArray)
                     .tag(BudgetTypeOption.yearly)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -47,46 +28,7 @@ struct BudgetView: View {
                 Rectangle()
                     .fill(.clear)
                     .overlay(alignment: .center) {
-                        HStack(spacing: 25) {
-                            Button {
-                                self.selectedTab = .weekly
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(self.selectedTab == .weekly ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Weekly")
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(self.selectedTab == .weekly ? .white : .black)
-                                    }
-                            }
-                            Button {
-                                self.selectedTab = .monthly
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(self.selectedTab == .monthly ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Monthly")
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(self.selectedTab == .monthly ? .white : .black)
-                                    }
-                            }
-                            Button {
-                                self.selectedTab = .yearly
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(self.selectedTab == .yearly ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
-                                    .frame(width: 108, height: 46)
-                                    .overlay {
-                                        Text("Yearly")
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(self.selectedTab == .yearly ? .white : .black)
-                                    }
-                            }
-                        }
-                        .frame(width: UIScreen.main.bounds.size.width, height: 65)
-                        .background(.white.opacity(0.3))
+                        TabButtons(selectedTab: $selectedTab)
                     }
                     .background(LinearGradient(gradient: Gradient(colors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]), startPoint: .topTrailing, endPoint: .bottomLeading))
                     .frame(height: 95)
@@ -94,46 +36,101 @@ struct BudgetView: View {
         }
         .onAppear{
             viewModel.fetchData()
-            //            let _: () = printBudgets()
         }
     }
 }
 
-struct WeeklyPageTabView: View {
+struct TabButtons: View {
     @Binding var selectedTab: BudgetTypeOption
-    @Binding var date: String
-    @Binding var currentPage: Int
-    var budgets: [Budget]
+    
     var body: some View {
-        BottomBudgetOverView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: self.budgets)
+        HStack(spacing: 25) {
+            Button(action: {
+                withAnimation {
+                    self.selectedTab = .weekly
+                }
+            }) {
+                TabButton(label: "Weekly", isSelected: selectedTab == .weekly)
+            }
+            Button(action: {
+                withAnimation {
+                    self.selectedTab = .monthly
+                }
+            }) {
+                TabButton(label: "Monthly", isSelected: selectedTab == .monthly)
+            }
+            Button(action: {
+                withAnimation {
+                    self.selectedTab = .yearly
+                }
+            }) {
+                TabButton(label: "Yearly", isSelected: selectedTab == .yearly)
+            }
+        }
+        .frame(width: UIScreen.main.bounds.size.width, height: 65)
+        .background(.white.opacity(0.3))
     }
 }
 
-struct YearlyPageTabView: View {
-    @Binding var selectedTab: BudgetTypeOption
-    @Binding var date: String
-    @Binding var currentPage: Int
-    var budgets: [Budget]
+struct TabButton: View {
+    let label: String
+    let isSelected: Bool
+    
     var body: some View {
-        BottomBudgetOverView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: self.budgets)
+        RoundedRectangle(cornerRadius: 15)
+            .fill(isSelected ? Color("ColorVividBlue") : Color("ColorPaleBlueGray"))
+            .frame(width: 108, height: 46)
+            .overlay {
+                Text(label)
+                    .fontWeight(.semibold)
+                    .foregroundColor(isSelected ? .white : .black)
+            }
     }
 }
 
-struct MonthlyPageTabView: View {
+struct PageTabView: View {
     @Binding var selectedTab: BudgetTypeOption
-    @Binding var date: String
     @Binding var currentPage: Int
     var budgets: [Budget]
+    
+    var yearlyBudgets: [Budget] {
+        budgets.filter { $0.budgetType.type == .yearly }
+    }
+    
+    var monthlyBudgets: [Budget] {
+        budgets.filter { $0.budgetType.type == .monthly }
+    }
+    
+    var weeklyBudgets: [Budget] {
+        budgets.filter { $0.budgetType.type == .weekly }
+    }
+    
+    func printBudgets(budget: [Budget]) {
+        for budget in budget {
+            print(budget.budgetType.type)
+            print(budget.category[0].name)
+            print(budget.allocatedAmount)
+        }
+    }
+    
     var body: some View {
-        BottomBudgetOverView(selectedTab: $selectedTab, date: $date, currentPage: $currentPage, budgets: self.budgets)
+        if selectedTab == .monthly {
+            BottomBudgetSheetOverView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: monthlyBudgets)
+                .onAppear{
+                    let _: () = printBudgets(budget: monthlyBudgets)
+                }
+        } else if selectedTab == .weekly {
+            BottomBudgetSheetOverView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: weeklyBudgets)
+        } else if selectedTab == .yearly {
+            BottomBudgetSheetOverView(selectedTab: $selectedTab, currentPage: $currentPage, budgets: yearlyBudgets)
+        }
     }
 }
 
-
-struct BottomBudgetOverView: View {
-    var heightOfSheet: CGFloat = 672
+struct BottomBudgetSheetOverView: View {
+    var heightOfSheet: CGFloat = UIScreen.main.bounds.height * 3/4
     @Binding var selectedTab: BudgetTypeOption
-    @Binding var date: String
+    @State private var date: String = DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1]
     @Binding var currentPage: Int
     var budgets: [Budget]
     
@@ -264,7 +261,7 @@ struct BottomBudgetSheet: View {
         return progressValues
     }
     
-    
+    // type - month - budget
     var budgetByMonth:  [(String, [(String, [Budget])])]{
         let monthlyBudgets = budgetArray.filter { budget in
             if case .monthOnly = budget.budgetType.date {
@@ -283,7 +280,7 @@ struct BottomBudgetSheet: View {
         }
         return result
     }
-    
+    //type - range - budget
     var budgetByWeek:  [(String, [(String, [Budget])])] {
         let weeklyBudgets = budgetArray.filter { budget in
             if case .dateRange = budget.budgetType.date {
@@ -304,7 +301,7 @@ struct BottomBudgetSheet: View {
         }
         return result
     }
-    
+    //type - year - budget
     var budgetByYear:  [(String, [(String, [Budget])])] {
         let yearlyBudgets = budgetArray.filter { budget in
             if case .yearOnly = budget.budgetType.date {
@@ -352,6 +349,7 @@ struct BottomBudgetSheet: View {
                     print("  Budget ID: \(budget.id)")
                     print("  Allocated Amount: $\(budget.allocatedAmount)")
                     print("  date range: $\(budget.budgetType.date)")
+                    print("        -------------")
                 }
                 print("-------------")
             }
@@ -430,29 +428,58 @@ struct BottomBudgetSheet: View {
                         HStack {
                             Text("What’s left to spend").font(.system(size: 14, weight: .medium))
                             Spacer()
-                            if let leftToSpendAmount = totalAmountRemainingByMonth["monthly"]?[date] {
-                                Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
+                            if selectedTab == .monthly {
+                                if let leftToSpendAmount = totalAmountRemainingByMonth["monthly"]?[date] {
+                                    Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                    Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                                }
                             }
-                            else if let leftToSpendAmount = totalAmountRemainingByMonth["weekly"]?[date] {
-                                Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
+                            else if selectedTab == .weekly {
+                                if let leftToSpendAmount = totalAmountRemainingByMonth["weekly"]?.compactMap({ $0.key.contains(date) ? $0.value : nil }).first {
+                                    Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                    Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                                }
                             }
-                            else if let leftToSpendAmount = totalAmountRemainingByMonth["yearly"]?[date] {
-                                Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
-                            } else {
-                                Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                            else if selectedTab == .yearly {
+                                if let leftToSpendAmount = totalAmountRemainingByMonth["yearly"]?[date] {
+                                    Text("\(formatCurrency(value: leftToSpendAmount))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                    Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                                }
                             }
+                            
                         }.padding(.horizontal, 20).padding(.bottom, 4)
                         HStack {
                             Text("Spend Limit per Day").font(.system(size: 14, weight: .medium))
                             Spacer()
-                            if let limit = limitForBudgetType.first(where: { $0.0 == "monthly" })?.1.first(where: { $0.0 == date })?.1 {
-                                Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
-                            } else if let limit = limitForBudgetType.first(where: { $0.0 == "weekly" })?.1.first(where: { $0.0 == date })?.1 {
-                                Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
-                            } else if let limit = limitForBudgetType.first(where: { $0.0 == "yearly" })?.1.first(where: { $0.0 == date })?.1 {
-                                Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
-                            } else {
-                                Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                            if selectedTab == .monthly {
+                                if let limit = limitForBudgetType.first(where: { $0.0 == "monthly" })?.1.first(where: { $0.0 == date })?.1 {
+                                    Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                    Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                                }
+                            }
+                            if selectedTab == .weekly {
+                                if let limit = limitForBudgetType.first(where: { $0.0 == "weekly" })?.1.first(where: { $0.0.contains(date)})?.1 {
+                                    Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                   Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                               }
+                            }
+                            if selectedTab == .yearly {
+                                if let limit = limitForBudgetType.first(where: { $0.0 == "yearly" })?.1.first(where: { $0.0 == date })?.1 {
+                                    Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
+                                }
+                                else {
+                                   Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                               }
                             }
 
                         }.padding(.horizontal, 20).padding(.bottom, 4)
@@ -460,20 +487,87 @@ struct BottomBudgetSheet: View {
                     GeometryReader { geometry in
                         ScrollView(showsIndicators: false) {
                             VStack {
-                                ForEach(budgetArray) { budget in
-                                    ForEach(budget.category) { category in
-                                        OverallBudgetCategoryCardView(
-                                            primaryBackgroundColor: category.primaryBackgroundColor,
-                                            budgetCategoryName: category.name,
-                                            amountAllocated: budget.allocatedAmount,
-                                            amountSpent: budget.currentAmountSpent,
-                                            numberOfDaysSpent: budget.numberOfDaysSpent,
-                                            footerMessage: budget.footerMessage
-                                        )
+                                if selectedTab == .monthly {
+                                    let filteredBudgets = budgetArray.filter { budget in
+                                        if case .monthOnly(let month) = budget.budgetType.date {
+                                            return DateFormatter().monthSymbols[month - 1] == date
+                                        }
+                                        return false
+                                    }
+                                    if filteredBudgets.isEmpty {
+                                        Text("No Budgets Found")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .padding()
+                                    } else {
+                                        ForEach(filteredBudgets){ budget in
+                                            ForEach(budget.category) { category in
+                                                OverallBudgetCategoryCardView(
+                                                    primaryBackgroundColor: category.primaryBackgroundColor,
+                                                    budgetCategoryName: category.name,
+                                                    amountAllocated: budget.allocatedAmount,
+                                                    amountSpent: budget.currentAmountSpent,
+                                                    numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                    footerMessage: budget.footerMessage
+                                                )
+                                            }
+                                        }
                                     }
                                 }
+                                if selectedTab == .weekly {
+                                    let filteredBudgets = budgetArray.filter { budget in
+                                        if case .dateRange(let month, _, _) = budget.budgetType.date {
+                                                       return DateFormatter().monthSymbols[month - 1] == date
+                                                   }
+                                                   return false
+                                               }
+                                    if filteredBudgets.isEmpty {
+                                        Text("No Budgets Found")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .padding()
+                                    } else {
+                                        ForEach(filteredBudgets) { budget in
+                                            ForEach(budget.category) { category in
+                                                OverallBudgetCategoryCardView(
+                                                    primaryBackgroundColor: category.primaryBackgroundColor,
+                                                    budgetCategoryName: category.name,
+                                                    amountAllocated: budget.allocatedAmount,
+                                                    amountSpent: budget.currentAmountSpent,
+                                                    numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                    footerMessage: budget.footerMessage
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                                if selectedTab == .yearly {
+                                    let filteredBudgets = budgetArray.filter { budget in
+                                                   if case .yearOnly(let year) = budget.budgetType.date {
+                                                       return String(year) == date
+                                                   }
+                                                   return false
+                                               }
+                                               
+                                               if filteredBudgets.isEmpty {
+                                                   Text("No Budgets Found")
+                                                       .font(.system(size: 16, weight: .bold))
+                                                       .padding()
+                                               } else {
+                                                   ForEach(filteredBudgets) { budget in
+                                                       ForEach(budget.category) { category in
+                                                           OverallBudgetCategoryCardView(
+                                                               primaryBackgroundColor: category.primaryBackgroundColor,
+                                                               budgetCategoryName: category.name,
+                                                               amountAllocated: budget.allocatedAmount,
+                                                               amountSpent: budget.currentAmountSpent,
+                                                               numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                               footerMessage: budget.footerMessage
+                                                           )
+                                                       }
+                                                   }
+                                               }
+                                }
+                                    
                             }
-                            
                         }
                         .frame(width: geometry.size.width, height: geometry.size.height)
                     }
@@ -481,7 +575,11 @@ struct BottomBudgetSheet: View {
             }
         }
         .onAppear{
-            let _: () = printBudgets(budgets: budgetByWeek)
+//            let _: () = printBudgets(budgets: budgetByWeek)
+//            let _: () = printBudgets(budgets: budgetByYear)
+//            let _: () = printBudgets(budgets: budgetByMonth)
+        }
+        .onDisappear{
         }
     }
 }
@@ -570,19 +668,18 @@ struct BudgetOverView: View {
     }
     
     var body: some View {
-        Text("\(date)")
         HStack(spacing: 0) {
             Button {
                 if selectedTab == .weekly || selectedTab == .monthly {
                     if currentPage > 0 {
                         scrollToPage(page: currentPage - 1, array: months)
-                        date = months[currentPage]
                     }
+                    date = months[currentPage]
                 } else if selectedTab == .yearly {
                     if currentPage > 0 {
                         scrollToPage(page: currentPage - 1, array: years)
-                        date = years[currentPage]
                     }
+                date = years[currentPage]
                 }
             } label: {
                 Image(systemName: "chevron.left.circle")
@@ -597,7 +694,6 @@ struct BudgetOverView: View {
                                 VStack {
                                     if let (_, label) = getDateOptionAndLabel(for: month, budgets: budgetArray) {
                                         if label == month {
-                                            Text("\(label)")
                                             VStack(spacing: 15) {
                                                 if let monthlyProgress = progressValue["monthly"]?[label], let monthlySpentAmount = usedAmount["monthly"]?[label] {
                                                     BudgetProgressView(progressValue: monthlyProgress, date: label, usedAmount: monthlySpentAmount)
@@ -650,7 +746,7 @@ struct BudgetOverView: View {
                                                     VStack {
                                                         Text("Weekly Budget")
                                                             .font(.system(size: 16, weight: .bold))
-                                                        if let totalBudget = totalBudgetAmount["weekly"]?[monthExtracted] {
+                                                        if let totalBudget = totalBudgetAmount["weekly"]?[label] {
                                                             Text("LKR \(formatCurrency(value: totalBudget))")
                                                                 .font(.system(size: 18, weight: .bold))
                                                                 .multilineTextAlignment(.center)
@@ -737,10 +833,11 @@ struct BudgetOverView: View {
                 .onAppear() {
                     if selectedTab == .weekly || selectedTab == .monthly {
                         scrollToCurrentMonth()
+                        date = months[currentPage]
                     } else if selectedTab == .yearly {
                         scrollToCurrentYear()
+                        date = years[currentPage]
                     }
-                    date = months[currentPage]
                 }
             }
             
