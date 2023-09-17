@@ -37,8 +37,8 @@ class BudgetViewModel: ObservableObject{
                         primaryBackgroundColor: "ColorGoldenrod"
                     )
                 ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
+            allocatedAmount: 100000.00,
+            currentAmountSpent: 100.00,
             numberOfDaysSpent: 8,
             footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
         ),
@@ -69,8 +69,8 @@ class BudgetViewModel: ObservableObject{
                         primaryBackgroundColor: "ColorVividBlue"
                     )
                 ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
+            allocatedAmount: 546321.00,
+            currentAmountSpent: 96532.00,
             numberOfDaysSpent: 8,
             footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
         ),
@@ -85,8 +85,8 @@ class BudgetViewModel: ObservableObject{
                         primaryBackgroundColor: "ColorVividBlue"
                     )
                 ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
+            allocatedAmount: 52362.00,
+            currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
             footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
         ),
@@ -101,8 +101,8 @@ class BudgetViewModel: ObservableObject{
                         primaryBackgroundColor: "ColorSecondTealGreen"
                     )
                 ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
+            allocatedAmount: 785697.00,
+            currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
             footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
         ),
@@ -117,9 +117,9 @@ class BudgetViewModel: ObservableObject{
                         primaryBackgroundColor: "ColorSecondTealGreen"
                     )
                 ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
-            numberOfDaysSpent: 8,
+            allocatedAmount: 458000.00,
+            currentAmountSpent: 10000.00,
+            numberOfDaysSpent: 12,
             footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
         ),
     ]
