@@ -21,4 +21,11 @@ class ApiService {
             return
         }
     }
+    
+    static func fetchAmountSpentForLast7Days(completion: @escaping (Result<[SpentAmountForPreviousSevenDays], NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+    }
 }
