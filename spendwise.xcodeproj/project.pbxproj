@@ -18,6 +18,7 @@
 		9425511F2AB2257500AA33F3 /* BudgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425511E2AB2257500AA33F3 /* BudgetViewModel.swift */; };
 		942551222AB22B5400AA33F3 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942551212AB22B5400AA33F3 /* ApiService.swift */; };
 		942551272AB24E9000AA33F3 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942551262AB24E9000AA33F3 /* HomeViewModel.swift */; };
+		943C8F7F2ABE0ECB0007180D /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943C8F7E2ABE0ECB0007180D /* Chart.swift */; };
 		944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */; };
 		944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */; };
 		9443A0062AAB235D00902E88 /* BudgetChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443A0052AAB235D00902E88 /* BudgetChartView.swift */; };
@@ -89,6 +90,7 @@
 		9425511E2AB2257500AA33F3 /* BudgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetViewModel.swift; sourceTree = "<group>"; };
 		942551212AB22B5400AA33F3 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		942551262AB24E9000AA33F3 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		943C8F7E2ABE0ECB0007180D /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
 		944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTopNavigationView.swift; sourceTree = "<group>"; };
 		944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyBarChartView.swift; sourceTree = "<group>"; };
 		9443A0052AAB235D00902E88 /* BudgetChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetChartView.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				9443A0092AAB87EA00902E88 /* User.swift */,
 				9443A00B2AAB90B300902E88 /* Expense.swift */,
 				9443A00D2AAB90C300902E88 /* Income.swift */,
+				943C8F7E2ABE0ECB0007180D /* Chart.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 				9421C30B2AAF8401004F0A65 /* CurrencyView.swift in Sources */,
 				9425511F2AB2257500AA33F3 /* BudgetViewModel.swift in Sources */,
 				9443A00A2AAB87EA00902E88 /* User.swift in Sources */,
+				943C8F7F2ABE0ECB0007180D /* Chart.swift in Sources */,
 				944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */,
 				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
 				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
