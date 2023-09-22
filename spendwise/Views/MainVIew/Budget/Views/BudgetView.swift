@@ -555,7 +555,7 @@ struct BudgetOverView: View {
                                                                     usedAmount: weeklySpentAmount,
                                                                     selectedTab: $selectedTab,
                                                                     viewModel: viewModel
-                                                                )
+                                                                ).border(.blue, width: 4)
                                                                 .frame(width: 220)
                                                                 .frame(maxWidth: .infinity, alignment: .top)
                                                             }.padding(.bottom, 16)
@@ -594,8 +594,8 @@ struct BudgetOverView: View {
                                             }
                                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                                         }
-                                    }
-                                    .frame(width: 300, alignment: .leading)
+                                    }.border(.green, width: 4)
+                                    .frame(width: 300)
                                     .offset(x: scrollOffset)
                                     .animation(.easeInOut, value: scrollOffset)
                                 }
@@ -795,36 +795,61 @@ struct CalenderView: View {
     var month: String
     var dateRange: [Int]?
     
-    var body: some View {
-        Text(month)
-            .font(.system(size: 22, weight: .semibold))
-            .foregroundColor(Color("ColorVividBlue"))
-            .padding(.bottom, 12)
-        let (daysInMonth) = calculateCalendarData(for: month)
-        let daySymbols = Calendar.current.veryShortStandaloneWeekdaySymbols
-        VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: 0) {
-                ForEach(0..<7, id: \.self) { index in
-                    Text("\(daySymbols[index])")
-                        .font(.system(size: 18, weight: .semibold))
-                        .frame(maxWidth: .infinity)
-                }
-            }
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 10) {
-                ForEach(daysInMonth, id: \.self) { day in
-                    Text("\(day)")
-                        .font(.system(size: 18))
-                        .foregroundColor(isInDateRange(day) ? .red : .black)
-                }
-            }
-        }.frame(maxWidth: .infinity, alignment: .center)
+    init(month: String) {
+        self.month = month
     }
+    
+    init(month: String, dateRange: [Int]?) {
+        self.month = month
+        self.dateRange = dateRange.map(expandDateRange)
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            Text(month)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(Color("ColorVividBlue"))
+                .padding(.bottom, 12)
+            let (daysInMonth) = calculateCalendarData(for: month)
+            VStack(alignment: .center, spacing: 0) {
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(36), spacing: 0), count: 7), spacing: 0) {
+                    ForEach(daysInMonth.indices, id: \.self) { index in
+                        if daysInMonth[index].isEmpty {
+                            Rectangle()
+                                .fill(.clear)
+                                .padding(2)
+                        } else {
+                            Rectangle()
+                                .fill(.clear)
+                                .overlay {
+                                    HStack {
+                                        Text("\(daysInMonth[index])")
+                                            .font(.system(size: 18))
+                                            .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
+                                    }.frame(maxWidth: .infinity, alignment: .center)
+                                }
+                                .background(isInDateRange(daysInMonth[index]) ? Color("ColorVividBlue") : .white)
+                                .frame(width: 36, height: 36, alignment: .center)
+                                .padding(2)
+                        }
+                    }
+                }
+            }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        }.frame(maxHeight: .infinity, alignment: .center)
+    }
+    
+    func expandDateRange(_ range: [Int]) -> [Int] {
+            var expandedRange: [Int] = []
+            for i in range.first!...range.last! {
+                expandedRange.append(i)
+            }
+            return expandedRange
+        }
     
     func isInDateRange(_ day: String) -> Bool {
         if !day.isEmpty {
             if let dateRange = dateRange {
                 //                    return dateRange.contains(Int(day))
-                print(type(of: dateRange))
                 if let dayNumber = Int(day) {
                     return dateRange.contains(dayNumber)
                 }
@@ -840,19 +865,22 @@ struct CalenderView: View {
             let calendar = Calendar.current
             let year = calendar.component(.year, from: date)
             let month = calendar.component(.month, from: date)
-            
-            let daySymbols = Calendar.current.veryShortStandaloneWeekdaySymbols
-            
             let dateComponents = DateComponents(year: year, month: month, day: 1)
             let startDate = calendar.date(from: dateComponents)!
-            
             let range = calendar.range(of: .day, in: .month, for: startDate)
-            
+
             let firstDayWeekday = calendar.component(.weekday, from: startDate) - 1
-            var daysInMonth: [String] = Array(repeating: "", count: firstDayWeekday)
-            
+            let daySymbols = Calendar.current.veryShortStandaloneWeekdaySymbols
+            var daysInMonth: [String] = daySymbols
+            if firstDayWeekday > 0 {
+                daysInMonth.append(contentsOf: Array(repeating: "", count: firstDayWeekday))
+            }
             if let range = range {
                 daysInMonth.append(contentsOf: (1..<range.count + 1).map { "\($0)" })
+            }
+            
+            for day in daysInMonth {
+                print(day)
             }
             
             return (daysInMonth)
