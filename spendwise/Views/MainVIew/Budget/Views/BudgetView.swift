@@ -175,7 +175,6 @@ struct BottomBudgetSheet: View {
     @Binding var date: String
     var sheetHeight: CGFloat
     @ObservedObject var viewModel: BudgetViewModel
-    var spentAmountForLast7Days: Double = 0
     
     func printBudgets(budgets: [(String, [(String, [Budget])])]) {
         for (type, dateBudgets) in budgets {
@@ -241,20 +240,27 @@ struct BottomBudgetSheet: View {
                             currentPage: $currentPage,
                             date: $date,
                             viewModel: viewModel
-                        ).frame(maxWidth: .infinity, maxHeight: .infinity)
+                        )
+                        .padding(.vertical, 15)
                     }
                     VStack(spacing : 0) {
-                        if !spentAmountForLast7Days.isNaN {
-                            HStack {
-                                    Text("You’ve spent")
-                                        .font(.system(size: 14, weight: .medium))
-                                    Text("LKR \(formatCurrency(value: spentAmountForLast7Days))")
-                                        .foregroundColor(Color("ColorVividBlue"))
-                                        .font(.system(size: 16, weight: .bold))
-                                    
-                                    Text("for the past 7 days")
-                                        .font(.system(size: 14, weight: .medium))
-                            }.padding(.top, 0).padding(.bottom, 8).offset(y: -14)
+                        let amountSpent = viewModel.amountSpentForLast7Days
+                        if !amountSpent.isEmpty {
+                            ForEach(amountSpent) { spend in
+                                if spend.budgetType == .monthly {
+                                    if spend.monthOrYear == date {
+                                        HStack {
+                                            Text("You’ve spent")
+                                                .font(.system(size: 14, weight: .medium))
+                                            Text("LKR \(formatCurrency(value: spend.amount))")
+                                                .foregroundColor(Color("ColorVividBlue"))
+                                                .font(.system(size: 16, weight: .bold))
+                                            Text("for the past \(spend.daysCount) days")
+                                                .font(.system(size: 14, weight: .medium))
+                                        }.padding(.top, 0).padding(.bottom, 8).offset(y: -14)
+                                    }
+                                }
+                            }
                         }
                         HStack {
                             Text("What’s left to spend").font(.system(size: 14, weight: .medium))
@@ -402,6 +408,9 @@ struct BottomBudgetSheet: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }.padding(.vertical, 5)
                 }
+                .onAppear {
+                    viewModel.fetchAmountSpentForLast7Days()
+                }
             }
         }
     }
@@ -444,7 +453,6 @@ struct BudgetOverView: View {
                     .font(.system(size: 35))
                     .foregroundColor(Color("ColorVividBlue"))
             }
-            HStack {
                 HStack(spacing: 0){
                     if selectedTab == .monthly {
                         TabView(selection: $currentPage) {
@@ -453,7 +461,7 @@ struct BudgetOverView: View {
                                     .tag(index)
                             }
                         }
-                        .frame(height: 275)
+                        .frame(height: 235)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .onAppear {
                               UIScrollView.appearance().isScrollEnabled = false
@@ -466,7 +474,7 @@ struct BudgetOverView: View {
                                     .tag(index)
                             }
                         }
-                        .frame(height: 310)
+                        .frame(height: 280)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .onAppear {
                               UIScrollView.appearance().isScrollEnabled = false
@@ -479,7 +487,7 @@ struct BudgetOverView: View {
                                     .tag(index)
                             }
                         }
-                        .frame(height: 310)
+                        .frame(height: 235)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .onAppear {
                               UIScrollView.appearance().isScrollEnabled = false
@@ -497,7 +505,6 @@ struct BudgetOverView: View {
                         }
                     }
                 }
-            }
             Button {
                 if selectedTab == .weekly || selectedTab == .monthly {
                     if currentPage < months.count - 1 {
@@ -516,9 +523,7 @@ struct BudgetOverView: View {
                     .foregroundColor(Color("ColorVividBlue"))
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
-        
     }
     
     private func scrollToPage(page: Int, array: [String]) {
@@ -560,7 +565,7 @@ struct WeeklyBudgetOverview: View {
                                         selectedTab: $selectedTab,
                                         viewModel: viewModel
                                     )
-                                }.padding(.bottom, 12)
+                                }.padding(.bottom, 8)
                             }
                             VStack(spacing: 0) {
                                 Text("Weekly Budget")
@@ -604,7 +609,7 @@ struct MonthlyBudgetOverview: View {
     @ObservedObject var viewModel: BudgetViewModel
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if let (_, label) = viewModel.getDateOptionAndLabel(selectedTab: .monthly, for: month, budgets: viewModel.budgetByMonth) {
                 if label == month {
                     VStack(spacing: 15) {
@@ -806,7 +811,7 @@ struct CalenderView: View {
                                 .overlay {
                                     HStack {
                                         Text("\(daysInMonth[index])")
-                                            .font(.system(size: 14))
+                                            .font(.system(size: 16))
                                             .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
                                     }.frame(maxWidth: .infinity, alignment: .center)
                                 }

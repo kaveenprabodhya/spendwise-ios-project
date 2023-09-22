@@ -8,6 +8,7 @@
 import SwiftUI
 
 class BudgetViewModel: ObservableObject {
+    @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
     @Published var budgetArray:[Budget] =
     [
         Budget(
@@ -466,6 +467,19 @@ class BudgetViewModel: ObservableObject {
                 switch result {
                 case .success(let budgetItems):
                     self.budgetArray = budgetItems
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func fetchAmountSpentForLast7Days() {
+        ApiService.fetchAmountSpentForLast7Days { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let amount):
+                    self.amountSpentForLast7Days = amount
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }
