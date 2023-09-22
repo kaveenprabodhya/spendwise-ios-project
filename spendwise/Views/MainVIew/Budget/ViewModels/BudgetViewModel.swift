@@ -409,6 +409,57 @@ class BudgetViewModel: ObservableObject {
         }
     }
     
+    func getDateOptionAndLabel(selectedTab: BudgetTypeOption , for month: String, budgets: [(String, [(String, [Budget])])]) -> (BudgetDateOption, String)? {
+        if selectedTab == .monthly || selectedTab == .yearly {
+            for (_, data) in budgets {
+                for (date, budgets) in data {
+                    if date == month {
+                        if let budget = budgets.first {
+                            switch budget.budgetType.date {
+                            case .monthOnly(let month):
+                                let label = Calendar.current.monthSymbols[month - 1]
+                                return (.monthOnly(month), label)
+                            case .yearOnly(let year):
+                                let label = "\(year)"
+                                return (.yearOnly(year), label)
+                            case .dateRange(let month, let startDate, let endDate):
+                                let monthString = Calendar.current.monthSymbols[month - 1]
+                                let label = "\(monthString), \(startDate)-\(endDate)"
+                                return (.dateRange(month, startDate, endDate), label)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if selectedTab == .weekly {
+            for (_, data) in budgets {
+                for (date, budgets) in data {
+                    if let monthExtracted = extractMonth(from: date, with: "([A-Za-z]+),") {
+                        if monthExtracted == month {
+                            if let budget = budgets.first {
+                                switch budget.budgetType.date {
+                                case .monthOnly(let month):
+                                    let label = Calendar.current.monthSymbols[month - 1]
+                                    return (.monthOnly(month), label)
+                                case .yearOnly(let year):
+                                    let label = "\(year)"
+                                    return (.yearOnly(year), label)
+                                case .dateRange(let month, let startDate, let endDate):
+                                    let monthString = Calendar.current.monthSymbols[month - 1]
+                                    let label = "\(monthString), \(startDate)-\(endDate)"
+                                    return (.dateRange(month, startDate, endDate), label)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
+    
     func fetchData() {
         ApiService.fetchBudgetData { result in
             DispatchQueue.main.async {
