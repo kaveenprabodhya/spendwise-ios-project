@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetView: View {
-    @State private var selectedTab: BudgetTypeOption = .weekly
+    @State private var selectedTab: BudgetTypeOption = .monthly
     @State private var currentPage: Int = 0
     @State var date: String = ""
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
@@ -425,56 +425,6 @@ struct BudgetOverView: View {
         (0..<10).map { String(currentYear + $0) }
     }
     
-    func getDateOptionAndLabel(for month: String, budgets: [(String, [(String, [Budget])])]) -> (BudgetDateOption, String)? {
-        if selectedTab == .monthly || selectedTab == .yearly {
-            for (_, data) in budgets {
-                for (date, budgets) in data {
-                    if date == month {
-                        if let budget = budgets.first {
-                            switch budget.budgetType.date {
-                            case .monthOnly(let month):
-                                let label = Calendar.current.monthSymbols[month - 1]
-                                return (.monthOnly(month), label)
-                            case .yearOnly(let year):
-                                let label = "\(year)"
-                                return (.yearOnly(year), label)
-                            case .dateRange(let month, let startDate, let endDate):
-                                let monthString = Calendar.current.monthSymbols[month - 1]
-                                let label = "\(monthString), \(startDate)-\(endDate)"
-                                return (.dateRange(month, startDate, endDate), label)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if selectedTab == .weekly {
-            for (_, data) in budgets {
-                for (date, budgets) in data {
-                    if let monthExtracted = viewModel.extractMonth(from: date, with: "([A-Za-z]+),") {
-                        if monthExtracted == month {
-                            if let budget = budgets.first {
-                                switch budget.budgetType.date {
-                                case .monthOnly(let month):
-                                    let label = Calendar.current.monthSymbols[month - 1]
-                                    return (.monthOnly(month), label)
-                                case .yearOnly(let year):
-                                    let label = "\(year)"
-                                    return (.yearOnly(year), label)
-                                case .dateRange(let month, let startDate, let endDate):
-                                    let monthString = Calendar.current.monthSymbols[month - 1]
-                                    let label = "\(monthString), \(startDate)-\(endDate)"
-                                    return (.dateRange(month, startDate, endDate), label)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return nil
-    }
-    
     var body: some View {
         HStack(spacing: 0) {
             Button {
@@ -495,164 +445,49 @@ struct BudgetOverView: View {
                     .foregroundColor(Color("ColorVividBlue"))
             }
             HStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 0){
-                            if selectedTab == .monthly {
-                                ForEach(months, id: \.self) { month in
-                                    VStack {
-                                        if let (_, label) = getDateOptionAndLabel(for: month, budgets: viewModel.budgetByMonth) {
-                                            if label == month {
-                                                VStack(spacing: 15) {
-                                                    if let monthlyProgress = viewModel.progressValueByMonth["monthly"]?[label], let monthlySpentAmount = viewModel.totalAmountSpentByMonth ["monthly"]?[label] {
-                                                        BudgetProgressView(progressValue: monthlyProgress, date: label, usedAmount: monthlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
-                                                            .frame(width: 175, height: 175)
-                                                    }
-                                                    VStack {
-                                                        Text("Monthly Budget")
-                                                            .font(.system(size: 16, weight: .bold))
-                                                        if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["monthly"]?[month] {
-                                                            Text("LKR \(formatCurrency(value: totalBudget))")
-                                                                .font(.system(size: 18, weight: .bold))
-                                                                .multilineTextAlignment(.center)
-                                                        }
-                                                    }
-                                                }
-                                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                            }
-                                        } else {
-                                            VStack(spacing: 15) {
-                                                BudgetProgressView(progressValue: 0, date: month, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
-                                                    .frame(width: 175, height: 175)
-                                                VStack {
-                                                    Text("Monthly Budget")
-                                                        .font(.system(size: 16, weight: .bold))
-                                                    Text("LKR \(formatCurrency(value: 0))")
-                                                        .font(.system(size: 18, weight: .bold))
-                                                        .multilineTextAlignment(.center)
-                                                }
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                        }
-                                    }
-                                    .padding(.vertical, 5)
-                                    .frame(width: 300, alignment: .leading)
-                                    .offset(x: scrollOffset)
-                                    .animation(.easeInOut, value: scrollOffset)
-                                }
-                            }
-                            if selectedTab == .weekly {
-                                ForEach(months, id: \.self) { month in
-                                    VStack(spacing: 0) {
-                                        if let (_, label) = getDateOptionAndLabel(for: month, budgets: viewModel.budgetByWeek) {
-                                            if let monthExtracted = viewModel.extractMonth(from: label, with: "([A-Za-z]+),") {
-                                                if monthExtracted == month {
-                                                    VStack(spacing: 0) {
-                                                        if let weeklyProgress = viewModel.progressValueByMonth["weekly"]?[label], let weeklySpentAmount = viewModel.totalAmountSpentByMonth["weekly"]?[label] {
-                                                            VStack(spacing: 0) {
-                                                                BudgetProgressView(
-                                                                    progressValue: weeklyProgress,
-                                                                    date: label,
-                                                                    usedAmount: weeklySpentAmount,
-                                                                    selectedTab: $selectedTab,
-                                                                    viewModel: viewModel
-                                                                ).border(.blue, width: 4)
-                                                                .frame(width: 220)
-                                                                .frame(maxWidth: .infinity, alignment: .top)
-                                                            }.padding(.bottom, 16)
-                                                        }
-                                                        VStack(spacing: 0) {
-                                                            Text("Weekly Budget")
-                                                                .font(.system(size: 16, weight: .bold)).padding(5)
-                                                            if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["weekly"]?[label] {
-                                                                Text("LKR \(formatCurrency(value: totalBudget))")
-                                                                    .font(.system(size: 18, weight: .bold))
-                                                                    .multilineTextAlignment(.center)
-                                                            }
-                                                        }
-                                                    }
-                                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                                }
-                                            }
-                                        }
-                                        else {
-                                            VStack(spacing: 0) {
-                                                BudgetProgressView(
-                                                    progressValue: 0,
-                                                    date: month,
-                                                    usedAmount: 0,
-                                                    selectedTab: $selectedTab,
-                                                    viewModel: viewModel
-                                                )
-                                                    .frame(width: 220, height: 240)
-                                                VStack(spacing: 0) {
-                                                    Text("Weekly Budget")
-                                                        .font(.system(size: 16, weight: .semibold))
-                                                    Text("LKR \(formatCurrency(value: 0))")
-                                                        .font(.system(size: 18, weight: .bold))
-                                                        .multilineTextAlignment(.center)
-                                                }
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                        }
-                                    }.border(.green, width: 4)
-                                    .frame(width: 300)
-                                    .offset(x: scrollOffset)
-                                    .animation(.easeInOut, value: scrollOffset)
-                                }
-                            }
-                            if selectedTab == .yearly {
-                                ForEach(years, id: \.self) { year in
-                                    VStack {
-                                        if let (_, label) = getDateOptionAndLabel(for: year, budgets: viewModel.budgetByYear) {
-                                            if label == year {
-                                                VStack(spacing: 15) {
-                                                    if let yearlyProgress = viewModel.progressValueByMonth["yearly"]?[year], let yearlySpentAmount = viewModel.totalAmountSpentByMonth["yearly"]?[year] {
-                                                        BudgetProgressView(progressValue: yearlyProgress, date: label, usedAmount: yearlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
-                                                            .frame(width: 175, height: 175)
-                                                        
-                                                    }
-                                                    VStack {
-                                                        Text("Yearly Budget")
-                                                            .font(.system(size: 16, weight: .bold))
-                                                        if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["yearly"]?[year] {
-                                                            Text("LKR \(formatCurrency(value: totalBudget))")
-                                                                .font(.system(size: 18, weight: .bold))
-                                                                .multilineTextAlignment(.center)
-                                                        }
-                                                    }
-                                                }
-                                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                            }
-                                        }
-                                        else {
-                                            VStack(spacing: 15) {
-                                                BudgetProgressView(progressValue: 0, date: year, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
-                                                    .frame(width: 175, height: 175)
-                                                VStack {
-                                                    Text("Yearly Budget")
-                                                        .font(.system(size: 16, weight: .bold))
-                                                    Text("LKR \(formatCurrency(value: 0))")
-                                                        .font(.system(size: 18, weight: .bold))
-                                                        .multilineTextAlignment(.center)
-                                                }
-                                            }
-                                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                        }
-                                    }
-                                    .padding(.vertical, 5)
-                                    .frame(width: 300, alignment: .leading)
-                                    .offset(x: scrollOffset)
-                                    .animation(.easeInOut, value: scrollOffset)
-                                }
+                HStack(spacing: 0){
+                    if selectedTab == .monthly {
+                        TabView(selection: $currentPage) {
+                            ForEach(months.indices, id: \.self) { index in
+                                MonthlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, month: months[index], viewModel: viewModel)
+                                    .tag(index)
                             }
                         }
+                        .frame(height: 275)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .onAppear {
+                              UIScrollView.appearance().isScrollEnabled = false
+                        }
                     }
-                    .environment(\.isScrollEnabled, isScrollEnabled)
-                    .onTapGesture {
-                        isScrollEnabled.toggle()
+                    if selectedTab == .weekly {
+                        TabView(selection: $currentPage) {
+                            ForEach(months.indices, id: \.self) { index in
+                               WeeklyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, month: months[index], viewModel: viewModel)
+                                    .tag(index)
+                            }
+                        }
+                        .frame(height: 310)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .onAppear {
+                              UIScrollView.appearance().isScrollEnabled = false
+                        }
                     }
-                    .coordinateSpace(name: "scroll")
-                    .onAppear() {
+                    if selectedTab == .yearly {
+                        TabView(selection: $currentPage) {
+                            ForEach(years.indices, id: \.self) { index in
+                               YearlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, year: years[index], viewModel: viewModel)
+                                    .tag(index)
+                            }
+                        }
+                        .frame(height: 310)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .onAppear {
+                              UIScrollView.appearance().isScrollEnabled = false
+                        }
+                    }
+                }
+                .onAppear() {
+                    withAnimation {
                         if selectedTab == .weekly || selectedTab == .monthly {
                             scrollToCurrentMonth()
                             date = months[currentPage]
@@ -661,7 +496,7 @@ struct BudgetOverView: View {
                             date = years[currentPage]
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
             Button {
                 if selectedTab == .weekly || selectedTab == .monthly {
@@ -687,10 +522,7 @@ struct BudgetOverView: View {
     }
     
     private func scrollToPage(page: Int, array: [String]) {
-        withAnimation {
             currentPage = min(max(page, 0), array.count - 1)
-            scrollOffset = -CGFloat(currentPage) * 300
-        }
     }
     
     func scrollToCurrentMonth() {
@@ -703,6 +535,156 @@ struct BudgetOverView: View {
         if let currentYearIndex = Calendar.current.dateComponents([.year], from: Date()).year,
            let index = years.firstIndex(of: "\(currentYearIndex)") {
             scrollToPage(page: index - 1, array: years)
+        }
+    }
+}
+
+struct WeeklyBudgetOverview: View {
+    @Binding var selectedTab: BudgetTypeOption
+    @Binding var currentPage: Int
+    var month: String
+    @ObservedObject var viewModel: BudgetViewModel
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if let (_, label) = viewModel.getDateOptionAndLabel(selectedTab: .weekly, for: month, budgets: viewModel.budgetByWeek) {
+                if let monthExtracted = viewModel.extractMonth(from: label, with: "([A-Za-z]+),") {
+                    if monthExtracted == month {
+                        VStack(spacing: 0) {
+                            if let weeklyProgress = viewModel.progressValueByMonth["weekly"]?[label], let weeklySpentAmount = viewModel.totalAmountSpentByMonth["weekly"]?[label] {
+                                VStack(spacing: 0) {
+                                    BudgetProgressView(
+                                        progressValue: weeklyProgress,
+                                        date: label,
+                                        usedAmount: weeklySpentAmount,
+                                        selectedTab: $selectedTab,
+                                        viewModel: viewModel
+                                    )
+                                }.padding(.bottom, 12)
+                            }
+                            VStack(spacing: 0) {
+                                Text("Weekly Budget")
+                                    .font(.system(size: 16, weight: .bold)).padding(5)
+                                if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["weekly"]?[label] {
+                                    Text("LKR \(formatCurrency(value: totalBudget))")
+                                        .font(.system(size: 18, weight: .bold))
+                                        .multilineTextAlignment(.center)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                VStack(spacing: 0) {
+                    BudgetProgressView(
+                        progressValue: 0,
+                        date: month,
+                        usedAmount: 0,
+                        selectedTab: $selectedTab,
+                        viewModel: viewModel
+                    ).padding(.bottom, 12)
+                    VStack(spacing: 0) {
+                        Text("Weekly Budget")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("LKR \(formatCurrency(value: 0))")
+                            .font(.system(size: 18, weight: .bold))
+                            .multilineTextAlignment(.center)
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct MonthlyBudgetOverview: View {
+    @Binding var selectedTab: BudgetTypeOption
+    @Binding var currentPage: Int
+    var month: String
+    @ObservedObject var viewModel: BudgetViewModel
+    
+    var body: some View {
+        VStack {
+            if let (_, label) = viewModel.getDateOptionAndLabel(selectedTab: .monthly, for: month, budgets: viewModel.budgetByMonth) {
+                if label == month {
+                    VStack(spacing: 15) {
+                        if let monthlyProgress = viewModel.progressValueByMonth["monthly"]?[label], let monthlySpentAmount = viewModel.totalAmountSpentByMonth ["monthly"]?[label] {
+                            BudgetProgressView(progressValue: monthlyProgress, date: label, usedAmount: monthlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
+                                .frame(width: 175, height: 175)
+                        }
+                        VStack {
+                            Text("Monthly Budget")
+                                .font(.system(size: 16, weight: .bold))
+                            if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["monthly"]?[month] {
+                                Text("LKR \(formatCurrency(value: totalBudget))")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                }
+            } else {
+                VStack(spacing: 15) {
+                    BudgetProgressView(progressValue: 0, date: month, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
+                        .frame(width: 175, height: 175)
+                    VStack {
+                        Text("Monthly Budget")
+                            .font(.system(size: 16, weight: .bold))
+                        Text("LKR \(formatCurrency(value: 0))")
+                            .font(.system(size: 18, weight: .bold))
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            }
+        }
+    }
+}
+
+struct YearlyBudgetOverview: View {
+    @Binding var selectedTab: BudgetTypeOption
+    @Binding var currentPage: Int
+    var year: String
+    @ObservedObject var viewModel: BudgetViewModel
+    
+    var body: some View {
+        VStack {
+            if let (_, label) = viewModel.getDateOptionAndLabel(selectedTab: .yearly, for: year, budgets: viewModel.budgetByYear) {
+                if label == year {
+                    VStack(spacing: 15) {
+                        if let yearlyProgress = viewModel.progressValueByMonth["yearly"]?[year], let yearlySpentAmount = viewModel.totalAmountSpentByMonth["yearly"]?[year] {
+                            BudgetProgressView(progressValue: yearlyProgress, date: label, usedAmount: yearlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
+                                .frame(width: 175, height: 175)
+                            
+                        }
+                        VStack {
+                            Text("Yearly Budget")
+                                .font(.system(size: 16, weight: .bold))
+                            if let totalBudget = viewModel.allocatedTotalBudgetAmountByMonth["yearly"]?[year] {
+                                Text("LKR \(formatCurrency(value: totalBudget))")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                }
+            }
+            else {
+                VStack(spacing: 15) {
+                    BudgetProgressView(progressValue: 0, date: year, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
+                        .frame(width: 175, height: 175)
+                    VStack {
+                        Text("Yearly Budget")
+                            .font(.system(size: 16, weight: .bold))
+                        Text("LKR \(formatCurrency(value: 0))")
+                            .font(.system(size: 18, weight: .bold))
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            }
         }
     }
 }
@@ -807,12 +789,12 @@ struct CalenderView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(month)
-                .font(.system(size: 22, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(Color("ColorVividBlue"))
                 .padding(.bottom, 12)
             let (daysInMonth) = calculateCalendarData(for: month)
             VStack(alignment: .center, spacing: 0) {
-                LazyVGrid(columns: Array(repeating: GridItem(.fixed(36), spacing: 0), count: 7), spacing: 0) {
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(28), spacing: 0), count: 7), spacing: 0) {
                     ForEach(daysInMonth.indices, id: \.self) { index in
                         if daysInMonth[index].isEmpty {
                             Rectangle()
@@ -824,18 +806,18 @@ struct CalenderView: View {
                                 .overlay {
                                     HStack {
                                         Text("\(daysInMonth[index])")
-                                            .font(.system(size: 18))
+                                            .font(.system(size: 14))
                                             .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
                                     }.frame(maxWidth: .infinity, alignment: .center)
                                 }
                                 .background(isInDateRange(daysInMonth[index]) ? Color("ColorVividBlue") : .white)
-                                .frame(width: 36, height: 36, alignment: .center)
+                                .frame(width: 28, height: 28, alignment: .center)
                                 .padding(2)
                         }
                     }
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        }.frame(maxHeight: .infinity, alignment: .center)
+            }
+        }
     }
     
     func expandDateRange(_ range: [Int]) -> [Int] {
