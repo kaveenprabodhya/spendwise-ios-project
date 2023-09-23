@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetView: View {
-    @State private var selectedTab: BudgetTypeOption = .monthly
+    @State private var selectedTab: BudgetTypeOption = .weekly
     @State private var currentPage: Int = 0
     @State var date: String = ""
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
@@ -241,7 +241,6 @@ struct BottomBudgetSheet: View {
                             date: $date,
                             viewModel: viewModel
                         )
-                        .padding(.vertical, 15)
                     }
                     VStack(spacing : 0) {
                         let amountSpent = viewModel.amountSpentForLast7Days
@@ -474,7 +473,7 @@ struct BudgetOverView: View {
                                     .tag(index)
                             }
                         }
-                        .frame(height: 280)
+                        .frame(height: 335)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .onAppear {
                               UIScrollView.appearance().isScrollEnabled = false
@@ -565,7 +564,7 @@ struct WeeklyBudgetOverview: View {
                                         selectedTab: $selectedTab,
                                         viewModel: viewModel
                                     )
-                                }.padding(.bottom, 8)
+                                }.padding(6)
                             }
                             VStack(spacing: 0) {
                                 Text("Weekly Budget")
@@ -576,19 +575,21 @@ struct WeeklyBudgetOverview: View {
                                         .multilineTextAlignment(.center)
                                 }
                             }
-                        }
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
                 }
             }
             else {
                 VStack(spacing: 0) {
-                    BudgetProgressView(
-                        progressValue: 0,
-                        date: month,
-                        usedAmount: 0,
-                        selectedTab: $selectedTab,
-                        viewModel: viewModel
-                    ).padding(.bottom, 12)
+                    VStack(spacing: 0) {
+                        BudgetProgressView(
+                            progressValue: 0,
+                            date: month,
+                            usedAmount: 0,
+                            selectedTab: $selectedTab,
+                            viewModel: viewModel
+                        )
+                    }.padding(6)
                     VStack(spacing: 0) {
                         Text("Weekly Budget")
                             .font(.system(size: 16, weight: .semibold))
@@ -596,7 +597,7 @@ struct WeeklyBudgetOverview: View {
                             .font(.system(size: 18, weight: .bold))
                             .multilineTextAlignment(.center)
                     }
-                }
+                }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
         }
     }
@@ -792,37 +793,43 @@ struct CalenderView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            Text(month)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color("ColorVividBlue"))
-                .padding(.bottom, 12)
-            let (daysInMonth) = calculateCalendarData(for: month)
-            VStack(alignment: .center, spacing: 0) {
-                LazyVGrid(columns: Array(repeating: GridItem(.fixed(28), spacing: 0), count: 7), spacing: 0) {
-                    ForEach(daysInMonth.indices, id: \.self) { index in
-                        if daysInMonth[index].isEmpty {
-                            Rectangle()
-                                .fill(.clear)
-                                .padding(2)
-                        } else {
-                            Rectangle()
-                                .fill(.clear)
-                                .overlay {
-                                    HStack {
-                                        Text("\(daysInMonth[index])")
-                                            .font(.system(size: 16))
-                                            .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
-                                    }.frame(maxWidth: .infinity, alignment: .center)
+        RoundedRectangle(cornerRadius: 15)
+            .stroke(Color("ColorVividBlue"), lineWidth: 2)
+            .frame(width: 240)
+            .overlay {
+                VStack(spacing: 0) {
+                    Text(month)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(Color("ColorVividBlue"))
+                        .padding(.bottom, 12)
+                        .padding(.top, 6)
+                    let (daysInMonth) = calculateCalendarData(for: month)
+                    VStack(alignment: .center, spacing: 0) {
+                        LazyVGrid(columns: Array(repeating: GridItem(.fixed(28), spacing: 0), count: 7), spacing: 0) {
+                            ForEach(daysInMonth.indices, id: \.self) { index in
+                                if daysInMonth[index].isEmpty {
+                                    Rectangle()
+                                        .fill(.clear)
+                                        .padding(2)
+                                } else {
+                                    Rectangle()
+                                        .fill(.clear)
+                                        .overlay {
+                                            HStack {
+                                                Text("\(daysInMonth[index])")
+                                                    .font(.system(size: 14))
+                                                    .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
+                                            }
+                                        }
+                                        .background(isInDateRange(daysInMonth[index]) ? Color("ColorVividBlue") : .white)
+                                        .frame(width: 28, height: 28, alignment: .center)
+                                        .padding(2)
                                 }
-                                .background(isInDateRange(daysInMonth[index]) ? Color("ColorVividBlue") : .white)
-                                .frame(width: 28, height: 28, alignment: .center)
-                                .padding(2)
+                            }
                         }
                     }
                 }
             }
-        }
     }
     
     func expandDateRange(_ range: [Int]) -> [Int] {
