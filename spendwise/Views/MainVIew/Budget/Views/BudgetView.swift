@@ -783,7 +783,7 @@ struct ProgressViewThree: View {
 
 struct CalenderView: View {
     var month: String
-    private var dateRanges: [Int] = []
+    private var dateRanges: [[Int]] = []
     var dateRangesForMonth: [[String]]?
     @ObservedObject var viewModel: BudgetViewModel
     
@@ -840,29 +840,36 @@ struct CalenderView: View {
             }
     }
     
-    func expandDateRange(_ ranges: [[String]]) -> [Int] {
-        var expandedDateRanges: [Int] = []
+    func expandDateRange(_ ranges: [[String]]) -> [[Int]] {
+        var expandedDateRanges: [[Int]] = []
 
         for range in ranges {
+            var expandedRange: [Int] = []
             for dateRange in range {
                 let components = dateRange.split(separator: "-")
                 if components.count == 2,
                    let start = Int(components[0]),
                    let end = Int(components[1]) {
                     for i in start...end {
-                        expandedDateRanges.append(i)
+                        expandedRange.append(i)
                     }
                 }
             }
+            expandedDateRanges.append(expandedRange)
         }
+        
+        print(expandedDateRanges)
+
         return expandedDateRanges
     }
     
     func isInDateRange(_ day: String) -> Bool {
         if !day.isEmpty {
+            for dateRange in dateRanges {
                 if let dayNumber = Int(day) {
-                    return dateRanges.contains(dayNumber)
+                    return dateRange.contains(dayNumber)
                 }
+            }
         }
         return false
     }
