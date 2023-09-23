@@ -409,6 +409,7 @@ struct BottomBudgetSheet: View {
                 }
                 .onAppear {
                     viewModel.fetchAmountSpentForLast7Days()
+//                    printBudgets(budgets: viewModel.budgetByWeek)
                 }
             }
         }
@@ -751,47 +752,40 @@ struct ProgressViewThree: View {
     var usedAmount: Double
     @ObservedObject var viewModel: BudgetViewModel
     
-    func extractDateRange(from inputString: String) -> [Int]? {
-        let regexPattern = #"\b(\d{1,2}-\d{1,2})\b"#
-        print(regexPattern)
-        if let range = inputString.range(of: regexPattern, options: .regularExpression) {
-            let extractedRange = inputString[range]
-            let components = extractedRange.components(separatedBy: "-")
-            if components.count == 2, let start = Int(components[0]), let end = Int(components[1]) {
-                return [start, end]
+    func printDateRangesByMonth() {
+        for (weeklyKey, monthAndWeeks) in viewModel.dateRangesByMonth {
+            print("------- \(weeklyKey) ---------")
+            for (monthKey, weeks) in monthAndWeeks {
+                print("      \(monthKey)")
+                for week in weeks {
+                    print("              \(week)")
+                }
             }
+            print("=====================")
         }
-        
-        return nil
     }
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             if let monthExtracted = viewModel.extractMonth(from: date, with: "([A-Za-z]+),") {
-                if let extractedDateRange = extractDateRange(from: date) {
-                    CalenderView(month: monthExtracted, dateRange: extractedDateRange)
+                if let extractedDateRange = viewModel.extractDateRange(from: date) {
+                    CalenderView(month: monthExtracted, viewModel: viewModel)
                 }
 //                Text("\(extractDateRange(from: date)?.description ?? "nil")")
             } else {
-                CalenderView(month: date)
+                CalenderView(month: date, viewModel: viewModel)
             }
+        }
+        .onAppear{
+            let _: () = printDateRangesByMonth()
         }
     }
 }
 
 struct CalenderView: View {
     var month: String
-    var dateRange: [Int]?
-    
-    init(month: String) {
-        self.month = month
-    }
-    
-    init(month: String, dateRange: [Int]?) {
-        self.month = month
-        self.dateRange = dateRange.map(expandDateRange)
-    }
-    
+    @ObservedObject var viewModel: BudgetViewModel
+
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(Color("ColorVividBlue"), lineWidth: 2)
@@ -833,24 +827,37 @@ struct CalenderView: View {
     }
     
     func expandDateRange(_ range: [Int]) -> [Int] {
-            var expandedRange: [Int] = []
-            for i in range.first!...range.last! {
-                expandedRange.append(i)
-            }
-            return expandedRange
+        var expandedRange: [Int] = []
+        for i in range.first!...range.last! {
+            expandedRange.append(i)
         }
+        return expandedRange
+    }
+    
+//    func isInDateRange(_ day: String) -> Bool {
+//        if !day.isEmpty {
+//            if let dateRange = dateRange {
+//                if let dayNumber = Int(day) {
+//                    return dateRange.contains(dayNumber)
+//                }
+//            }
+//        }
+//        return false
+//    }
     
     func isInDateRange(_ day: String) -> Bool {
         if !day.isEmpty {
-            if let dateRange = dateRange {
-                //                    return dateRange.contains(Int(day))
-                if let dayNumber = Int(day) {
-                    return dateRange.contains(dayNumber)
+            if let dateRangeByMonth = viewModel.dateRangesByMonth["weekly"] {
+                if let monthWeeks = dateRangeByMonth[month] {
+                    return monthWeeks.contains { week in
+                        return week.contains(day)
+                    }
                 }
             }
         }
-            return false
-        }
+        return false
+    }
+
     
     func calculateCalendarData(for date: String) -> ([String]) {
         let dateFormatter = DateFormatter()
@@ -873,9 +880,9 @@ struct CalenderView: View {
                 daysInMonth.append(contentsOf: (1..<range.count + 1).map { "\($0)" })
             }
             
-            for day in daysInMonth {
-                print(day)
-            }
+//            for day in daysInMonth {
+//                print(day)
+//            }
             
             return (daysInMonth)
         }

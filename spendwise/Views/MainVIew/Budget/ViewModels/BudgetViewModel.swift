@@ -189,7 +189,7 @@ class BudgetViewModel: ObservableObject {
         ),
         Budget(
             id: UUID(),
-            budgetType: BudgetType(type: .weekly, date: .dateRange(10, 15, 22), limit: 1200),
+            budgetType: BudgetType(type: .weekly, date: .dateRange(5, 15, 22), limit: 1200),
             category:
                 [
                     BudgetCategory(
@@ -399,6 +399,35 @@ class BudgetViewModel: ObservableObject {
 
         return limits
     }
+
+    var dateRangesByMonth: [String: [String: [[String]]]] {
+        var result = [String: [String: [[String]]]]()
+
+        for (weeklyKey, weeklyValues) in budgetByWeek {
+            for (monthAndWeek, _) in weeklyValues {
+                let components = monthAndWeek.components(separatedBy: ", ")
+                if components.count == 2 {
+                    let month = components[0]
+                    let weekDescription = components[1]
+
+                    if var monthDict = result[weeklyKey] {
+                        if var weekArray = monthDict[month] {
+                            weekArray.append([weekDescription])
+                            monthDict[month] = weekArray
+                        } else {
+                            monthDict[month] = [[weekDescription]]
+                        }
+                        result[weeklyKey] = monthDict
+                    } else {
+                        result[weeklyKey] = [month: [[weekDescription]]]
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+
     
     func extractMonth(from inputString: String, with pattern: String) -> String? {
         if let range = inputString.range(of: pattern, options: .regularExpression) {
@@ -457,6 +486,19 @@ class BudgetViewModel: ObservableObject {
                 }
             }
         }
+        return nil
+    }
+    
+    func extractDateRange(from inputString: String) -> [Int]? {
+        let regexPattern = #"\b(\d{1,2}-\d{1,2})\b"#
+        if let range = inputString.range(of: regexPattern, options: .regularExpression) {
+            let extractedRange = inputString[range]
+            let components = extractedRange.components(separatedBy: "-")
+            if components.count == 2, let start = Int(components[0]), let end = Int(components[1]) {
+                return [start, end]
+            }
+        }
+        
         return nil
     }
 
