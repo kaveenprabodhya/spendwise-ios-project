@@ -400,26 +400,21 @@ class BudgetViewModel: ObservableObject {
         return limits
     }
 
-    var dateRangesByMonth: [String: [String: [[String]]]] {
-        var result = [String: [String: [[String]]]]()
+    var dateRangesByMonth: [String: [[String]]] {
+        var result = [String: [[String]]]()
 
-        for (weeklyKey, weeklyValues) in budgetByWeek {
+        for (_, weeklyValues) in budgetByWeek {
             for (monthAndWeek, _) in weeklyValues {
                 let components = monthAndWeek.components(separatedBy: ", ")
                 if components.count == 2 {
                     let month = components[0]
                     let weekDescription = components[1]
 
-                    if var monthDict = result[weeklyKey] {
-                        if var weekArray = monthDict[month] {
-                            weekArray.append([weekDescription])
-                            monthDict[month] = weekArray
-                        } else {
-                            monthDict[month] = [[weekDescription]]
-                        }
-                        result[weeklyKey] = monthDict
+                    if var monthArray = result[month] {
+                        monthArray.append([weekDescription])
+                        result[month] = monthArray
                     } else {
-                        result[weeklyKey] = [month: [[weekDescription]]]
+                        result[month] = [[weekDescription]]
                     }
                 }
             }
