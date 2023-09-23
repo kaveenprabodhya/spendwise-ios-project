@@ -748,43 +748,57 @@ struct ProgressBarViewTwo: View {
 }
 
 struct ProgressViewThree: View {
+    //range ("October, 12-13")
     var date: String
     var usedAmount: Double
     @ObservedObject var viewModel: BudgetViewModel
     
     func printDateRangesByMonth() {
-        for (weeklyKey, monthAndWeeks) in viewModel.dateRangesByMonth {
-            print("------- \(weeklyKey) ---------")
-            for (monthKey, weeks) in monthAndWeeks {
-                print("      \(monthKey)")
-                for week in weeks {
-                    print("              \(week)")
-                }
+        for (monthKey, weeks) in viewModel.dateRangesByMonth {
+            print("      \(monthKey)")
+            for week in weeks {
+                print("              \(week)")
             }
-            print("=====================")
         }
+        print("=====================")
     }
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             if let monthExtracted = viewModel.extractMonth(from: date, with: "([A-Za-z]+),") {
-                if let extractedDateRange = viewModel.extractDateRange(from: date) {
-                    CalenderView(month: monthExtracted, viewModel: viewModel)
-                }
-//                Text("\(extractDateRange(from: date)?.description ?? "nil")")
+                CalenderView(
+                    month: monthExtracted,
+                    dateRangesForMonth: viewModel.dateRangesByMonth[monthExtracted]!,
+                    viewModel: viewModel
+                )
             } else {
                 CalenderView(month: date, viewModel: viewModel)
             }
         }
         .onAppear{
-            let _: () = printDateRangesByMonth()
+//            let _: () = printDateRangesByMonth()
         }
     }
 }
 
 struct CalenderView: View {
     var month: String
+    private var dateRanges: [Int] = []
+    var dateRangesForMonth: [[String]]?
     @ObservedObject var viewModel: BudgetViewModel
+    
+    init(month: String, viewModel: BudgetViewModel) {
+        self.month = month
+        self.viewModel = viewModel
+    }
+    
+    init(month: String, dateRangesForMonth: [[String]], viewModel: BudgetViewModel) {
+        print("\(dateRangesForMonth) =")
+        self.month = month
+        self.dateRangesForMonth = dateRangesForMonth
+        self.viewModel = viewModel
+        self.dateRanges = expandDateRange(dateRangesForMonth)
+    }
 
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -826,38 +840,32 @@ struct CalenderView: View {
             }
     }
     
-    func expandDateRange(_ range: [Int]) -> [Int] {
-        var expandedRange: [Int] = []
-        for i in range.first!...range.last! {
-            expandedRange.append(i)
-        }
-        return expandedRange
-    }
-    
-//    func isInDateRange(_ day: String) -> Bool {
-//        if !day.isEmpty {
-//            if let dateRange = dateRange {
-//                if let dayNumber = Int(day) {
-//                    return dateRange.contains(dayNumber)
-//                }
-//            }
-//        }
-//        return false
-//    }
-    
-    func isInDateRange(_ day: String) -> Bool {
-        if !day.isEmpty {
-            if let dateRangeByMonth = viewModel.dateRangesByMonth["weekly"] {
-                if let monthWeeks = dateRangeByMonth[month] {
-                    return monthWeeks.contains { week in
-                        return week.contains(day)
+    func expandDateRange(_ ranges: [[String]]) -> [Int] {
+        var expandedDateRanges: [Int] = []
+
+        for range in ranges {
+            for dateRange in range {
+                let components = dateRange.split(separator: "-")
+                if components.count == 2,
+                   let start = Int(components[0]),
+                   let end = Int(components[1]) {
+                    for i in start...end {
+                        expandedDateRanges.append(i)
                     }
                 }
             }
         }
+        return expandedDateRanges
+    }
+    
+    func isInDateRange(_ day: String) -> Bool {
+        if !day.isEmpty {
+                if let dayNumber = Int(day) {
+                    return dateRanges.contains(dayNumber)
+                }
+        }
         return false
     }
-
     
     func calculateCalendarData(for date: String) -> ([String]) {
         let dateFormatter = DateFormatter()
