@@ -779,13 +779,15 @@ struct ProgressViewThree: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             if let monthExtracted = viewModel.extractMonth(from: monthInCall, with: "([A-Za-z]+),") {
-                CalenderView(
-                    date: $date,
-                    month: monthExtracted,
-                    dateRangesForMonth: viewModel.dateRangesByMonth[monthExtracted]!,
-                    dateRangeColors: viewModel.categoryColorDict,
-                    viewModel: viewModel
-                )
+                if monthExtracted == date {
+                    CalenderView(
+                        date: $date,
+                        month: monthExtracted,
+                        dateRangesForMonth: viewModel.dateRangesByMonth[monthExtracted]!,
+                        dateRangeColors: viewModel.categoryColorDict,
+                        viewModel: viewModel
+                    )
+                }
             } else {
                 CalenderView(
                     date: $date,
@@ -795,7 +797,7 @@ struct ProgressViewThree: View {
             }
         }
         .onAppear{
-            //            let _: () = printDateRangesByMonth()
+            //let _: () = printDateRangesByMonth()
         }
     }
 }
@@ -804,24 +806,24 @@ struct CalenderView: View {
     @Binding var date: String
     var month: String
     //category - alldates
-    private var dateRanges: [[String: [Int]]] = []
+    var dateRanges: [[String: [Int]]]?
     //category - daterange
-    var dateRangesForMonth: [[String: String]]?
     @ObservedObject var viewModel: BudgetViewModel
     //category - color
-    var dateRangeColors: [String: String]
+    @State var dateRangeColors: [String: String]
+    @State var daysInMonth: [String] = []
     
     init(date: Binding<String>, month: String, viewModel: BudgetViewModel) {
         _date = date
         self.month = month
         self.viewModel = viewModel
         self.dateRangeColors = [:]
+        self.daysInMonth = []
     }
     
     init(date: Binding<String>, month: String, dateRangesForMonth: [[String: String]], dateRangeColors: [String: String], viewModel: BudgetViewModel) {
         _date = date
         self.month = month
-        self.dateRangesForMonth = dateRangesForMonth
         self.viewModel = viewModel
         self.dateRangeColors = dateRangeColors
         self.dateRanges = expandDateRange(dateRangesForMonth)
@@ -838,43 +840,50 @@ struct CalenderView: View {
                         .foregroundColor(Color("ColorVividBlue"))
                         .padding(.bottom, 12)
                         .padding(.top, 6)
-                    let (daysInMonth) = calculateCalendarData(for: month)
+                    
                     VStack(alignment: .center, spacing: 0) {
                         LazyVGrid(columns: Array(repeating: GridItem(.fixed(28), spacing: 0), count: 7), spacing: 0) {
                             ForEach(daysInMonth.indices, id: \.self) { index in
-                                if daysInMonth[index].isEmpty {
-                                    Rectangle()
-                                        .fill(.clear)
-                                        .padding(2)
-                                } else {
-                                    Rectangle()
-                                        .fill(dateRangeColorForDay(daysInMonth[index]))
-                                        .overlay {
-                                            HStack {
-                                                Text("\(daysInMonth[index])")
-                                                    .font(.system(size: 14))
-                                                    .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
-                                            }
-                                        }
-                                        .frame(width: 28, height: 28, alignment: .center)
-                                        .padding(2)
-                                }
+                                let day = daysInMonth[index]
+                                Rectangle()
+                                    .fill(day.isEmpty ? Color.clear : dateRangeColorForDay(day))
+                                    .frame(width: 28, height: 28)
+                                    .overlay(
+                                        day.isEmpty ? nil : Text("\(day)")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(isInDateRange(day) ? .white : .black)
+                                    )
+                                    .padding(2)
                             }
                         }
                     }
                 }
             }
+            .onAppear {
+                daysInMonth = calculateCalendarData(for: month)
+            }
+    }
+    
+    func printMonth(_ day: [String]) {
+        print(day)
+    }
+    
+    func printMonth(_ day: String) {
+        print("day => \(day)")
     }
     
     func dateRangeColorForDay(_ day: String) -> Color {
-        for dateRangeCategory in dateRanges {
-            if let category = dateRangeCategory.keys.first, let dateRange = dateRangeCategory.values.first {
-                if let dayNumber = Int(day), dateRange.contains(dayNumber) {
-                    
-                    if let color = dateRangeColors[category] {
-                        return Color(color)
-                    } else {
-                        print("Color not found")
+        if let dateRangesExtract = dateRanges {
+            if date == month {
+                for dateRangeCategory in dateRangesExtract {
+                    if let category = dateRangeCategory.keys.first, let dateRange = dateRangeCategory.values.first {
+                        if let dayNumber = Int(day), dateRange.contains(dayNumber) {
+                            if let color = dateRangeColors[category] {
+                                return Color(color)
+                            } else {
+                                print("Color not found")
+                            }
+                        }
                     }
                 }
             }
@@ -899,22 +908,24 @@ struct CalenderView: View {
                 }
             }
         }
-        print(expandedDateRanges)
         
         return expandedDateRanges
     }
     
     func isInDateRange(_ day: String) -> Bool {
-        return !day.isEmpty && dateRanges.contains { dateRangeDict in
-            if let dayNumbers = dateRangeDict.values.first,
-               let dayNumber = Int(day) {
-                return dayNumbers.contains(dayNumber)
+        if let dateRangesExtract = dateRanges {
+            return !day.isEmpty && dateRangesExtract.contains { dateRangeDict in
+                if let dayNumbers = dateRangeDict.values.first,
+                   let dayNumber = Int(day) {
+                    return dayNumbers.contains(dayNumber)
+                }
+                return false
             }
-            return false
         }
+        return false
     }
     
-    func calculateCalendarData(for date: String) -> ([String]) {
+    func calculateCalendarData(for date: String) -> [String] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"
         if let date = dateFormatter.date(from: date) {
@@ -934,8 +945,10 @@ struct CalenderView: View {
             if let range = range {
                 daysInMonth.append(contentsOf: (1..<range.count + 1).map { "\($0)" })
             }
-            return (daysInMonth)
+//            print("\(daysInMonth)")
+            return daysInMonth
         }
+        
         return ([])
     }
 }
