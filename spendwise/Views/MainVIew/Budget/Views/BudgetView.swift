@@ -314,102 +314,102 @@ struct BottomBudgetSheet: View {
                                     Text("\(formatCurrency(value: limit))").font(.system(size: 16, weight: .bold))
                                 }
                                 else {
-                                   Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
-                               }
+                                    Text("\(formatCurrency(value: 0))").font(.system(size: 16, weight: .bold))
+                                }
                             }
-
+                            
                         }.padding(.horizontal, 20).padding(.bottom, 4)
                     }.padding(.top, 0).padding(.bottom, 10)
-                        VStack {
-                            ScrollView(showsIndicators: false) {
-                                VStack {
-                                    if selectedTab == .monthly {
-                                        let filteredBudgets = viewModel.monthlyBudgets.filter { budget in
-                                            if case .monthOnly(let month) = budget.budgetType.date {
-                                                return DateFormatter().monthSymbols[month - 1] == date
-                                            }
-                                            return false
+                    VStack {
+                        ScrollView(showsIndicators: false) {
+                            VStack {
+                                if selectedTab == .monthly {
+                                    let filteredBudgets = viewModel.monthlyBudgets.filter { budget in
+                                        if case .monthOnly(let month) = budget.budgetType.date {
+                                            return DateFormatter().monthSymbols[month - 1] == date
                                         }
-                                        if filteredBudgets.isEmpty {
-                                            Text("No Budgets Found")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .padding()
-                                        } else {
-                                            ForEach(filteredBudgets){ budget in
-                                                ForEach(budget.category) { category in
-                                                    OverallBudgetCategoryCardView(
-                                                        primaryBackgroundColor: category.primaryBackgroundColor,
-                                                        budgetCategoryName: category.name,
-                                                        amountAllocated: budget.allocatedAmount,
-                                                        amountSpent: budget.currentAmountSpent,
-                                                        numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                        footerMessage: budget.footerMessage
-                                                    )
-                                                }
+                                        return false
+                                    }
+                                    if filteredBudgets.isEmpty {
+                                        Text("No Budgets Found")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .padding()
+                                    } else {
+                                        ForEach(filteredBudgets){ budget in
+                                            ForEach(budget.category) { category in
+                                                OverallBudgetCategoryCardView(
+                                                    primaryBackgroundColor: category.primaryBackgroundColor,
+                                                    budgetCategoryName: category.name,
+                                                    amountAllocated: budget.allocatedAmount,
+                                                    amountSpent: budget.currentAmountSpent,
+                                                    numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                    footerMessage: budget.footerMessage
+                                                )
                                             }
                                         }
                                     }
-                                    if selectedTab == .weekly {
-                                        let filteredBudgets = viewModel.weeklyBudgets.filter { budget in
-                                            if case .dateRange(let month, _, _) = budget.budgetType.date {
-                                                return DateFormatter().monthSymbols[month - 1] == date
-                                                       }
-                                                       return false
-                                                   }
-                                        if filteredBudgets.isEmpty {
-                                            Text("No Budgets Found")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .padding()
-                                        } else {
-                                            ForEach(filteredBudgets) { budget in
-                                                ForEach(budget.category) { category in
-                                                    OverallBudgetCategoryCardView(
-                                                        primaryBackgroundColor: category.primaryBackgroundColor,
-                                                        budgetCategoryName: category.name,
-                                                        amountAllocated: budget.allocatedAmount,
-                                                        amountSpent: budget.currentAmountSpent,
-                                                        numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                        footerMessage: budget.footerMessage
-                                                    )
-                                                }
+                                }
+                                if selectedTab == .weekly {
+                                    let filteredBudgets = viewModel.weeklyBudgets.filter { budget in
+                                        if case .dateRange(let month, _, _) = budget.budgetType.date {
+                                            return DateFormatter().monthSymbols[month - 1] == date
+                                        }
+                                        return false
+                                    }
+                                    if filteredBudgets.isEmpty {
+                                        Text("No Budgets Found")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .padding()
+                                    } else {
+                                        ForEach(filteredBudgets) { budget in
+                                            ForEach(budget.category) { category in
+                                                OverallBudgetCategoryCardView(
+                                                    primaryBackgroundColor: category.primaryBackgroundColor,
+                                                    budgetCategoryName: category.name,
+                                                    amountAllocated: budget.allocatedAmount,
+                                                    amountSpent: budget.currentAmountSpent,
+                                                    numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                    footerMessage: budget.footerMessage
+                                                )
                                             }
                                         }
                                     }
-                                    if selectedTab == .yearly {
-                                        let filteredBudgets = viewModel.yearlyBudgets.filter { budget in
-                                                       if case .yearOnly(let year) = budget.budgetType.date {
-                                                           return String(year) == date
-                                                       }
-                                                       return false
-                                                   }
-                                                   
-                                                   if filteredBudgets.isEmpty {
-                                                       Text("No Budgets Found")
-                                                           .font(.system(size: 16, weight: .bold))
-                                                           .padding()
-                                                   } else {
-                                                       ForEach(filteredBudgets) { budget in
-                                                           ForEach(budget.category) { category in
-                                                               OverallBudgetCategoryCardView(
-                                                                   primaryBackgroundColor: category.primaryBackgroundColor,
-                                                                   budgetCategoryName: category.name,
-                                                                   amountAllocated: budget.allocatedAmount,
-                                                                   amountSpent: budget.currentAmountSpent,
-                                                                   numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                                   footerMessage: budget.footerMessage
-                                                               )
-                                                           }
-                                                       }
-                                                   }
+                                }
+                                if selectedTab == .yearly {
+                                    let filteredBudgets = viewModel.yearlyBudgets.filter { budget in
+                                        if case .yearOnly(let year) = budget.budgetType.date {
+                                            return String(year) == date
+                                        }
+                                        return false
+                                    }
+                                    
+                                    if filteredBudgets.isEmpty {
+                                        Text("No Budgets Found")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .padding()
+                                    } else {
+                                        ForEach(filteredBudgets) { budget in
+                                            ForEach(budget.category) { category in
+                                                OverallBudgetCategoryCardView(
+                                                    primaryBackgroundColor: category.primaryBackgroundColor,
+                                                    budgetCategoryName: category.name,
+                                                    amountAllocated: budget.allocatedAmount,
+                                                    amountSpent: budget.currentAmountSpent,
+                                                    numberOfDaysSpent: budget.numberOfDaysSpent,
+                                                    footerMessage: budget.footerMessage
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        }.padding(.vertical, 5)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }.padding(.vertical, 5)
                 }
                 .onAppear {
                     viewModel.fetchAmountSpentForLast7Days()
-//                    printBudgets(budgets: viewModel.budgetByWeek)
+                    //                    printBudgets(budgets: viewModel.budgetByWeek)
                 }
             }
         }
@@ -453,52 +453,52 @@ struct BudgetOverView: View {
                     .font(.system(size: 35))
                     .foregroundColor(Color("ColorVividBlue"))
             }
-                HStack(spacing: 0){
-                    if selectedTab == .monthly {
-                        TabView(selection: $currentPage) {
-                            ForEach(months.indices, id: \.self) { index in
-                                MonthlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, month: months[index], viewModel: viewModel)
-                                    .tag(index)
-                            }
+            HStack(spacing: 0){
+                if selectedTab == .monthly {
+                    TabView(selection: $currentPage) {
+                        ForEach(months.indices, id: \.self) { index in
+                            MonthlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, month: months[index], viewModel: viewModel)
+                                .tag(index)
                         }
-                        .frame(height: 235)
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .disabled(true)
                     }
-                    if selectedTab == .weekly {
-                        TabView(selection: $currentPage) {
-                            ForEach(months.indices, id: \.self) { index in
-                               WeeklyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, month: months[index], viewModel: viewModel)
-                                    .tag(index)
-                            }
+                    .frame(height: 235)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .disabled(true)
+                }
+                if selectedTab == .weekly {
+                    TabView(selection: $currentPage) {
+                        ForEach(months.indices, id: \.self) { index in
+                            WeeklyBudgetOverview(selectedTab: $selectedTab, date: $date ,currentPage: $currentPage, month: months[index], viewModel: viewModel)
+                                .tag(index)
                         }
-                        .frame(height: 335)
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .disabled(true)
                     }
-                    if selectedTab == .yearly {
-                        TabView(selection: $currentPage) {
-                            ForEach(years.indices, id: \.self) { index in
-                               YearlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, year: years[index], viewModel: viewModel)
-                                    .tag(index)
-                            }
+                    .frame(height: 335)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .disabled(true)
+                }
+                if selectedTab == .yearly {
+                    TabView(selection: $currentPage) {
+                        ForEach(years.indices, id: \.self) { index in
+                            YearlyBudgetOverview(selectedTab: $selectedTab, currentPage: $currentPage, year: years[index], viewModel: viewModel)
+                                .tag(index)
                         }
-                        .frame(height: 235)
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .disabled(true)
+                    }
+                    .frame(height: 235)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .disabled(true)
+                }
+            }
+            .onAppear() {
+                withAnimation {
+                    if selectedTab == .weekly || selectedTab == .monthly {
+                        scrollToCurrentMonth()
+                        date = months[currentPage]
+                    } else if selectedTab == .yearly {
+                        scrollToCurrentYear()
+                        date = years[currentPage]
                     }
                 }
-                .onAppear() {
-                    withAnimation {
-                        if selectedTab == .weekly || selectedTab == .monthly {
-                            scrollToCurrentMonth()
-                            date = months[currentPage]
-                        } else if selectedTab == .yearly {
-                            scrollToCurrentYear()
-                            date = years[currentPage]
-                        }
-                    }
-                }
+            }
             Button {
                 if selectedTab == .weekly || selectedTab == .monthly {
                     if currentPage < months.count - 1 {
@@ -521,7 +521,7 @@ struct BudgetOverView: View {
     }
     
     private func scrollToPage(page: Int, array: [String]) {
-            currentPage = min(max(page, 0), array.count - 1)
+        currentPage = min(max(page, 0), array.count - 1)
     }
     
     func scrollToCurrentMonth() {
@@ -540,6 +540,7 @@ struct BudgetOverView: View {
 
 struct WeeklyBudgetOverview: View {
     @Binding var selectedTab: BudgetTypeOption
+    @Binding var date: String
     @Binding var currentPage: Int
     var month: String
     @ObservedObject var viewModel: BudgetViewModel
@@ -552,9 +553,10 @@ struct WeeklyBudgetOverview: View {
                         VStack(spacing: 0) {
                             if let weeklyProgress = viewModel.progressValueByMonth["weekly"]?[label], let weeklySpentAmount = viewModel.totalAmountSpentByMonth["weekly"]?[label] {
                                 VStack(spacing: 0) {
-                                    BudgetProgressView(
+                                    WeeklyBudgetProgressView(
                                         progressValue: weeklyProgress,
-                                        date: label,
+                                        monthInCall: label,
+                                        date: $date,
                                         usedAmount: weeklySpentAmount,
                                         selectedTab: $selectedTab,
                                         viewModel: viewModel
@@ -577,9 +579,10 @@ struct WeeklyBudgetOverview: View {
             else {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        BudgetProgressView(
+                        WeeklyBudgetProgressView(
                             progressValue: 0,
-                            date: month,
+                            monthInCall: month,
+                            date: $date,
                             usedAmount: 0,
                             selectedTab: $selectedTab,
                             viewModel: viewModel
@@ -610,7 +613,7 @@ struct MonthlyBudgetOverview: View {
                 if label == month {
                     VStack(spacing: 15) {
                         if let monthlyProgress = viewModel.progressValueByMonth["monthly"]?[label], let monthlySpentAmount = viewModel.totalAmountSpentByMonth ["monthly"]?[label] {
-                            BudgetProgressView(progressValue: monthlyProgress, date: label, usedAmount: monthlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
+                            MonthlyYearlyBudgetProgressView(progressValue: monthlyProgress, date: label, usedAmount: monthlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
                                 .frame(width: 175, height: 175)
                         }
                         VStack {
@@ -627,7 +630,7 @@ struct MonthlyBudgetOverview: View {
                 }
             } else {
                 VStack(spacing: 15) {
-                    BudgetProgressView(progressValue: 0, date: month, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
+                    MonthlyYearlyBudgetProgressView(progressValue: 0, date: month, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
                         .frame(width: 175, height: 175)
                     VStack {
                         Text("Monthly Budget")
@@ -655,7 +658,7 @@ struct YearlyBudgetOverview: View {
                 if label == year {
                     VStack(spacing: 15) {
                         if let yearlyProgress = viewModel.progressValueByMonth["yearly"]?[year], let yearlySpentAmount = viewModel.totalAmountSpentByMonth["yearly"]?[year] {
-                            BudgetProgressView(progressValue: yearlyProgress, date: label, usedAmount: yearlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
+                            MonthlyYearlyBudgetProgressView(progressValue: yearlyProgress, date: label, usedAmount: yearlySpentAmount, selectedTab: $selectedTab, viewModel: viewModel)
                                 .frame(width: 175, height: 175)
                             
                         }
@@ -674,7 +677,7 @@ struct YearlyBudgetOverview: View {
             }
             else {
                 VStack(spacing: 15) {
-                    BudgetProgressView(progressValue: 0, date: year, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
+                    MonthlyYearlyBudgetProgressView(progressValue: 0, date: year, usedAmount: 0, selectedTab: $selectedTab, viewModel: viewModel)
                         .frame(width: 175, height: 175)
                     VStack {
                         Text("Yearly Budget")
@@ -690,7 +693,7 @@ struct YearlyBudgetOverview: View {
     }
 }
 
-struct BudgetProgressView: View {
+struct MonthlyYearlyBudgetProgressView: View {
     var progressValue:Float
     var date: String
     var usedAmount: Double
@@ -701,8 +704,23 @@ struct BudgetProgressView: View {
         VStack(spacing: 0) {
             if selectedTab == .monthly || selectedTab == .yearly {
                 ProgressBarViewTwo(progress: progressValue, date: date, usedAmount: usedAmount)
-            } else if selectedTab == .weekly {
-                ProgressViewThree(date: date, usedAmount: usedAmount, viewModel: viewModel)
+            }
+        }
+    }
+}
+
+struct WeeklyBudgetProgressView: View {
+    var progressValue:Float
+    var monthInCall: String
+    @Binding var date: String
+    var usedAmount: Double
+    @Binding var selectedTab: BudgetTypeOption
+    @ObservedObject var viewModel: BudgetViewModel
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if selectedTab == .weekly {
+                ProgressViewThree(date: $date, monthInCall: monthInCall, usedAmount: usedAmount, viewModel: viewModel)
             }
         }
     }
@@ -742,8 +760,9 @@ struct ProgressBarViewTwo: View {
 }
 
 struct ProgressViewThree: View {
+    @Binding var date: String
     //range ("October, 12-13")
-    var date: String
+    var monthInCall: String
     var usedAmount: Double
     @ObservedObject var viewModel: BudgetViewModel
     
@@ -759,24 +778,30 @@ struct ProgressViewThree: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            if let monthExtracted = viewModel.extractMonth(from: date, with: "([A-Za-z]+),") {
+            if let monthExtracted = viewModel.extractMonth(from: monthInCall, with: "([A-Za-z]+),") {
                 CalenderView(
+                    date: $date,
                     month: monthExtracted,
                     dateRangesForMonth: viewModel.dateRangesByMonth[monthExtracted]!,
                     dateRangeColors: viewModel.categoryColorDict,
                     viewModel: viewModel
                 )
             } else {
-                CalenderView(month: date, viewModel: viewModel)
+                CalenderView(
+                    date: $date,
+                    month: monthInCall,
+                    viewModel: viewModel
+                )
             }
         }
         .onAppear{
-//            let _: () = printDateRangesByMonth()
+            //            let _: () = printDateRangesByMonth()
         }
     }
 }
 
 struct CalenderView: View {
+    @Binding var date: String
     var month: String
     //category - alldates
     private var dateRanges: [[String: [Int]]] = []
@@ -786,20 +811,22 @@ struct CalenderView: View {
     //category - color
     var dateRangeColors: [String: String]
     
-    init(month: String, viewModel: BudgetViewModel) {
+    init(date: Binding<String>, month: String, viewModel: BudgetViewModel) {
+        _date = date
         self.month = month
         self.viewModel = viewModel
         self.dateRangeColors = [:]
     }
     
-    init(month: String, dateRangesForMonth: [[String: String]], dateRangeColors: [String: String], viewModel: BudgetViewModel) {
+    init(date: Binding<String>, month: String, dateRangesForMonth: [[String: String]], dateRangeColors: [String: String], viewModel: BudgetViewModel) {
+        _date = date
         self.month = month
         self.dateRangesForMonth = dateRangesForMonth
         self.viewModel = viewModel
         self.dateRangeColors = dateRangeColors
         self.dateRanges = expandDateRange(dateRangesForMonth)
     }
-
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(Color("ColorVividBlue"), lineWidth: 2)
@@ -840,20 +867,20 @@ struct CalenderView: View {
     }
     
     func dateRangeColorForDay(_ day: String) -> Color {
-            for dateRangeCategory in dateRanges {
-                if let category = dateRangeCategory.keys.first, let dateRange = dateRangeCategory.values.first {
-                    if let dayNumber = Int(day), dateRange.contains(dayNumber) {
-                        
-                        if let color = dateRangeColors[category] {
-                            return Color(color)
-                        } else {
-                            print("Color not found")
-                        }
+        for dateRangeCategory in dateRanges {
+            if let category = dateRangeCategory.keys.first, let dateRange = dateRangeCategory.values.first {
+                if let dayNumber = Int(day), dateRange.contains(dayNumber) {
+                    
+                    if let color = dateRangeColors[category] {
+                        return Color(color)
+                    } else {
+                        print("Color not found")
                     }
                 }
             }
-            return .clear
         }
+        return .clear
+    }
     
     func expandDateRange(_ ranges: [[String: String]]) -> [[String: [Int]]] {
         var expandedDateRanges: [[String: [Int]]] = []
@@ -897,7 +924,7 @@ struct CalenderView: View {
             let dateComponents = DateComponents(year: year, month: month, day: 1)
             let startDate = calendar.date(from: dateComponents)!
             let range = calendar.range(of: .day, in: .month, for: startDate)
-
+            
             let firstDayWeekday = calendar.component(.weekday, from: startDate) - 1
             let daySymbols = Calendar.current.veryShortStandaloneWeekdaySymbols
             var daysInMonth: [String] = daySymbols
