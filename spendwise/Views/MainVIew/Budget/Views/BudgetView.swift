@@ -463,9 +463,7 @@ struct BudgetOverView: View {
                         }
                         .frame(height: 235)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .onAppear {
-                              UIScrollView.appearance().isScrollEnabled = false
-                        }
+                        .disabled(true)
                     }
                     if selectedTab == .weekly {
                         TabView(selection: $currentPage) {
@@ -476,9 +474,7 @@ struct BudgetOverView: View {
                         }
                         .frame(height: 335)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .onAppear {
-                              UIScrollView.appearance().isScrollEnabled = false
-                        }
+                        .disabled(true)
                     }
                     if selectedTab == .yearly {
                         TabView(selection: $currentPage) {
@@ -489,9 +485,7 @@ struct BudgetOverView: View {
                         }
                         .frame(height: 235)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .onAppear {
-                              UIScrollView.appearance().isScrollEnabled = false
-                        }
+                        .disabled(true)
                     }
                 }
                 .onAppear() {
@@ -769,6 +763,7 @@ struct ProgressViewThree: View {
                 CalenderView(
                     month: monthExtracted,
                     dateRangesForMonth: viewModel.dateRangesByMonth[monthExtracted]!,
+                    dateRangeColors: viewModel.categoryColorDict,
                     viewModel: viewModel
                 )
             } else {
@@ -783,20 +778,25 @@ struct ProgressViewThree: View {
 
 struct CalenderView: View {
     var month: String
-    private var dateRanges: [[Int]] = []
-    var dateRangesForMonth: [[String]]?
+    //category - alldates
+    private var dateRanges: [[String: [Int]]] = []
+    //category - daterange
+    var dateRangesForMonth: [[String: String]]?
     @ObservedObject var viewModel: BudgetViewModel
+    //category - color
+    var dateRangeColors: [String: String]
     
     init(month: String, viewModel: BudgetViewModel) {
         self.month = month
         self.viewModel = viewModel
+        self.dateRangeColors = [:]
     }
     
-    init(month: String, dateRangesForMonth: [[String]], viewModel: BudgetViewModel) {
-        print("\(dateRangesForMonth) =")
+    init(month: String, dateRangesForMonth: [[String: String]], dateRangeColors: [String: String], viewModel: BudgetViewModel) {
         self.month = month
         self.dateRangesForMonth = dateRangesForMonth
         self.viewModel = viewModel
+        self.dateRangeColors = dateRangeColors
         self.dateRanges = expandDateRange(dateRangesForMonth)
     }
 
@@ -821,7 +821,7 @@ struct CalenderView: View {
                                         .padding(2)
                                 } else {
                                     Rectangle()
-                                        .fill(.clear)
+                                        .fill(dateRangeColorForDay(daysInMonth[index]))
                                         .overlay {
                                             HStack {
                                                 Text("\(daysInMonth[index])")
@@ -829,7 +829,6 @@ struct CalenderView: View {
                                                     .foregroundColor(isInDateRange(daysInMonth[index]) ? .white : .black)
                                             }
                                         }
-                                        .background(isInDateRange(daysInMonth[index]) ? Color("ColorVividBlue") : .white)
                                         .frame(width: 28, height: 28, alignment: .center)
                                         .padding(2)
                                 }
@@ -840,38 +839,52 @@ struct CalenderView: View {
             }
     }
     
-    func expandDateRange(_ ranges: [[String]]) -> [[Int]] {
-        var expandedDateRanges: [[Int]] = []
-
-        for range in ranges {
-            var expandedRange: [Int] = []
-            for dateRange in range {
-                let components = dateRange.split(separator: "-")
-                if components.count == 2,
-                   let start = Int(components[0]),
-                   let end = Int(components[1]) {
-                    for i in start...end {
-                        expandedRange.append(i)
+    func dateRangeColorForDay(_ day: String) -> Color {
+            for dateRangeCategory in dateRanges {
+                if let category = dateRangeCategory.keys.first, let dateRange = dateRangeCategory.values.first {
+                    if let dayNumber = Int(day), dateRange.contains(dayNumber) {
+                        
+                        if let color = dateRangeColors[category] {
+                            return Color(color)
+                        } else {
+                            print("Color not found")
+                        }
                     }
                 }
             }
-            expandedDateRanges.append(expandedRange)
+            return .clear
         }
+    
+    func expandDateRange(_ ranges: [[String: String]]) -> [[String: [Int]]] {
+        var expandedDateRanges: [[String: [Int]]] = []
         
+        for dateRange in ranges {
+            if let category = dateRange.keys.first, let dateRangeString = dateRange.values.first {
+                let components = dateRangeString.split(separator: "-")
+                
+                if components.count == 2,
+                   let start = Int(components[0]),
+                   let end = Int(components[1]) {
+                    let expandedRange = Array(start...end)
+                    expandedDateRanges.append([category: expandedRange])
+                } else {
+                    print("Invalid date range format for category: \(category)")
+                }
+            }
+        }
         print(expandedDateRanges)
-
+        
         return expandedDateRanges
     }
     
     func isInDateRange(_ day: String) -> Bool {
-        if !day.isEmpty {
-            for dateRange in dateRanges {
-                if let dayNumber = Int(day) {
-                    return dateRange.contains(dayNumber)
-                }
+        return !day.isEmpty && dateRanges.contains { dateRangeDict in
+            if let dayNumbers = dateRangeDict.values.first,
+               let dayNumber = Int(day) {
+                return dayNumbers.contains(dayNumber)
             }
+            return false
         }
-        return false
     }
     
     func calculateCalendarData(for date: String) -> ([String]) {
@@ -894,14 +907,8 @@ struct CalenderView: View {
             if let range = range {
                 daysInMonth.append(contentsOf: (1..<range.count + 1).map { "\($0)" })
             }
-            
-//            for day in daysInMonth {
-//                print(day)
-//            }
-            
             return (daysInMonth)
         }
-        
         return ([])
     }
 }

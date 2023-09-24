@@ -11,134 +11,134 @@ class BudgetViewModel: ObservableObject {
     @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
     @Published var budgetArray:[Budget] =
     [
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod"
-                    )
-                ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod"
-                    )
-                ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .monthly, date: .monthOnly(8), limit: 2500),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Entertainment",
-                        primaryBackgroundColor: "ColorGoldenrod"
-                    )
-                ],
-            allocatedAmount: 100000.00,
-            currentAmountSpent: 10600.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Dining",
-                        primaryBackgroundColor: "ColorGoldenrod"
-                    )
-                ],
-            allocatedAmount: 300000.00,
-            currentAmountSpent: 100000.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue"
-                    )
-                ],
-            allocatedAmount: 546321.00,
-            currentAmountSpent: 96532.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .yearly, date: .yearOnly(2025), limit: 8000),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue"
-                    )
-                ],
-            allocatedAmount: 546321.00,
-            currentAmountSpent: 96532.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue"
-                    )
-                ],
-            allocatedAmount: 52362.00,
-            currentAmountSpent: 12283.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
-        ),
-        Budget(
-            id: UUID(),
-            budgetType: BudgetType(type: .yearly, date: .yearOnly(2024), limit: 8000),
-            category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue"
-                    )
-                ],
-            allocatedAmount: 52362.00,
-            currentAmountSpent: 12283.00,
-            numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
-        ),
+        /*Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Shopping",
+         primaryBackgroundColor: "ColorGoldenrod"
+         )
+         ],
+         allocatedAmount: 300000.00,
+         currentAmountSpent: 100000.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Shopping",
+         primaryBackgroundColor: "ColorGoldenrod"
+         )
+         ],
+         allocatedAmount: 300000.00,
+         currentAmountSpent: 100000.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .monthly, date: .monthOnly(8), limit: 2500),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Entertainment",
+         primaryBackgroundColor: "ColorGoldenrod"
+         )
+         ],
+         allocatedAmount: 100000.00,
+         currentAmountSpent: 10600.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Dining",
+         primaryBackgroundColor: "ColorGoldenrod"
+         )
+         ],
+         allocatedAmount: 300000.00,
+         currentAmountSpent: 100000.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Transportation",
+         primaryBackgroundColor: "ColorVividBlue"
+         )
+         ],
+         allocatedAmount: 546321.00,
+         currentAmountSpent: 96532.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .yearly, date: .yearOnly(2025), limit: 8000),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Transportation",
+         primaryBackgroundColor: "ColorVividBlue"
+         )
+         ],
+         allocatedAmount: 546321.00,
+         currentAmountSpent: 96532.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Rent/Mortage",
+         primaryBackgroundColor: "ColorVividBlue"
+         )
+         ],
+         allocatedAmount: 52362.00,
+         currentAmountSpent: 12283.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+         ),
+         Budget(
+         id: UUID(),
+         budgetType: BudgetType(type: .yearly, date: .yearOnly(2024), limit: 8000),
+         category:
+         [
+         BudgetCategory(
+         id: UUID(),
+         name: "Rent/Mortage",
+         primaryBackgroundColor: "ColorVividBlue"
+         )
+         ],
+         allocatedAmount: 52362.00,
+         currentAmountSpent: 12283.00,
+         numberOfDaysSpent: 8,
+         footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+         ),*/
         Budget(
             id: UUID(),
             budgetType: BudgetType(type: .weekly, date: .dateRange(10, 15, 22), limit: 1200),
@@ -162,8 +162,8 @@ class BudgetViewModel: ObservableObject {
                 [
                     BudgetCategory(
                         id: UUID(),
-                        name: "Groceries",
-                        primaryBackgroundColor: "ColorSecondTealGreen"
+                        name: "Vacation",
+                        primaryBackgroundColor: "ColorVividBlue"
                     )
                 ],
             allocatedAmount: 785697.00,
@@ -195,7 +195,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Vacation",
-                        primaryBackgroundColor: "ColorSecondTealGreen"
+                        primaryBackgroundColor: "ColorVividBlue"
                     )
                 ],
             allocatedAmount: 458000.00,
@@ -382,7 +382,7 @@ class BudgetViewModel: ObservableObject {
     
     var limitForBudgetType: [String: [String: Double]] {
         var limits: [String: [String: Double]] = [:]
-
+        
         for (budgetType, monthsAndBudgets) in allBudgets {
             for (month, budgets) in monthsAndBudgets {
                 if let firstBudget = budgets.first {
@@ -396,33 +396,62 @@ class BudgetViewModel: ObservableObject {
                 }
             }
         }
-
+        
         return limits
     }
-
-    var dateRangesByMonth: [String: [[String]]] {
-        var result = [String: [[String]]]()
-
-        for (_, weeklyValues) in budgetByWeek {
-            for (monthAndWeek, _) in weeklyValues {
-                let components = monthAndWeek.components(separatedBy: ", ")
-                if components.count == 2 {
-                    let month = components[0]
-                    let weekDescription = components[1]
-
-                    if var monthArray = result[month] {
-                        monthArray.append([weekDescription])
-                        result[month] = monthArray
-                    } else {
-                        result[month] = [[weekDescription]]
+    
+    var categoryColorDict: [String: String] {
+        var result = [String: String]()
+        
+        for (_, weeklyBudgets) in budgetByWeek {
+            for (_, budgetArray) in weeklyBudgets {
+                for budget in budgetArray {
+                    if let categoryName = budget.category.first?.name {
+                        result["\(categoryName)"] = budget.category.first?.primaryBackgroundColor ?? ""
                     }
                 }
             }
         }
-
+        return result
+    }
+    
+    //month - [category: dateRange]
+    var dateRangesByMonth: [String: [[String: String]]] {
+        var result = [String: [[String: String]]]()
+        
+        for (_, weeklyValues) in budgetByWeek {
+            for (monthAndWeek, budget) in weeklyValues {
+                let components = monthAndWeek.components(separatedBy: ", ")
+                if components.count == 2 {
+                    let month = components[0]
+                    let weekDescription = components[1]
+                    
+                    if let categoryName = budget.first?.category.first?.name {
+                        if var monthArray = result[month] {
+                            // Create a new dictionary for the budget category and dateRange
+                            let budgetDict = [categoryName: weekDescription]
+                            
+                            // Append the new dictionary to the existing month's array
+                            monthArray.append(budgetDict)
+                            
+                            // Update the month in the result dictionary
+                            result[month] = monthArray
+                        } else {
+                            // Create a new array for the month if it doesn't exist
+                            let monthArray = [[categoryName: weekDescription]]
+                            result[month] = monthArray
+                        }
+                    }
+                }
+            }
+        }
+        
+//        print(result)
         return result
     }
 
+
+    
     
     func extractMonth(from inputString: String, with pattern: String) -> String? {
         if let range = inputString.range(of: pattern, options: .regularExpression) {
@@ -496,7 +525,7 @@ class BudgetViewModel: ObservableObject {
         
         return nil
     }
-
+    
     
     func fetchData() {
         ApiService.fetchBudgetData { result in
