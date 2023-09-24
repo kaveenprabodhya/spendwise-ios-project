@@ -128,7 +128,7 @@ struct PageTabView: View {
 }
 
 struct BottomBudgetSheetOverView: View {
-    var heightOfSheet: CGFloat = 692
+    var heightOfSheet: CGFloat = 672
     @Binding var selectedTab: BudgetTypeOption
     @Binding var currentPage: Int
     @Binding var date: String
