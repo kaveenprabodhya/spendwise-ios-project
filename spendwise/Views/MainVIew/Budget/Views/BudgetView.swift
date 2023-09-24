@@ -128,7 +128,7 @@ struct PageTabView: View {
 }
 
 struct BottomBudgetSheetOverView: View {
-    var heightOfSheet: CGFloat = 672
+    var heightOfSheet: CGFloat = 692
     @Binding var selectedTab: BudgetTypeOption
     @Binding var currentPage: Int
     @Binding var date: String
@@ -165,6 +165,31 @@ struct BottomBudgetSheetOverView: View {
                 })
                 .edgesIgnoringSafeArea(.bottom)
             }
+        }
+    }
+}
+
+struct EmptyScreenImageView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            Image("budget-empty-screen")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 380, height: 260)
+                .padding(.vertical, 10)
+                .overlay {
+                    VStack {
+                        Text(
+                                     """
+                                     Looks Like, You don’t have a budget.
+                                     Let’s make one, so you in control.
+                                     """
+                        )
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 18, weight: .medium))
+                        Spacer()
+                    }
+                }
         }
     }
 }
@@ -210,25 +235,7 @@ struct BottomBudgetSheet: View {
                         date: $date,
                         viewModel: viewModel
                     )
-                    VStack(spacing: 0) {
-                        Image("budget-empty-screen")
-                            .resizable()
-                            .scaledToFit()
-                    }.overlay {
-                        VStack(spacing: 0) {
-                            Text(
-                                     """
-                                     Looks Like, You don’t have a budget.
-                                     Let’s make one so you in control.
-                                     """
-                            )
-                            .multilineTextAlignment(.center)
-                            .font(.system(size: 18, weight: .medium))
-                            Spacer()
-                        }
-                        .offset(y: -10)
-                        .padding()
-                    }
+                    EmptyScreenImageView()
                     Spacer()
                 }
             }
@@ -331,9 +338,10 @@ struct BottomBudgetSheet: View {
                                         return false
                                     }
                                     if filteredBudgets.isEmpty {
-                                        Text("No Budgets Found")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .padding()
+//                                        Text("No Budgets Found")
+//                                            .font(.system(size: 16, weight: .bold))
+//                                            .padding()
+                                        EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets){ budget in
                                             ForEach(budget.category) { category in
@@ -357,9 +365,10 @@ struct BottomBudgetSheet: View {
                                         return false
                                     }
                                     if filteredBudgets.isEmpty {
-                                        Text("No Budgets Found")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .padding()
+//                                        Text("No Budgets Found")
+//                                            .font(.system(size: 16, weight: .bold))
+//                                            .padding()
+                                        EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets) { budget in
                                             ForEach(budget.category) { category in
@@ -384,9 +393,10 @@ struct BottomBudgetSheet: View {
                                     }
                                     
                                     if filteredBudgets.isEmpty {
-                                        Text("No Budgets Found")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .padding()
+//                                        Text("No Budgets Found")
+//                                            .font(.system(size: 16, weight: .bold))
+//                                            .padding()
+                                        EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets) { budget in
                                             ForEach(budget.category) { category in
@@ -409,7 +419,6 @@ struct BottomBudgetSheet: View {
                 }
                 .onAppear {
                     viewModel.fetchAmountSpentForLast7Days()
-                    //                    printBudgets(budgets: viewModel.budgetByWeek)
                 }
             }
         }
