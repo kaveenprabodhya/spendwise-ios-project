@@ -59,6 +59,8 @@
 		946AADD22AA369E900474ABE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD12AA369E900474ABE /* Constants.swift */; };
 		946AADD42AA3D33000474ABE /* CurvedSideRectangleViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */; };
 		9485A35E2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9485A35D2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift */; };
+		94F89DA72AC0B9B3000D2233 /* InputTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F89DA62AC0B9B3000D2233 /* InputTextFieldView.swift */; };
+		94F89DA92AC0BE44000D2233 /* SelectOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F89DA82AC0BE44000D2233 /* SelectOptionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +138,8 @@
 		946AADD12AA369E900474ABE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurvedSideRectangleViewShape.swift; sourceTree = "<group>"; };
 		9485A35D2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallBudgetCategoryCardView.swift; sourceTree = "<group>"; };
+		94F89DA62AC0B9B3000D2233 /* InputTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextFieldView.swift; sourceTree = "<group>"; };
+		94F89DA82AC0BE44000D2233 /* SelectOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectOptionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +170,7 @@
 		941328E32AAE1C7D00C50DFA /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				946AADD12AA369E900474ABE /* Constants.swift */,
 				941328E42AAE1C9B00C50DFA /* currencyFormatter.swift */,
 			);
 			path = Helper;
@@ -420,7 +425,7 @@
 		946AADD02AA3697E00474ABE /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				946AADD12AA369E900474ABE /* Constants.swift */,
+				94F89DA52AC0AD9F000D2233 /* FormComponenets */,
 				946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */,
 				944010AB2AA4A83C00648E4A /* CustomTopNavigationView.swift */,
 				944010AD2AA4DD1700648E4A /* WeeklyBarChartView.swift */,
@@ -432,6 +437,15 @@
 				94192AF82AB11CD200864CBF /* RoundedRectProgressViewStyle.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		94F89DA52AC0AD9F000D2233 /* FormComponenets */ = {
+			isa = PBXGroup;
+			children = (
+				94F89DA62AC0B9B3000D2233 /* InputTextFieldView.swift */,
+				94F89DA82AC0BE44000D2233 /* SelectOptionView.swift */,
+			);
+			path = FormComponenets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -586,6 +600,7 @@
 				946AADC92AA363CF00474ABE /* BudgetView.swift in Sources */,
 				946AADBF2AA3630100474ABE /* AccountView.swift in Sources */,
 				946AADB42AA3602A00474ABE /* OnboardingView.swift in Sources */,
+				94F89DA92AC0BE44000D2233 /* SelectOptionView.swift in Sources */,
 				94192AF92AB11CD200864CBF /* RoundedRectProgressViewStyle.swift in Sources */,
 				946AADB22AA35FFD00474ABE /* NotificationView.swift in Sources */,
 				946AADC12AA3632F00474ABE /* ProfileView.swift in Sources */,
@@ -599,6 +614,7 @@
 				9453FFCB2AA20B8900A193DB /* spendwiseApp.swift in Sources */,
 				946AADA42AA3484200474ABE /* ForgetPasswordView.swift in Sources */,
 				94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */,
+				94F89DA72AC0B9B3000D2233 /* InputTextFieldView.swift in Sources */,
 				9421C3112AAF84A7004F0A65 /* SecurityView.swift in Sources */,
 				9421C30D2AAF8428004F0A65 /* LanguageView.swift in Sources */,
 				9421C3132AAFBE56004F0A65 /* CustomContainerBodyView.swift in Sources */,
