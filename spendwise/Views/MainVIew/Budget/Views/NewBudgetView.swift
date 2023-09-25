@@ -13,7 +13,6 @@ struct NewBudgetView: View {
     @State private var selectedBudgetCategoryOption = ""
     @State private var inputValue = ""
     @State private var showGreeting = false
-    @State var isOptionModalPresented: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -28,7 +27,8 @@ struct NewBudgetView: View {
                             .padding(.top, 15)
                             .padding(.all, 20)
                         InputTextFieldView(label: "Name of Budget", textInput: $inputValue)
-                    
+                                SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, placeholderString: "Select Type", options : ["Option1", "Option2", "Option3"])
+                        
                         VStack {
                             Text("Cycle of budget")
                                 .font(.system(size: 14, weight:  .medium))
@@ -51,7 +51,7 @@ struct NewBudgetView: View {
                                     .stroke(.black, lineWidth: 2)
                             }
                         }.padding()
-                       
+                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, placeholderString: "Select Category", options : ["Option1", "Option2", "Option3"])
                         VStack(spacing: 0) {
                             Text("Receive Alert")
                                 .font(.system(size: 18, weight:  .medium))
@@ -68,7 +68,7 @@ struct NewBudgetView: View {
                         } label: {
                             
                         }.buttonStyle(CustomNavigationLinkButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Continue"))
-                        
+
                         Spacer()
                     }
                 }

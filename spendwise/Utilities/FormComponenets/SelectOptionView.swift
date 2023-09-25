@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SelectOptionView: View {
     var label: String
-    @Binding var isOptionPresented: Bool
+    @State private var isOptionPresented:Bool = false
     @Binding var selectedOption: String
     let placeholderString:String
     let options: [String]
@@ -32,13 +32,50 @@ struct SelectOptionView: View {
                                     .fontWeight(.medium)
                                     .foregroundColor(.black)
                                 Spacer()
-                                Image(systemName: self.isOptionPresented ? "chvron.up" : "chevron.down")
+                                Image(systemName: self.isOptionPresented ? "chevron.up" : "chevron.down")
                                     .fontWeight(.medium)
                                     .foregroundColor(.black)
                             }.padding(.horizontal, 10)
                         }
                     }
-            }.padding()
+            }.padding().sheet(isPresented: $isOptionPresented) {
+                VStack {
+                    Spacer()
+                    
+                    VStack {
+                        Text("Select an Option")
+                            .font(.title)
+                            .fontWeight(.medium)
+                        
+                        Divider()
+                        
+                        ForEach(options, id: \.self) { option in
+                            Button(action: {
+                                withAnimation {
+                                    self.isOptionPresented = false
+                                    self.selectedOption = option
+                                }
+                            }) {
+                                Text(option)
+                                    .font(.title2)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.black)
+                                    .padding()
+                            }
+                        }
+                    }
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .padding()
+                }
+                .background(Color.clear)
+                .frame(maxWidth: .infinity)
+                .frame(height: 300)
+                .background(Color.white)
+                .cornerRadius(15)
+                .shadow(radius: 5)
+                .padding()
+            }
     }
 }
 
@@ -82,7 +119,6 @@ struct DropDownMenuListRow: View {
 struct SelectOptionView_Previews: PreviewProvider {
     static var previews: some View {
         @State var selected: String = ""
-        @State var isPresented: Bool = false
-        SelectOptionView(label: "Pick your Budget Type", isOptionPresented: $isPresented, selectedOption: $selected, placeholderString: "Select Type", options : ["Option1", "Option2", "Option3"])
+        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selected, placeholderString: "Select Type", options : ["Option1", "Option2", "Option3"])
     }
 }
