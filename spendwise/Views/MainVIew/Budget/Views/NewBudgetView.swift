@@ -20,7 +20,7 @@ struct NewBudgetView: View {
     var body: some View {
         NavigationStack {
             VStack{
-                CustomContainerBodyView(gradientHeight: 240, sheetHeight: 752, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]){
+                CustomContainerBodyView(gradientHeight: 240, sheetHeight: 752, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")], headerContent: {}){
                     VStack(spacing: 0) {
                         Text("Create Your Budget")
                             .font(.title)
@@ -201,7 +201,7 @@ struct SecondView: View {
     var body: some View {
         NavigationStack {
             VStack{
-                CustomContainerBodyView(gradientHeight: 480, sheetHeight: 456, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]){
+                CustomContainerBodyView(gradientHeight: 480, sheetHeight: 456, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")], headerContent: {}){
                     VStack(spacing: 0) {
                         Spacer()
                         Text("Set Amount")

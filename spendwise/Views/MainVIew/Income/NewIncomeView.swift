@@ -11,7 +11,7 @@ struct NewIncomeView: View {
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack{
-                CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")]){
+            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")], headerContent: {}){
                     VStack {
                         Text("Hellooooo")
                     }

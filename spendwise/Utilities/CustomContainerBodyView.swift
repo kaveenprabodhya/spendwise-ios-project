@@ -7,18 +7,20 @@
 
 import SwiftUI
 
-struct CustomContainerBodyView<Content: View>: View {
+struct CustomContainerBodyView<HeaderContent: View, BodyContent: View>: View {
     var gradientHeight: CGFloat
     var sheetHeight: CGFloat
     var gradientColors: [Color]
-    let content: Content
+    let content: BodyContent
+    let headerContent: HeaderContent
     
-    init(gradientHeight: CGFloat, sheetHeight: CGFloat, gradientColors: [Color], @ViewBuilder content: () -> Content) {
-            self.gradientHeight = gradientHeight
-            self.sheetHeight = sheetHeight
-            self.gradientColors = gradientColors
-            self.content = content()
-        }
+    init(gradientHeight: CGFloat, sheetHeight: CGFloat, gradientColors: [Color], @ViewBuilder headerContent:  @escaping () -> HeaderContent, @ViewBuilder content:  @escaping () -> BodyContent) {
+        self.gradientHeight = gradientHeight
+        self.sheetHeight = sheetHeight
+        self.gradientColors = gradientColors
+        self.content = content()
+        self.headerContent = headerContent()
+    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -31,14 +33,16 @@ struct CustomContainerBodyView<Content: View>: View {
                         endPoint: .bottomLeading
                     ))
                     .frame(width: geometry.size.width, height: gradientHeight)
-                
+                    .overlay {
+                        headerContent
+                    }
             }
             ZStack(alignment: .top) {
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
                         Color.clear.frame(width: geometry.size.width, height: geometry.size.height)
                     }
-                    
+
                 }
                 .overlay(content: {
                     GeometryReader { geometry in
@@ -62,6 +66,14 @@ struct CustomContainerBodyView<Content: View>: View {
 
 struct CustomContainerBodyView_Previews: PreviewProvider {
     static var previews: some View {
-        CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [.blue, .green], content: {Text("Hello")})
+        CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [.blue, .green]) {
+            ZStack {
+                Text("Header Content")
+            }
+        } content: {
+            VStack {
+                Text("Main Content")
+            }
+        }
     }
 }
