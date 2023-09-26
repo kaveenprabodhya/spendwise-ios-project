@@ -16,6 +16,7 @@ struct AccountView: View {
                 }
             }
         }
+        .navigationBarHidden(true)
     }
 }
 

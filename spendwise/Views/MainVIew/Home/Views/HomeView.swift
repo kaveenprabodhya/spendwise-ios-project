@@ -143,6 +143,7 @@ struct HomeView: View {
         .onAppear{
             viewModel.fetchData()
         }
+        .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
     }
 }

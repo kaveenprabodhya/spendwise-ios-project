@@ -14,6 +14,7 @@ struct TransactionView: View {
                 .fill(Color.clear)
             .background(LinearGradient(gradient: Gradient(colors: [Color("ColorElectricIndigo"), Color("ColorCerulean")]), startPoint: .topTrailing, endPoint: .bottomLeading))
         }
+        .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.all)
     }
 }
