@@ -11,6 +11,8 @@ struct DetailBudgetView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isSheetRemovePresented: Bool = false
     @State private var capsuleWidth: CGFloat = 0
+    @State private var categoryNameWidth: CGFloat = 0
+    
     var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue")], allocatedAmount: 30000, currentAmountSpent: 3000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
     
     func getTextWidth(text: String) -> CGFloat {
@@ -58,7 +60,7 @@ struct DetailBudgetView: View {
                 }
                 .padding()
             }) {
-                VStack {
+                VStack(spacing: 0) {
                     HStack {
                         Text("Edit your Budget")
                             .font(.system(size: 22, weight: .medium))
@@ -68,16 +70,18 @@ struct DetailBudgetView: View {
                         } label: {
                             Circle()
                                 .fill(Color("ColorSilverGray"))
-                                .frame(width: 46, height: 48)
+                                .frame(width: 36, height: 36)
                                 .overlay {
                                     Image(systemName: "square.and.pencil")
                                         .foregroundColor(.white)
-                                        .font(.system(size: 28))
+                                        .font(.system(size: 22))
                                 }
                         }
 
                     }
-                    .padding(30)
+                    .padding(.top, 30)
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 20)
                     HStack {
                         Text("What’s left to spend")
                             .font(.system(size: 18, weight: .semibold))
@@ -85,10 +89,57 @@ struct DetailBudgetView: View {
                         Text("LKR \(formatCurrency(value: 170001))")
                             .font(.system(size: 18, weight: .semibold))
                     }
-                    .padding(.horizontal, 20)
+                    .padding(20)
                     
                     BudgetSpendingCardView(budget: budget)
+                        .padding(.bottom, 15)
                     
+                    VStack(spacing: 0) {
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(.secondary)
+                            .frame(width: categoryNameWidth, height: 64)
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "cart")
+                                        .font(.system(size: 32))
+                                        .frame(width: 30)
+                                    let textWidth = getTextWidth(text: "Shopping")
+                                    Text("Shopping")
+                                        .font(.system(size: 22, weight: .semibold))
+                                        .onAppear {
+                                            categoryNameWidth = textWidth + 100
+                                        }
+                                }
+                            }
+                    }.padding(10)
+                    
+                    VStack(spacing: 0) {
+                        Text("Budget Transactions")
+                            .font(.system(size: 18, weight: .semibold))
+                    }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: 0) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.secondary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .overlay {
+                                ScrollView {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.black, lineWidth: 2)
+                                        .frame(height: 52)
+                                        .overlay {
+                                            VStack(spacing: 0) {
+                                                BudgetTransactionListView()
+                                            }
+                                            .padding(5)
+                                        }
+                                        .padding(10)
+                                }
+                            }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 25)
                     Spacer()
                 }
             }
@@ -167,6 +218,29 @@ struct DetailBudgetView: View {
     }
 }
 
+struct BudgetTransactionListView: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .fill(.white)
+            .frame(height: 36)
+            .overlay{
+                HStack {
+                    VStack(spacing: 0) {
+                        Text("Expense")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Date")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Spacer()
+                    Text("Amount")
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                .padding(10)
+            }
+    }
+}
+
 struct BudgetSpendingCardView: View {
     var budget: Budget
     
@@ -183,7 +257,7 @@ struct BudgetSpendingCardView: View {
                         Spacer()
                         Text("Spend Limit per Day")
                             .foregroundColor(.secondary)
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 14, weight: .medium))
                     }.padding(.bottom, 10)
                     HStack {
                         Text("LKR \(formatCurrency(value: 10000000))")
