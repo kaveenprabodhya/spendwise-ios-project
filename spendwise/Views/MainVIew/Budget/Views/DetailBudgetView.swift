@@ -56,8 +56,9 @@ struct DetailBudgetView: View {
                     .padding(.vertical, 10)
                 Text("Are you sure do you wanna remove this budget?")
                     .font(.system(size: 18, weight: .medium))
+                    .multilineTextAlignment(.center)
                     .frame(width: 250)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
                 HStack {
                     Button {
                         
