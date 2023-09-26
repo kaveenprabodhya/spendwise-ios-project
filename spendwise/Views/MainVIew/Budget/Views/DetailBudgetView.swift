@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailBudgetView: View {
     @Environment(\.dismiss) private var dismiss
+    @State var isOnRemove: Bool = false
     var body: some View {
         VStack{
             CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")]){
@@ -39,7 +40,7 @@ struct DetailBudgetView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    
+                    self.isOnRemove = true
                 } label: {
                     Image(systemName: "trash")
                         .font(.system(size: 20, weight: .semibold))
@@ -48,6 +49,34 @@ struct DetailBudgetView: View {
                 
             }
         }
+        .sheet(isPresented: $isOnRemove) {
+            VStack {
+                Text("Remove")
+                    .font(.system(size: 18, weight: .semibold))
+                    .padding(.vertical, 10)
+                Text("Are you sure do you wanna remove this budget?")
+                    .font(.system(size: 18, weight: .medium))
+                    .frame(width: 250)
+                    .padding(.bottom, 10)
+                HStack {
+                    Button {
+                        
+                    } label: {
+                    }
+                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))
+                    
+                    Button {
+                        dismiss()
+                    } label: {
+                    }
+                    .buttonStyle(CustomButtonStyle(fillColor: "ColorSilverGray", width: 164, height: 56, label: "No", cornerRadius: 16))
+
+                }
+            }
+            .presentationDragIndicator(.visible)
+            .presentationDetents([.height(261)])
+        }
+        .background(Color.blue)
     }
 }
 
