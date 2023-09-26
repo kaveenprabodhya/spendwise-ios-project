@@ -43,6 +43,7 @@ struct BudgetView: View {
                 date = String(Calendar.current.component(.year, from: Date()))
             }
         }
+        .navigationBarHidden(true)
     }
 }
 
