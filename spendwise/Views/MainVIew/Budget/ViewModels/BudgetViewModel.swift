@@ -118,7 +118,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+            footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: true)
         ),
         Budget(
             id: UUID(),
