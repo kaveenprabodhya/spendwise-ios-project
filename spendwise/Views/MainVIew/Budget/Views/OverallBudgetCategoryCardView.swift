@@ -78,12 +78,16 @@ struct OverallBudgetCategoryCardView: View {
                                 Text(footerMessage.message)
                                     .font(.system(size: 20, weight: .bold))
                                     .foregroundColor(Color("ColorCottonCandy"))
+                                    .lineLimit(nil)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }else {
                                 Text(footerMessage.message)
                                     .font(.system(size: 14, weight: .bold))
                                     .foregroundColor(.white)
+                                    .lineLimit(nil)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                         }
                     }
