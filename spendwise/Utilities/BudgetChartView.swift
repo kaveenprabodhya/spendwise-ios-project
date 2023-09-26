@@ -13,6 +13,7 @@ struct BudgetChartView: View {
     @State var progressValue: Float = 0.3
     
     let budgetArray: [Budget]
+    let budgetCategory: [BudgetCategory]
     
     var body: some View {
         VStack {
@@ -112,7 +113,7 @@ struct ProgressBarViewOne: View {
 
 struct BudgetChartView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetChartView(budgetArray: [])
+        BudgetChartView(budgetArray: [], budgetCategory: [])
     }
 }
 
