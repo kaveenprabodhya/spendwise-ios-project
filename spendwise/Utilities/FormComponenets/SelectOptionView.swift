@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct SelectOptionView: View {
+struct SelectOptionView<T: Hashable>: View {
     var label: String
     @State private var isOptionPresented:Bool = false
     @Binding var selectedOption: String
+    var sheetLabel: String
     let placeholderString:String
-    let options: [String]
+    let options: [T]
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
             VStack {
                 Text("\(label)")
@@ -20,7 +23,7 @@ struct SelectOptionView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(.black, lineWidth: 2)
-                    .frame(height: 50)
+                    .frame(height: 65)
                     .overlay {
                         Button {
                             withAnimation {
@@ -38,43 +41,71 @@ struct SelectOptionView: View {
                             }.padding(.horizontal, 10)
                         }
                     }
-            }.padding().sheet(isPresented: $isOptionPresented) {
+            }.padding()
+            .sheet(isPresented: $isOptionPresented) {
                 VStack {
-                    Spacer()
-                    
+                    Capsule()
+                           .fill(Color.white)
+                           .opacity(0.5)
+                           .frame(width: 35, height: 5)
+                           .padding(6)
+                           .onTapGesture {
+                               dismiss()
+                           }
                     VStack {
-                        Text("Select an Option")
+                        Text(sheetLabel)
                             .font(.title)
                             .fontWeight(.medium)
-                        
+                            .foregroundColor(.white)
                         Divider()
-                        
-                        ForEach(options, id: \.self) { option in
-                            Button(action: {
-                                withAnimation {
-                                    self.isOptionPresented = false
-                                    self.selectedOption = option
+                            .frame(height: 2)
+                            .background(.white)
+                            .padding()
+                        ScrollView(showsIndicators: false) {
+                            ForEach(options, id: \.self) { option in
+                                Button(action: {
+                                    withAnimation {
+                                        self.isOptionPresented = false
+                                        if let budgetCategory = option as? BudgetCategory {
+                                            self.selectedOption = budgetCategory.name
+                                        }
+                                        if let val = option as? String {
+                                            self.selectedOption = val
+                                        }
+                                    }
+                                }) {
+                                    if let budgetCategory = option as? BudgetCategory {
+                                        Text("\(budgetCategory.name)")
+                                            .font(.system(size: 24))
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    if let val = option as? String {
+                                        Text("\(val)")
+                                            .font(.system(size: 24))
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
                                 }
-                            }) {
-                                Text(option)
-                                    .font(.title2)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.black)
-                                    .padding()
                             }
                         }
                     }
-                    .background(Color.white)
-                    .cornerRadius(15)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .padding()
                 }
-                .background(Color.clear)
-                .frame(maxWidth: .infinity)
-                .frame(height: 300)
-                .background(Color.white)
-                .cornerRadius(15)
-                .shadow(radius: 5)
-                .padding()
+                .background(LinearGradient(
+                    gradient: Gradient(colors: [.blue, .green]),
+                    startPoint: .topTrailing,
+                    endPoint: .bottomLeading
+                ))
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .edgesIgnoringSafeArea(.bottom)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.hidden)
             }
     }
 }
@@ -118,7 +149,7 @@ struct DropDownMenuListRow: View {
 
 struct SelectOptionView_Previews: PreviewProvider {
     static var previews: some View {
-        @State var selected: String = ""
-        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selected, placeholderString: "Select Type", options : ["Option1", "Option2", "Option3"])
+        @StateObject var viewModel = BudgetViewModel()
+        SelectOptionView(label: "Pick your Budget Type", selectedOption: .constant(""), sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["xxxxxxx", "ffffff"])
     }
 }
