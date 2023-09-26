@@ -9,15 +9,20 @@ import SwiftUI
 
 struct BottomLineTextFieldView: View {
     var label: String
+    var placeholder: String
     @Binding var textInputVal: String
     
     var body: some View {
         VStack {
-            Text("\(label)")
-                .font(.system(size: 18, weight:  .medium))
-                .frame(maxWidth: .infinity, alignment: .leading)
-            TextField("", text: $textInputVal)
+            if !label.isEmpty {
+                Text("\(label)")
+                    .font(.system(size: 18, weight:  .medium))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            TextField("\(placeholder)", text: $textInputVal)
+                .foregroundColor(.black)
                 .textFieldStyle(BottomLineTextFieldStyle())
+                .font(.system(size: 24))
         }.padding()
     }
 }
@@ -26,19 +31,18 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<_Label>) -> some View {
         VStack {
             configuration
-                .padding(.vertical, 5)
                 .overlay(
                     Rectangle()
                         .frame(height: 2, alignment: .bottom)
                         .foregroundColor(.black)
-                        .padding(.top, 24)
+                        .padding(.top, 45)
                 )
         }
     }
 }
 
-struct InputTextFieldView_Previews: PreviewProvider {
+struct BottomLineTextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomLineTextFieldView(label: "Name of Budget", textInputVal: .constant(""))
+        BottomLineTextFieldView(label: "Name of Budget", placeholder: "Type....", textInputVal: .constant(""))
     }
 }
