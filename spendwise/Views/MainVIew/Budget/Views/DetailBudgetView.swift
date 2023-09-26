@@ -60,18 +60,18 @@ struct DetailBudgetView: View {
                 VStack {
                     HStack {
                         Text("Edit your Budget")
-                            .font(.system(size: 18, weight: .medium))
+                            .font(.system(size: 22, weight: .medium))
                         Spacer()
                         Button {
                             
                         } label: {
                             Circle()
                                 .fill(Color("ColorSilverGray"))
-                                .frame(width: 40, height: 40)
+                                .frame(width: 46, height: 48)
                                 .overlay {
-                                    Image(systemName: "pencil.circle")
+                                    Image(systemName: "square.and.pencil")
                                         .foregroundColor(.white)
-                                        .frame(width: 35, height: 35)
+                                        .font(.system(size: 28))
                                 }
                         }
 
@@ -79,8 +79,10 @@ struct DetailBudgetView: View {
                     .padding(30)
                     HStack {
                         Text("What’s left to spend")
+                            .font(.system(size: 18, weight: .semibold))
                         Spacer()
                         Text("\(formatCurrency(value: 170001))")
+                            .font(.system(size: 18, weight: .semibold))
                     }
                     .padding(.horizontal, 20)
                     Spacer()
