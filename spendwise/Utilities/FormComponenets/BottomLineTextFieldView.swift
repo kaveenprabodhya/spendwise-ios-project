@@ -12,6 +12,7 @@ struct BottomLineTextFieldView: View {
     var placeholder: String
     var fontColor: Color?
     var bottomLineColor: Color?
+    var placeholderColor: Color?
     var labelSize: CGFloat?
     var textFieldFontSize: CGFloat?
     @Binding var textInputVal: String
@@ -24,7 +25,7 @@ struct BottomLineTextFieldView: View {
                     .font(.system(size: labelSize != nil ? labelSize! : 18, weight:  .medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            TextField("", text: $textInputVal, prompt: Text("\(placeholder)").foregroundColor(.orange))
+            TextField("", text: $textInputVal, prompt: Text("\(placeholder)").foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
                 .foregroundColor(fontColor != nil ? fontColor! : .black)
                 .textFieldStyle(BottomLineTextFieldStyle())
                 .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24))
@@ -50,6 +51,6 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
 
 struct BottomLineTextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomLineTextFieldView(label: "Name of Budget", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, labelSize: 32, textFieldFontSize: 32, textInputVal: .constant(""))
+        BottomLineTextFieldView(label: "Name of Budget", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, placeholderColor: .green, labelSize: 32, textFieldFontSize: 32, textInputVal: .constant(""))
     }
 }
