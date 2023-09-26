@@ -132,7 +132,7 @@ struct HomeView: View {
                                 Spacer()
                             }
                             VStack {
-                                BudgetChartView(budgetArray: viewModel.budgetArray)
+                                BudgetChartView(budgetArray: viewModel.budgetArray, budgetCategory: viewModel.budgetCategoryArray)
                                 Spacer()
                             }
                     }
