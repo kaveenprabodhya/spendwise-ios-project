@@ -22,7 +22,7 @@ struct FooterMessage {
     let warning: Bool
 }
 
-struct BudgetCategory: Identifiable {
+struct BudgetCategory: Identifiable, Hashable {
     let id: UUID
     let name: String
     let primaryBackgroundColor: String
