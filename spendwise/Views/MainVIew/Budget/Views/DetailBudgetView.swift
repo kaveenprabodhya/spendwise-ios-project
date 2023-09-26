@@ -11,6 +11,7 @@ struct DetailBudgetView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isSheetRemovePresented: Bool = false
     @State private var capsuleWidth: CGFloat = 0
+    var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue")], allocatedAmount: 30000, currentAmountSpent: 3000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
     
     func getTextWidth(text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -38,15 +39,15 @@ struct DetailBudgetView: View {
                                 .foregroundColor(.white.opacity(0.5))
                                 .frame(width: capsuleWidth, height: 30)
                                 .overlay{
-                                    Text("LKR \(formatCurrency(value: 100000100))")
+                                    Text("LKR \(formatCurrency(value: budget.currentAmountSpent))")
                                         .foregroundColor(Color("ColorVividBlue"))
                                         .font(.system(size: 18, weight: .bold))
                                         .onAppear{
-                                            let textWidth = getTextWidth(text: "LKR \(formatCurrency(value: 10000100))")
+                                            let textWidth = getTextWidth(text: "LKR \(formatCurrency(value: budget.currentAmountSpent))")
                                             capsuleWidth = textWidth + 30
                                         }
                                 }
-                            Text("for the past \(10) days")
+                            Text("for the past \(budget.numberOfDaysSpent) days")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.white)
                         }
@@ -81,10 +82,13 @@ struct DetailBudgetView: View {
                         Text("What’s left to spend")
                             .font(.system(size: 18, weight: .semibold))
                         Spacer()
-                        Text("\(formatCurrency(value: 170001))")
+                        Text("LKR \(formatCurrency(value: 170001))")
                             .font(.system(size: 18, weight: .semibold))
                     }
                     .padding(.horizontal, 20)
+                    
+                    BudgetSpendingCardView(budget: budget)
+                    
                     Spacer()
                 }
             }
@@ -160,6 +164,76 @@ struct DetailBudgetView: View {
             }
         }
     }
+    }
+}
+
+struct BudgetSpendingCardView: View {
+    var budget: Budget
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 25)
+            .fill(Color("ColorEtherealPeriwinkle"))
+            .frame(width: 355, height: 148)
+            .overlay {
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("You’ve already spent")
+                            .foregroundColor(.secondary)
+                            .font(.system(size: 14, weight: .medium))
+                        Spacer()
+                        Text("Spend Limit per Day")
+                            .foregroundColor(.secondary)
+                            .font(.system(size: 14, weight: .semibold))
+                    }.padding(.bottom, 10)
+                    HStack {
+                        Text("LKR \(formatCurrency(value: 10000000))")
+                            .foregroundColor(Color("ColorVividBlue"))
+                            .font(.system(size: 18, weight: .medium))
+                        Spacer()
+                        Text("LKR \(formatCurrency(value: 12501549))")
+                            .font(.system(size: 18, weight: .semibold))
+                    }.padding(.bottom, 10)
+                    GeometryReader { geometry in
+                        ProgressView(value: calculateProgressBarValue(amountAllocated: budget.allocatedAmount, spent: budget.currentAmountSpent), total: 100)
+                            .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorJadeGreen", width: geometry.size.width))
+                            .accentColor(Color("ColorFreshMintGreen"))
+                    }.padding(.bottom, 10)
+                    HStack {
+                        if(budget.footerMessage.warning){
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .foregroundColor(Color("ColorCottonCandy"))
+                                .font(.system(size: 24))
+                            Text(budget.footerMessage.message)
+                                .font(.system(size: 20, weight: .bold))
+                                .lineLimit(nil)
+                                .foregroundColor(Color("ColorCottonCandy"))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }else {
+                            Text(budget.footerMessage.message)
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                                .lineLimit(nil)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+                .padding(20)
+            }
+    }
+    
+    private func calculateProgressBarValue(amountAllocated: Double, spent: Double) -> Double {
+        guard amountAllocated > 0 else {
+            return 0.0
+        }
+        let progress = (spent / amountAllocated) * 100.0
+        return min(max(progress, 0.0), 100.0)
+    }
+    
+    private func calculateRemainingAmount(amountAllocated: Double, spent: Double) -> Double {
+        let remainingAmount = amountAllocated - spent
+        return max(remainingAmount, 0.0)
     }
 }
 
