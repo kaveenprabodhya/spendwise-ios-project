@@ -27,7 +27,7 @@ struct BottomLineTextFieldView: View {
             }
             TextField("", text: $textInputVal, prompt: Text("\(placeholder)").foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
                 .foregroundColor(fontColor != nil ? fontColor! : .black)
-                .textFieldStyle(BottomLineTextFieldStyle())
+                .textFieldStyle(BottomLineTextFieldStyle(bottomLineColor: bottomLineColor))
                 .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24))
         }.padding()
     }
