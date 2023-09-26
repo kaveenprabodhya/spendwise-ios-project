@@ -145,41 +145,7 @@ struct DetailBudgetView: View {
             }
         }
         .sheet(isPresented: $isSheetRemovePresented, content: {
-            VStack(spacing: 0) {
-                Spacer()
-                Text("Remove")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(.white)
-                    .padding(.top, 10)
-                    .padding(.bottom, 20)
-                Text("Are you sure do you wanna remove this budget?")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .frame(width: 250)
-                    .padding(.bottom, 30)
-                HStack {
-                    Button {
-                        
-                    } label: {
-                    }
-                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))
-                    
-                    Button {
-                        withAnimation(.linear(duration: 0.25)) {
-                            self.isSheetRemovePresented = false
-                        }
-                    } label: {
-                    }
-                    .buttonStyle(CustomButtonStyle(fillColor: "ColorSilverGray", width: 164, height: 56, label: "No", cornerRadius: 16))
-                    
-                }
-                Spacer()
-            }
-            .presentationDetents([.height(261)])
-            .presentationDragIndicator(.visible)
-            .presentationBackground(.orange)
-            .presentationCornerRadius(25)
+            SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented)
         })
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -215,6 +181,48 @@ struct DetailBudgetView: View {
             }
         }
     }
+    }
+}
+
+struct SheetViewOfRemove: View {
+    @Binding var isSheetRemovePresented: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            Text("Remove")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(.white)
+                .padding(.top, 10)
+                .padding(.bottom, 20)
+            Text("Are you sure do you wanna remove this budget?")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .frame(width: 250)
+                .padding(.bottom, 30)
+            HStack {
+                Button {
+                    
+                } label: {
+                }
+                .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))
+                
+                Button {
+                    withAnimation(.linear(duration: 0.25)) {
+                        self.isSheetRemovePresented = false
+                    }
+                } label: {
+                }
+                .buttonStyle(CustomButtonStyle(fillColor: "ColorSilverGray", width: 164, height: 56, label: "No", cornerRadius: 16))
+                
+            }
+            Spacer()
+        }
+        .presentationDetents([.height(261)])
+        .presentationDragIndicator(.visible)
+        .presentationBackground(.orange)
+        .presentationCornerRadius(25)
     }
 }
 
