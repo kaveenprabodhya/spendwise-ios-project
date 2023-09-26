@@ -86,71 +86,44 @@ struct DetailBudgetView: View {
                     Spacer()
                 }
             }
-
-            if isSheetRemovePresented {
-                ZStack(alignment: .bottom) {
-                    Color.black.opacity(0.3)
-                        .onTapGesture {
-                            withAnimation(.linear(duration: 0.25)) {
-                                self.isSheetRemovePresented = false
-                            }
-                        }
-                    UnevenRoundedRectangleViewShape(topLeftRadius: 25, topRightRadius: 25, bottomLeftRadius: 0, bottomRightRadius: 0)
-                        .fill(.white)
-                        .overlay {
-                            VStack(spacing: 0) {
-                                Capsule()
-                                    .fill(Color.secondary)
-                                    .frame(width: 40, height: 3)
-                                    .padding(.top, 5)
-                                    .padding(.bottom, 20)
-                                    .onTapGesture {
-                                        withAnimation {
-                                            self.isSheetRemovePresented = false
-                                        }
-                                    }
-                                Text("Remove")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .padding(.top, 10)
-                                    .padding(.bottom, 20)
-                                Text("Are you sure do you wanna remove this budget?")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 250)
-                                    .padding(.bottom, 30)
-                                HStack {
-                                    Button {
-                                        
-                                    } label: {
-                                    }
-                                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))
-                                    
-                                    Button {
-                                        withAnimation(.linear(duration: 0.25)) {
-                                            self.isSheetRemovePresented = false
-                                        }
-                                    } label: {
-                                    }
-                                    .buttonStyle(CustomButtonStyle(fillColor: "ColorSilverGray", width: 164, height: 56, label: "No", cornerRadius: 16))
-                                    
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(height: 261)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    if value.translation.height > 50 {
-                                        withAnimation(.easeInOut(duration: 0.2)) {
-                                            isSheetRemovePresented = false
-                                        }
-                                    }
-                                }
-                        )
-                }.edgesIgnoringSafeArea(.all)
-            }
         }
+        .sheet(isPresented: $isSheetRemovePresented, content: {
+            VStack(spacing: 0) {
+                Spacer()
+                Text("Remove")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
+                Text("Are you sure do you wanna remove this budget?")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .frame(width: 250)
+                    .padding(.bottom, 30)
+                HStack {
+                    Button {
+                        
+                    } label: {
+                    }
+                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))
+                    
+                    Button {
+                        withAnimation(.linear(duration: 0.25)) {
+                            self.isSheetRemovePresented = false
+                        }
+                    } label: {
+                    }
+                    .buttonStyle(CustomButtonStyle(fillColor: "ColorSilverGray", width: 164, height: 56, label: "No", cornerRadius: 16))
+                    
+                }
+                Spacer()
+            }
+            .presentationDetents([.height(261)])
+            .presentationDragIndicator(.visible)
+            .presentationBackground(.orange)
+            .presentationCornerRadius(25)
+        })
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
