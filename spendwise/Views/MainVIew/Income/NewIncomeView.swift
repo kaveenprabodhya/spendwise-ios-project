@@ -9,9 +9,32 @@ import SwiftUI
 
 struct NewIncomeView: View {
     @Environment(\.dismiss) private var dismiss
+    @State var inputAmount: String = ""
+    
     var body: some View {
         VStack{
-            CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")], headerContent: {}){
+            CustomContainerBodyView(
+                gradientHeight: 240,
+                sheetHeight: 667,
+                gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")],
+                headerContent: {
+                    VStack {
+                        Text("How Much?")
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .semibold))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            Text("LKR")
+                                .foregroundColor(.white)
+                                .font(.system(size: 64, weight: .semibold))
+                            BottomLineTextFieldView(label: "", placeholder: "0.00", bottomLineColor: .white, textInputVal: $inputAmount)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                }){
                     VStack {
                         Text("Hellooooo")
                     }
