@@ -8,6 +8,99 @@
 import SwiftUI
 
 class BudgetViewModel: ObservableObject {
+    @Published var budgetCategoryArray: [BudgetCategory]  =
+    [
+        BudgetCategory(
+            id: UUID(),
+            name: "Shopping",
+            primaryBackgroundColor: "ColorShopping"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Transportation",
+            primaryBackgroundColor: "ColorTransportation"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Groceries",
+            primaryBackgroundColor: "ColorGroceries"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Dining Out",
+            primaryBackgroundColor: "ColorDiningOut"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Rent/Mortgage",
+            primaryBackgroundColor: "ColorRentAndMortgage"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Utilities",
+            primaryBackgroundColor: "ColorUtilities"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Healthcare",
+            primaryBackgroundColor: "ColorHealthcare"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Savings/Investments",
+            primaryBackgroundColor: "ColorSavingsAndInvestments"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Clothing",
+            primaryBackgroundColor: "ColorClothing"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Travel",
+            primaryBackgroundColor: "ColorTravel"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Maintenance",
+            primaryBackgroundColor: "ColorMaintenance"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Gifts/Donations",
+            primaryBackgroundColor: "ColorGiftsAndDonations"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Subscriptions",
+            primaryBackgroundColor: "ColorSubscriptions"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Miscellaneous",
+            primaryBackgroundColor: "ColorMiscellaneous"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Taxes",
+            primaryBackgroundColor: "ColorTaxes"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Entertainment",
+            primaryBackgroundColor: "ColorEntertainment"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Debt Repayment",
+            primaryBackgroundColor: "ColorDebtRepayment"
+        ),
+        BudgetCategory(
+            id: UUID(),
+            name: "Education",
+            primaryBackgroundColor: "ColorEducation"
+        )
+    ]
     @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
     @Published var budgetArray:[Budget] =
     [
