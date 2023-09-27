@@ -105,9 +105,14 @@ struct DetailBudgetView: View {
                             .frame(width: categoryNameWidth, height: 64)
                             .overlay {
                                 HStack {
-                                    Image(systemName: "cart")
-                                        .font(.system(size: 32))
-                                        .frame(width: 30)
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(.yellow)
+                                        .frame(width: 50, height: 50)
+                                        .overlay {
+                                            Image(systemName: "cart")
+                                                .font(.system(size: 28))
+                                                .frame(width: 30)
+                                        }
                                     let textWidth = getTextWidth(text: "Shopping")
                                     Text("Shopping")
                                         .font(.system(size: 22, weight: .semibold))
@@ -276,11 +281,11 @@ struct BudgetSpendingCardView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("You’ve already spent")
-                            .foregroundColor(Color("ColorGray"))
+                            .foregroundColor(Color("ColorSilverGray"))
                             .font(.system(size: 14, weight: .medium))
                         Spacer()
                         Text("Spend Limit per Day")
-                            .foregroundColor(Color("ColorGray"))
+                            .foregroundColor(Color("ColorSilverGray"))
                             .font(.system(size: 14, weight: .medium))
                     }.padding(.bottom, 10)
                     HStack {
