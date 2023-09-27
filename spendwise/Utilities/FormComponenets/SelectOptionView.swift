@@ -14,6 +14,10 @@ struct SelectOptionView<T: Hashable>: View {
     var sheetLabel: String
     let placeholderString:String
     let options: [T]
+    var fontColor: Color?
+    var iconColor: Color?
+    var placeholderStringColor: Color?
+    var strokeColor: Color?
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -22,7 +26,7 @@ struct SelectOptionView<T: Hashable>: View {
                     .font(.system(size: 18, weight: .medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(.black, lineWidth: 2)
+                    .stroke(strokeColor != nil ? strokeColor! : .black, lineWidth: 2)
                     .frame(height: 65)
                     .overlay {
                         Button {
@@ -33,11 +37,11 @@ struct SelectOptionView<T: Hashable>: View {
                             HStack {
                                 Text(selectedOption.isEmpty ? placeholderString : selectedOption)
                                     .fontWeight(.medium)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(placeholderStringColor != nil ? placeholderStringColor! : .black)
                                 Spacer()
                                 Image(systemName: self.isOptionPresented ? "chevron.up" : "chevron.down")
                                     .fontWeight(.medium)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(iconColor != nil ? iconColor! : .black)
                             }.padding(.horizontal, 10)
                         }
                     }
