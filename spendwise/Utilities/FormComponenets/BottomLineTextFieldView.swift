@@ -15,6 +15,7 @@ struct BottomLineTextFieldView: View {
     var placeholderColor: Color?
     var labelSize: CGFloat?
     var textFieldFontSize: CGFloat?
+    var placeholderFontSize: CGFloat?
     @Binding var textInputVal: String
     
     var body: some View {
@@ -26,7 +27,7 @@ struct BottomLineTextFieldView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 6)
             }
-            TextField("", text: $textInputVal, prompt: Text("\(placeholder)").foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
+            TextField("", text: $textInputVal, prompt: Text("\(placeholder)").font(.system(size: placeholderFontSize != nil ? placeholderFontSize! : 24, weight: .medium)).foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
                 .foregroundColor(fontColor != nil ? fontColor! : .black)
                 .textFieldStyle(BottomLineTextFieldStyle(bottomLineColor: bottomLineColor))
                 .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24))
