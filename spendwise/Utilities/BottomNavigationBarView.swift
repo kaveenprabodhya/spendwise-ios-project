@@ -28,7 +28,7 @@ struct BottomNavigationBarView: View {
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     ZStack {
                         NavigationLink {
-                            NewTransactionView().onAppear{
+                            NewIncomeView().onAppear{
                                 expand = false
                             }
                         } label: {
@@ -43,7 +43,7 @@ struct BottomNavigationBarView: View {
                                                 .foregroundColor(.white)
                                                 .frame(width: 30, height: 30)
                                                 .scaledToFit()
-                                            Text("Transaction").fontWeight(.bold).foregroundColor(.white)
+                                            Text("Income").fontWeight(.bold).foregroundColor(.white)
                                         }
                                     }
                             }
@@ -71,28 +71,28 @@ struct BottomNavigationBarView: View {
                             }
                         }
                         .offset(y: 15)
-//                        NavigationLink {
-//                            NewExpenseView().onAppear{
-//                                expand = false
-//                            }
-//                        } label: {
-//                            VStack(spacing: 10){
-//                                Circle()
-//                                    .fill(Color("ColorRustyRed"))
-//                                    .frame(width: 95, height: 95)
-//                                    .overlay {
-//                                        VStack {
-//                                            Image(systemName: "square.and.arrow.up.fill")
-//                                                .resizable()
-//                                                .foregroundColor(.white)
-//                                                .frame(width: 30, height: 30)
-//                                                .scaledToFit()
-//                                            Text("Expense").fontWeight(.bold).foregroundColor(.white)
-//                                        }
-//                                    }
-//                            }
-//                        }
-//                        .offset(x:100, y: 95)
+                        NavigationLink {
+                            NewExpenseView().onAppear{
+                                expand = false
+                            }
+                        } label: {
+                            VStack(spacing: 10){
+                                Circle()
+                                    .fill(Color("ColorRustyRed"))
+                                    .frame(width: 95, height: 95)
+                                    .overlay {
+                                        VStack {
+                                            Image(systemName: "square.and.arrow.up.fill")
+                                                .resizable()
+                                                .foregroundColor(.white)
+                                                .frame(width: 30, height: 30)
+                                                .scaledToFit()
+                                            Text("Expense").fontWeight(.bold).foregroundColor(.white)
+                                        }
+                                    }
+                            }
+                        }
+                        .offset(x:100, y: 95)
                     }
                 }
                 .offset(y: UIScreen.main.bounds.width / 3.2)
