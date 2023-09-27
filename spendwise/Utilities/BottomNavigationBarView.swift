@@ -24,31 +24,34 @@ struct BottomNavigationBarView: View {
                 ZStack(alignment: .top) {
                     Circle()
                         .trim(from: 0.5, to: 1)
-                        .fill(Color.clear)
+                        .fill(.clear)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     ZStack {
                         NavigationLink {
-                            NewIncomeView().onAppear{
+                            NewTransactionView(gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")]).onAppear{
                                 expand = false
                             }
                         } label: {
                             VStack(spacing: 10){
                                 Circle()
-                                    .fill(Color("ColorEmeraldGreen"))
-                                    .frame(width: 95, height: 95)
+                                    .fill(Color("ColorAzureBlue"))
+                                    .frame(width: 85, height: 85)
                                     .overlay {
                                         VStack {
-                                            Image(systemName: "square.and.arrow.down.fill")
+                                            Image(systemName: "arrow.left.arrow.right.square")
                                                 .resizable()
                                                 .foregroundColor(.white)
                                                 .frame(width: 30, height: 30)
                                                 .scaledToFit()
-                                            Text("Income").fontWeight(.bold).foregroundColor(.white)
+                                            Text("Txn")
+                                                .font(.system(size: 16))
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.white)
                                         }
                                     }
                             }
                         }
-                        .offset(x:-100, y: 95)
+                        .offset(x:-90, y: 95)
                         NavigationLink {
                             NewBudgetView().onAppear{
                                 expand = false
@@ -56,8 +59,8 @@ struct BottomNavigationBarView: View {
                         } label: {
                             VStack(spacing: 10){
                                 Circle()
-                                    .fill(Color("ColorAzureBlue"))
-                                    .frame(width: 95, height: 95)
+                                    .fill(Color("ColorLavenderPurple"))
+                                    .frame(width: 85, height: 85)
                                     .overlay {
                                         VStack {
                                             Image(systemName: "chart.pie.fill")
@@ -65,49 +68,34 @@ struct BottomNavigationBarView: View {
                                                 .foregroundColor(.white)
                                                 .frame(width: 30, height: 30)
                                                 .scaledToFit()
-                                            Text("Budget").fontWeight(.bold).foregroundColor(.white)
-                                        }
-                                    }
-                            }
-                        }
-                        .offset(y: 15)
-                        NavigationLink {
-                            NewExpenseView().onAppear{
-                                expand = false
-                            }
-                        } label: {
-                            VStack(spacing: 10){
-                                Circle()
-                                    .fill(Color("ColorRustyRed"))
-                                    .frame(width: 95, height: 95)
-                                    .overlay {
-                                        VStack {
-                                            Image(systemName: "square.and.arrow.up.fill")
-                                                .resizable()
+                                            Text("Budget")
+                                                .font(.system(size: 16))
+                                                .fontWeight(.bold)
                                                 .foregroundColor(.white)
-                                                .frame(width: 30, height: 30)
-                                                .scaledToFit()
-                                            Text("Expense").fontWeight(.bold).foregroundColor(.white)
                                         }
                                     }
                             }
                         }
-                        .offset(x:100, y: 95)
+                        .offset(x: 60, y: 35)
                     }
                 }
-                .offset(y: UIScreen.main.bounds.width / 3.2)
+                .offset(y: UIScreen.main.bounds.width / 2.8)
                 .opacity(self.expand ? 1 : 0)
             }
-            .edgesIgnoringSafeArea(.all)
+            .edgesIgnoringSafeArea(.bottom)
+            .frame(maxHeight: .infinity, alignment: .bottom)
             TabBar(index: $index, expand: $expand)
-                .background(Color("ColorVividBlue"))
+            .background(Color("ColorVividBlue"))       
         }
-        
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
 struct BottomNavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
         BottomNavigationBarView(index: .constant(1))
+            .padding(.bottom, 12)
+            .edgesIgnoringSafeArea(.all)
     }
 }
