@@ -18,12 +18,13 @@ struct BottomLineTextFieldView: View {
     @Binding var textInputVal: String
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if !label.isEmpty {
                 Text("\(label)")
                     .foregroundColor(fontColor != nil ? fontColor! : .black)
                     .font(.system(size: labelSize != nil ? labelSize! : 18, weight:  .medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 6)
             }
             TextField("", text: $textInputVal, prompt: Text("\(placeholder)").foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
                 .foregroundColor(fontColor != nil ? fontColor! : .black)

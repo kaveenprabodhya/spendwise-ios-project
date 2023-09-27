@@ -45,7 +45,7 @@ struct BudgetChartView: View {
                                     }
                                 }.padding(.top, 15)
                                 ProgressView(value: 90, total: 100)
-                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorFreshMintGreen", width: 360))
+                                    .progressViewStyle(RoundedRectProgressViewStyle(color: Color("ColorFreshMintGreen"), width: 360))
                                     .accentColor(Color("ColorFreshMintGreen"))
                             }.frame(height: 74).padding(.top, 8).padding(.bottom, 5)
                             VStack(spacing: 0) {

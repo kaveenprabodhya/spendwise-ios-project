@@ -38,39 +38,64 @@ struct NewIncomeView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
                 }){
                     VStack(spacing: 0) {
                         SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick Trtansaction Type", placeholderString: "Select Transaction", options: ["Expense, Income"])
+                            
                         SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Category", placeholderString: "Select Category", options: budgetViewModel.budgetCategoryArray)
-                        BottomLineTextFieldView(label: "", placeholder: "Description", textInputVal: $descriptionVal)
+                           
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(.black, lineWidth: 2)
+                            .frame(height: 65)
+                            .overlay {
+                                BottomLineTextFieldView(label: "", placeholder: "Description", textInputVal: $descriptionVal)
+                            }
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 15)
                         SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Wallet Type", placeholderString: "Select Wallet", options: ["Cash", "Paypal", "Apple"])
+                            
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
                             .frame(height: 65)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .overlay {
+                                Text("Add attatchment")
+                            }
+                            .padding(.horizontal, 15)
+                            .padding(.vertical, 5)
                         VStack(spacing :0) {
                             HStack {
-                                VStack {
+                                VStack(alignment: .leading) {
                                     Text("Repeat")
                                         .font(.system(size: 18, weight: .medium))
                                     Text("Repeat transaction")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.secondary)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                Spacer()
                                 CustomToggleView(isOn: $repeatTransaction)
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 15)
+                            .padding(.top, 5)
                         }
-                        Button(action: {
-                        }, label: {
-                        }
-                        )
-                        .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Create", cornerRadius: 16))
-                        .navigationDestination(
-                            isPresented: $isSuccess) {
-                                EmptyView()
+                        .padding(.vertical, 10)
+                        Spacer()
+                        VStack(spacing: 0) {
+                            Button(action: {
+                            }, label: {
                             }
-                            
+                            )
+                            .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Create", cornerRadius: 16))
+                            .navigationDestination(
+                                isPresented: $isSuccess) {
+                                    EmptyView()
+                            }
+                        }
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 5)
+                        Spacer()
                     }
                 }
         }

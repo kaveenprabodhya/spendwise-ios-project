@@ -22,9 +22,11 @@ struct SelectOptionView<T: Hashable>: View {
     
     var body: some View {
             VStack {
-                Text("\(label)")
-                    .font(.system(size: 18, weight: .medium))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                if !label.isEmpty {
+                    Text("\(label)")
+                        .font(.system(size: 18, weight: .medium))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(strokeColor != nil ? strokeColor! : .black, lineWidth: 2)
                     .frame(height: 65)

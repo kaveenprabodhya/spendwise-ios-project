@@ -13,7 +13,7 @@ struct DetailBudgetView: View {
     @State private var capsuleWidth: CGFloat = 0
     @State private var categoryNameWidth: CGFloat = 0
     
-    var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue")], allocatedAmount: 30000, currentAmountSpent: 3000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
+    var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue")], allocatedAmount: 300000000, currentAmountSpent: 3000000000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
     
     func getTextWidth(text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -28,14 +28,18 @@ struct DetailBudgetView: View {
             CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")], headerContent: {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack(spacing: 0) {
+                        HStack(alignment: .bottom , spacing: 0) {
                             Text("Monthly Budget")
                                 .foregroundColor(.white)
                                 .font(.system(size: 28, weight: .semibold))
+                            Spacer()
+                            Text("\(formatCurrency(value: budget.allocatedAmount))")
+                                .font(.system(size: 22, weight: .medium))
+                                .foregroundColor(.white)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         VStack {
                             Text("You’ve spent")
-                                .font(.system(size: 16, weight: .medium))
+                                .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(.white)
                             Capsule()
                                 .foregroundColor(.white.opacity(0.5))
@@ -43,16 +47,17 @@ struct DetailBudgetView: View {
                                 .overlay{
                                     Text("LKR \(formatCurrency(value: budget.currentAmountSpent))")
                                         .foregroundColor(Color("ColorVividBlue"))
-                                        .font(.system(size: 18, weight: .bold))
+                                        .font(.system(size: 16, weight: .semibold))
                                         .onAppear{
                                             let textWidth = getTextWidth(text: "LKR \(formatCurrency(value: budget.currentAmountSpent))")
-                                            capsuleWidth = textWidth + 30
+                                            capsuleWidth = textWidth + 10
                                         }
                                 }
                             Text("for the past \(budget.numberOfDaysSpent) days")
-                                .font(.system(size: 16, weight: .medium))
+                                .font(.system(size: 14, weight: .medium))
                                 .foregroundColor(.white)
                         }
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 10)
                         .padding(.bottom, 8)
                         Spacer()
@@ -81,7 +86,7 @@ struct DetailBudgetView: View {
                     }
                     .padding(.top, 30)
                     .padding(.horizontal, 30)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 10)
                     HStack {
                         Text("What’s left to spend")
                             .font(.system(size: 18, weight: .semibold))
@@ -92,7 +97,7 @@ struct DetailBudgetView: View {
                     .padding(20)
                     
                     BudgetSpendingCardView(budget: budget)
-                        .padding(.bottom, 15)
+                        .padding(.bottom, 10)
                     
                     VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 24)
@@ -111,13 +116,16 @@ struct DetailBudgetView: View {
                                         }
                                 }
                             }
-                    }.padding(10)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 10)
                     
                     VStack(spacing: 0) {
                         Text("Budget Transactions")
                             .font(.system(size: 18, weight: .semibold))
                     }
-                    .padding(10)
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 10)
@@ -126,18 +134,25 @@ struct DetailBudgetView: View {
                             .overlay {
                                 ScrollView {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(.black, lineWidth: 2)
+                                        .fill(.white)
                                         .frame(height: 52)
+                                        .shadow(color: .black, radius: 0, x: 5, y: 5)
                                         .overlay {
-                                            VStack(spacing: 0) {
-                                                BudgetTransactionListView()
-                                            }
-                                            .padding(5)
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(.black)
+                                                .frame(height: 52)
+                                                .overlay {
+                                                    VStack(spacing: 0) {
+                                                        BudgetTransactionListView()
+                                                    }
+                                                    .padding(5)
+                                                }
                                         }
                                         .padding(10)
                                 }
                             }
                     }
+                    
                     .padding(.horizontal, 20)
                     .padding(.bottom, 25)
                     Spacer()
@@ -241,7 +256,8 @@ struct BudgetTransactionListView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     Spacer()
-                    Text("Amount")
+                    Text("\(formatCurrency(value: 150000))")
+                        .foregroundColor(Color("ColorEmeraldGreen"))
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(10)
@@ -260,11 +276,11 @@ struct BudgetSpendingCardView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("You’ve already spent")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("ColorGray"))
                             .font(.system(size: 14, weight: .medium))
                         Spacer()
                         Text("Spend Limit per Day")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("ColorGray"))
                             .font(.system(size: 14, weight: .medium))
                     }.padding(.bottom, 10)
                     HStack {
@@ -275,11 +291,13 @@ struct BudgetSpendingCardView: View {
                         Text("LKR \(formatCurrency(value: 12501549))")
                             .font(.system(size: 18, weight: .semibold))
                     }.padding(.bottom, 10)
-                    GeometryReader { geometry in
-                        ProgressView(value: calculateProgressBarValue(amountAllocated: budget.allocatedAmount, spent: budget.currentAmountSpent), total: 100)
-                            .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorJadeGreen", width: geometry.size.width))
-                            .accentColor(Color("ColorFreshMintGreen"))
-                    }.padding(.bottom, 10)
+                    VStack {
+                        GeometryReader { geometry in
+                            ProgressView(value: calculateProgressBarValue(amountAllocated: budget.allocatedAmount, spent: budget.currentAmountSpent), total: 100)
+                                .progressViewStyle(RoundedRectProgressViewStyle(color: Color("ColorJadeGreen"), width: geometry.size.width))
+                                .accentColor(Color("ColorFreshMintGreen"))
+                        }.padding(.bottom, 10)
+                    }
                     HStack {
                         if(budget.footerMessage.warning){
                             Image(systemName: "exclamationmark.circle.fill")

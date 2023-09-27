@@ -52,7 +52,7 @@ struct OverallBudgetCategoryCardView: View {
                         VStack {
                             GeometryReader { geometry in
                                 ProgressView(value: calculateProgressBarValue(amountAllocated: amountAllocated, spent: amountSpent), total: 100)
-                                    .progressViewStyle(RoundedRectProgressViewStyle(color: "ColorDarkBlue", width: geometry.size.width))
+                                    .progressViewStyle(RoundedRectProgressViewStyle(color: Color("ColorDarkBlue"), width: geometry.size.width))
                                     .accentColor(Color("ColorFreshMintGreen"))
                             }.padding(.bottom, 10)
                             HStack {

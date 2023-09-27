@@ -8,18 +8,26 @@
 import SwiftUI
 
 struct RoundedRectProgressViewStyle: ProgressViewStyle {
-    var color: String
+    var color: Color
     var width: CGFloat
     
     func makeBody(configuration: Configuration) -> some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 14)
-                .frame(width: CGFloat(width), height: 8)
-                .overlay(Color.white).cornerRadius(14)
-            
-            RoundedRectangle(cornerRadius: 14)
-                .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * 360, height: 8)
-                .foregroundColor(Color(color))
-        }
+        let progress = configuration.fractionCompleted ?? 0.0
+        RoundedRectangle(cornerRadius: 10.0)
+            .fill(Color(uiColor: .systemGray5))
+            .frame(height: 8)
+            .frame(width: width)
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 10.0)
+                    .fill(color)
+                    .frame(width: width * progress)
+                    .overlay {
+                        if let currentValueLabel = configuration.currentValueLabel {
+                            currentValueLabel
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
+                    }
+            }
     }
 }
