@@ -40,19 +40,19 @@ struct NewIncomeView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }){
                     VStack(spacing: 0) {
-                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick Trtansaction Type", placeholderString: "Select Transaction", options: ["Expense, Income"])
+                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick Trtansaction Type", placeholderString: "Select Transaction", options: ["Expense", "Income"], placeholderStringFontSize: 20)
                             
-                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Category", placeholderString: "Select Category", options: budgetViewModel.budgetCategoryArray)
+                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Category", placeholderString: "Select Category", options: budgetViewModel.budgetCategoryArray, placeholderStringFontSize: 20)
                            
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(.black, lineWidth: 2)
                             .frame(height: 65)
                             .overlay {
-                                BottomLineTextFieldView(label: "", placeholder: "Description", textInputVal: $descriptionVal)
+                                BottomLineTextFieldView(label: "", placeholder: "Description", placeholderFontSize: 20, textInputVal: $descriptionVal)
                             }
                             .padding(.vertical, 6)
                             .padding(.horizontal, 15)
-                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Wallet Type", placeholderString: "Select Wallet", options: ["Cash", "Paypal", "Apple"])
+                        SelectOptionView(label: "", selectedOption: $categorySelectedOption, sheetLabel: "Pick your Wallet Type", placeholderString: "Select Wallet", options: ["Cash", "Paypal", "Apple"], placeholderStringFontSize: 20)
                             
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))

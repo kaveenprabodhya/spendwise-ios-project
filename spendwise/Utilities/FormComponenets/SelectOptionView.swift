@@ -17,6 +17,8 @@ struct SelectOptionView<T: Hashable>: View {
     var fontColor: Color?
     var iconColor: Color?
     var placeholderStringColor: Color?
+    var placeholderStringFontSize: CGFloat?
+    var fontSize: CGFloat?
     var strokeColor: Color?
     @Environment(\.dismiss) private var dismiss
     
@@ -24,7 +26,8 @@ struct SelectOptionView<T: Hashable>: View {
             VStack {
                 if !label.isEmpty {
                     Text("\(label)")
-                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(fontColor != nil ? fontColor! : .black)
+                        .font(.system(size: fontSize != nil ? fontSize! : 18, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 RoundedRectangle(cornerRadius: 15)
@@ -39,6 +42,7 @@ struct SelectOptionView<T: Hashable>: View {
                             HStack {
                                 Text(selectedOption.isEmpty ? placeholderString : selectedOption)
                                     .fontWeight(.medium)
+                                    .font(.system(size: placeholderStringFontSize != nil ? placeholderStringFontSize! : 24, weight: .medium))
                                     .foregroundColor(placeholderStringColor != nil ? placeholderStringColor! : .black)
                                 Spacer()
                                 Image(systemName: self.isOptionPresented ? "chevron.up" : "chevron.down")
