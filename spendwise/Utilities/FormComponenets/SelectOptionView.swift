@@ -23,12 +23,13 @@ struct SelectOptionView<T: Hashable>: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-            VStack {
+            VStack(spacing: 0) {
                 if !label.isEmpty {
                     Text("\(label)")
                         .foregroundColor(fontColor != nil ? fontColor! : .black)
                         .font(.system(size: fontSize != nil ? fontSize! : 18, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 10)
                 }
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(strokeColor != nil ? strokeColor! : .black, lineWidth: 2)
@@ -51,7 +52,7 @@ struct SelectOptionView<T: Hashable>: View {
                             }.padding(.horizontal, 10)
                         }
                     }
-            }.padding()
+            }
             .sheet(isPresented: $isOptionPresented) {
                 VStack {
                     Capsule()
