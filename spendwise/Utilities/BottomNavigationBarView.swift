@@ -28,7 +28,7 @@ struct BottomNavigationBarView: View {
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     ZStack {
                         NavigationLink {
-                            NewTransactionView(gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")]).onAppear{
+                            NewTransactionView().onAppear{
                                 expand = false
                             }
                         } label: {
@@ -82,13 +82,13 @@ struct BottomNavigationBarView: View {
                 .offset(y: UIScreen.main.bounds.width / 2.8)
                 .opacity(self.expand ? 1 : 0)
             }
-            .edgesIgnoringSafeArea(.bottom)
+//            .edgesIgnoringSafeArea(.bottom)
             .frame(maxHeight: .infinity, alignment: .bottom)
             TabBar(index: $index, expand: $expand)
             .background(Color("ColorVividBlue"))       
         }
         .frame(maxHeight: .infinity, alignment: .bottom)
-        .edgesIgnoringSafeArea(.bottom)
+//        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

@@ -13,14 +13,41 @@ struct SelectOptionView<T: Hashable>: View {
     @Binding var selectedOption: String
     var sheetLabel: String
     let placeholderString:String
-    let options: [T]
+    let options: [T]?
     var fontColor: Color?
     var iconColor: Color?
     var placeholderStringColor: Color?
     var placeholderStringFontSize: CGFloat?
     var fontSize: CGFloat?
     var strokeColor: Color?
+    var content: (() -> any View)?
     @Environment(\.dismiss) private var dismiss
+    
+    init(label: String,
+         selectedOption: Binding<String> = .constant(""),
+         sheetLabel: String,
+         placeholderString: String,
+         options: [T]? = nil,
+         fontColor: Color? = nil,
+         iconColor: Color? = nil,
+         placeholderStringColor: Color? = nil,
+         placeholderStringFontSize: CGFloat? = nil,
+         fontSize: CGFloat? = nil,
+         strokeColor: Color? = nil,
+         content: (() -> any View)? = nil) {
+        self.label = label
+        self._selectedOption = selectedOption
+        self.sheetLabel = sheetLabel
+        self.placeholderString = placeholderString
+        self.options = options
+        self.fontColor = fontColor
+        self.iconColor = iconColor
+        self.placeholderStringColor = placeholderStringColor
+        self.placeholderStringFontSize = placeholderStringFontSize
+        self.fontSize = fontSize
+        self.strokeColor = strokeColor
+        self.content = content
+    }
     
     var body: some View {
             VStack(spacing: 0) {
@@ -73,35 +100,40 @@ struct SelectOptionView<T: Hashable>: View {
                             .background(.white)
                             .padding()
                         ScrollView(showsIndicators: false) {
-                            ForEach(options, id: \.self) { option in
-                                Button(action: {
-                                    withAnimation {
-                                        self.isOptionPresented = false
+                            if let optionVals = options {
+                                ForEach(optionVals, id: \.self) { option in
+                                    Button(action: {
+                                        withAnimation {
+                                            self.isOptionPresented = false
+                                            if let budgetCategory = option as? BudgetCategory {
+                                                self.selectedOption = budgetCategory.name
+                                            }
+                                            if let val = option as? String {
+                                                self.selectedOption = val
+                                            }
+                                        }
+                                    }) {
                                         if let budgetCategory = option as? BudgetCategory {
-                                            self.selectedOption = budgetCategory.name
+                                            Text("\(budgetCategory.name)")
+                                                .font(.system(size: 24))
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                         if let val = option as? String {
-                                            self.selectedOption = val
+                                            Text("\(val)")
+                                                .font(.system(size: 24))
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
                                         }
                                     }
-                                }) {
-                                    if let budgetCategory = option as? BudgetCategory {
-                                        Text("\(budgetCategory.name)")
-                                            .font(.system(size: 24))
-                                            .fontWeight(.medium)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
-                                    if let val = option as? String {
-                                        Text("\(val)")
-                                            .font(.system(size: 24))
-                                            .fontWeight(.medium)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
                                 }
+                            }
+                            if let datePickerView = content?() {
+                                datePickerView
                             }
                         }
                     }
@@ -161,6 +193,10 @@ struct DropDownMenuListRow: View {
 struct SelectOptionView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var viewModel = BudgetViewModel()
-        SelectOptionView(label: "Pick your Budget Type", selectedOption: .constant(""), sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["xxxxxxx", "ffffff"])
+        SelectOptionView<String>(label: "Pick your Budget Type", sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", content: {
+            VStack {
+                Text("Hiiiiii")
+            }
+        }).padding()
     }
 }

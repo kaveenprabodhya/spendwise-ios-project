@@ -12,7 +12,7 @@ struct NewBudgetView: View {
     @State private var selectedBudgetTypeOption = ""
     @State private var selectedBudgetCategoryOption = ""
     @State private var inputValue = ""
-    @State var isPickDates: Bool = true
+    @State var isPickDates: Bool = false
     @State private var showGreeting = false
     @State private var openFrequency = false
     @ObservedObject var viewModel = BudgetViewModel()
@@ -31,12 +31,14 @@ struct NewBudgetView: View {
                             .padding(.horizontal, 15)
                         
                         BottomLineTextFieldView(label: "Name of Budget", placeholder: "", textInputVal: $inputValue)
+                            .padding(.vertical, 6)
                         
-                        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"])
-                        
+                        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20)
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 15)
                         VStack {
                             Text("Cycle of budget")
-                                .font(.system(size: 14, weight:  .medium))
+                                .font(.system(size: 18, weight:  .medium))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             Button {
                                 withAnimation {
@@ -45,7 +47,7 @@ struct NewBudgetView: View {
                             } label: {
                                 HStack {
                                     Text("Pick your dates")
-                                        .font(.system(size: 18, weight:  .medium))
+                                        .font(.system(size: 20, weight:  .medium))
                                     Spacer()
                                     Image(systemName: "calendar")
                                         .foregroundColor(Color("ColorVividBlue"))
@@ -54,7 +56,7 @@ struct NewBudgetView: View {
                             }
                             .padding()
                             .overlay {
-                                RoundedRectangle(cornerRadius: 8)
+                                RoundedRectangle(cornerRadius: 15)
                                     .stroke(.black, lineWidth: 2)
                             }
                             .sheet(isPresented: $isPickDates) {
@@ -108,8 +110,10 @@ struct NewBudgetView: View {
                             }
                         }.padding()
                         
-                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, sheetLabel: "Select Your Budget Category", placeholderString: "Select Category", options : viewModel.budgetCategoryArray)
-                        
+                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, sheetLabel: "Select Your Budget Category", placeholderString: "Select Category", options : viewModel.budgetCategoryArray, placeholderStringFontSize: 20)
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 15)
+                            Spacer()
                         VStack(spacing: 0) {
                             Text("Receive Alert")
                                 .font(.system(size: 18, weight:  .medium))

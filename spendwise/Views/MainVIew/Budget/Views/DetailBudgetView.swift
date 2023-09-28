@@ -111,6 +111,7 @@ struct DetailBudgetView: View {
                                         .overlay {
                                             Image(systemName: "cart")
                                                 .font(.system(size: 28))
+                                                .foregroundStyle(.white)
                                                 .frame(width: 30)
                                         }
                                     let textWidth = getTextWidth(text: "Shopping")
@@ -130,28 +131,21 @@ struct DetailBudgetView: View {
                             .font(.system(size: 18, weight: .semibold))
                     }
                     .padding(.horizontal, 10)
-                    .padding(.bottom, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(.secondary)
+                            .stroke(.white)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .overlay {
                                 ScrollView {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(.white)
-                                        .frame(height: 52)
-                                        .shadow(color: .black, radius: 0, x: 5, y: 5)
+                                        .frame(height: 63)
+                                        .shadow(color: .secondary, radius: 0, x: 5, y: 5)
                                         .overlay {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(.black)
-                                                .frame(height: 52)
-                                                .overlay {
-                                                    VStack(spacing: 0) {
-                                                        BudgetTransactionListView()
-                                                    }
-                                                    .padding(5)
-                                                }
+                                            VStack(spacing: 0) {
+                                                BudgetTransactionListView()
+                                            }
                                         }
                                         .padding(10)
                                 }
@@ -249,20 +243,24 @@ struct SheetViewOfRemove: View {
 struct BudgetTransactionListView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
-            .fill(.white)
-            .frame(height: 36)
+            .fill(Color("ColorVibrantJade"))
+            .frame(height: 63)
             .overlay{
                 HStack {
                     VStack(spacing: 0) {
                         Text("Expense")
+                            .foregroundStyle(.white)
+                            .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Date")
+                        Text("12/12/2021")
+                            .foregroundStyle(.white)
+                            .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     Spacer()
-                    Text("\(formatCurrency(value: 150000))")
-                        .foregroundColor(Color("ColorEmeraldGreen"))
+                    Text("+ \(formatCurrency(value: 150000))")
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(10)
@@ -274,26 +272,27 @@ struct BudgetSpendingCardView: View {
     var budget: Budget
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 25)
-            .fill(Color("ColorEtherealPeriwinkle"))
-            .frame(width: 355, height: 148)
+        RoundedRectangle(cornerRadius: 16)
+            .fill(Color("ColorOliveMist"))
+            .frame(width: 395, height: 168)
             .overlay {
                 VStack(spacing: 0) {
                     HStack {
                         Text("You’ve already spent")
-                            .foregroundColor(Color("ColorSilverGray"))
-                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white)
+                            .font(.system(size: 18, weight: .semibold))
                         Spacer()
                         Text("Spend Limit per Day")
-                            .foregroundColor(Color("ColorSilverGray"))
-                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white)
+                            .font(.system(size: 18, weight: .semibold))
                     }.padding(.bottom, 10)
                     HStack {
                         Text("LKR \(formatCurrency(value: 10000000))")
-                            .foregroundColor(Color("ColorVividBlue"))
-                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(Color("ColorDarkBlue"))
+                            .font(.system(size: 18, weight: .semibold))
                         Spacer()
                         Text("LKR \(formatCurrency(value: 12501549))")
+                            .foregroundStyle(Color("ColorDarkBlue"))
                             .font(.system(size: 18, weight: .semibold))
                     }.padding(.bottom, 10)
                     VStack {
@@ -301,22 +300,28 @@ struct BudgetSpendingCardView: View {
                             ProgressView(value: calculateProgressBarValue(amountAllocated: budget.allocatedAmount, spent: budget.currentAmountSpent), total: 100)
                                 .progressViewStyle(RoundedRectProgressViewStyle(color: Color("ColorJadeGreen"), width: geometry.size.width))
                                 .accentColor(Color("ColorFreshMintGreen"))
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .frame(width: 5, height: 18)
+                                        .foregroundStyle(Color("ColorDarkMaroon"))
+                                        .offset(x: 90)
+                                }
                         }.padding(.bottom, 10)
                     }
                     HStack {
                         if(budget.footerMessage.warning){
                             Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(Color("ColorCottonCandy"))
+                                .foregroundColor(.white)
                                 .font(.system(size: 24))
                             Text(budget.footerMessage.message)
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 18, weight: .bold))
                                 .lineLimit(nil)
-                                .foregroundColor(Color("ColorCottonCandy"))
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .fixedSize(horizontal: false, vertical: true)
                         }else {
                             Text(budget.footerMessage.message)
-                                .font(.system(size: 14, weight: .bold))
+                                .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.white)
                                 .lineLimit(nil)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

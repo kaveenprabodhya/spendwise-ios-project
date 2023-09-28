@@ -73,11 +73,11 @@ struct OverallBudgetCategoryCardView: View {
                         HStack {
                             if(footerMessage.warning){
                                 Image(systemName: "exclamationmark.circle.fill")
-                                    .foregroundColor(Color("ColorCottonCandy"))
+                                    .foregroundColor(.white)
                                     .font(.system(size: 24))
                                 Text(footerMessage.message)
                                     .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(Color("ColorCottonCandy"))
+                                    .foregroundColor(.white)
                                     .lineLimit(nil)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .fixedSize(horizontal: false, vertical: true)
