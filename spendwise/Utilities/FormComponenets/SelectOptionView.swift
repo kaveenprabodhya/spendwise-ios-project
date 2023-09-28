@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SelectOptionView<T: Hashable>: View {
+struct SelectOptionView<T: Hashable, SheetContent: View>: View {
     var label: String
     @State private var isOptionPresented:Bool = false
     @Binding var selectedOption: String
@@ -20,8 +20,8 @@ struct SelectOptionView<T: Hashable>: View {
     var placeholderStringFontSize: CGFloat?
     var fontSize: CGFloat?
     var strokeColor: Color?
-    var content: (() -> any View)?
-    @Environment(\.dismiss) private var dismiss
+    @Binding var dismiss: Bool
+    @ViewBuilder let sheetContent: SheetContent
     
     init(label: String,
          selectedOption: Binding<String> = .constant(""),
@@ -34,7 +34,8 @@ struct SelectOptionView<T: Hashable>: View {
          placeholderStringFontSize: CGFloat? = nil,
          fontSize: CGFloat? = nil,
          strokeColor: Color? = nil,
-         content: (() -> any View)? = nil) {
+         dismiss: Binding<Bool>? = nil,
+         @ViewBuilder content: @escaping () -> SheetContent) {
         self.label = label
         self._selectedOption = selectedOption
         self.sheetLabel = sheetLabel
@@ -46,7 +47,8 @@ struct SelectOptionView<T: Hashable>: View {
         self.placeholderStringFontSize = placeholderStringFontSize
         self.fontSize = fontSize
         self.strokeColor = strokeColor
-        self.content = content
+        self._dismiss = dismiss ?? .constant(false)
+        self.sheetContent = content()
     }
     
     var body: some View {
@@ -81,16 +83,16 @@ struct SelectOptionView<T: Hashable>: View {
                     }
             }
             .sheet(isPresented: $isOptionPresented) {
-                VStack {
+                VStack(spacing: 0) {
                     Capsule()
                            .fill(Color.white)
                            .opacity(0.5)
                            .frame(width: 35, height: 5)
                            .padding(6)
                            .onTapGesture {
-                               dismiss()
+                               isOptionPresented = false
                            }
-                    VStack {
+                    VStack(spacing: 0) {
                         Text(sheetLabel)
                             .font(.title)
                             .fontWeight(.medium)
@@ -132,8 +134,8 @@ struct SelectOptionView<T: Hashable>: View {
                                     }
                                 }
                             }
-                            if let datePickerView = content?() {
-                                datePickerView
+                            else {
+                                self.sheetContent
                             }
                         }
                     }
@@ -193,10 +195,10 @@ struct DropDownMenuListRow: View {
 struct SelectOptionView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var viewModel = BudgetViewModel()
-        SelectOptionView<String>(label: "Pick your Budget Type", sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", content: {
-            VStack {
+        SelectOptionView<String?, VStack<Text>>(label: "Pick your Budget Type", sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options: ["OPtion"]) {
+             VStack {
                 Text("Hiiiiii")
             }
-        }).padding()
+        }.padding()
     }
 }
