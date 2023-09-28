@@ -90,13 +90,15 @@ struct NewBudgetView: View {
                                             Spacer()
                                             CustomToggleView(isOn: $openFrequency)
                                         }
-                                    }.padding()
+                                    }
+                                    .padding()
                                     if openFrequency {
                                         VStack {
                                             SelectOptionView(label: "Frequency", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Frequency", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"]){}
                                         }
                                     }
                                     MultiDatePickerExample()
+                                        .padding(.vertical, 8)
                                     Spacer()
                                     Button {
                                         
@@ -298,15 +300,25 @@ struct CustomButtonStyle: ButtonStyle {
     var height: CGFloat
     var label: String
     var cornerRadius: CGFloat
+    var iconName: String?
+    var fontSize: CGFloat?
+    var iconSize: CGFloat?
     
     func makeBody(configuration: Self.Configuration) -> some View {
         RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color(fillColor))
             .frame(width: width, height: height)
             .overlay {
-                Text(label)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.white)
+                HStack {
+                    if let icon = iconName {
+                        Image(systemName: icon)
+                            .font(.system(size: iconSize != nil ? iconSize! : 18))
+                            .foregroundColor(.white)
+                    }
+                    Text(label)
+                        .font(.system(size: fontSize != nil ? fontSize! : 18, weight: .medium))
+                        .foregroundColor(.white)
+                }
             }
             .scaleEffect(configuration.isPressed ? 1.2 : 1)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)

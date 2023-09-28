@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct IncomeDetailView: View {
+struct TransactionDetailView: View {
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack{
@@ -53,6 +53,6 @@ struct IncomeDetailView: View {
 
 struct IncomeDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        IncomeDetailView()
+        TransactionDetailView()
     }
 }

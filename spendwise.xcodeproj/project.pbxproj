@@ -43,9 +43,8 @@
 		946AADAD2AA34C5700474ABE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADAC2AA34C5700474ABE /* HomeView.swift */; };
 		946AADB22AA35FFD00474ABE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB12AA35FFD00474ABE /* NotificationView.swift */; };
 		946AADB42AA3602A00474ABE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB32AA3602A00474ABE /* OnboardingView.swift */; };
-		946AADB92AA360E900474ABE /* DetailExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADB82AA360E900474ABE /* DetailExpenseView.swift */; };
 		946AADBB2AA3614E00474ABE /* NewTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBA2AA3614E00474ABE /* NewTransactionView.swift */; };
-		946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */; };
+		946AADBD2AA3617A00474ABE /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBC2AA3617A00474ABE /* TransactionDetailView.swift */; };
 		946AADBF2AA3630100474ABE /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADBE2AA3630100474ABE /* AccountView.swift */; };
 		946AADC12AA3632F00474ABE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC02AA3632F00474ABE /* ProfileView.swift */; };
 		946AADC32AA3633E00474ABE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADC22AA3633E00474ABE /* SettingsView.swift */; };
@@ -121,9 +120,8 @@
 		946AADAC2AA34C5700474ABE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		946AADB12AA35FFD00474ABE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		946AADB32AA3602A00474ABE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		946AADB82AA360E900474ABE /* DetailExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailExpenseView.swift; sourceTree = "<group>"; };
 		946AADBA2AA3614E00474ABE /* NewTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTransactionView.swift; sourceTree = "<group>"; };
-		946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeDetailView.swift; sourceTree = "<group>"; };
+		946AADBC2AA3617A00474ABE /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		946AADBE2AA3630100474ABE /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		946AADC02AA3632F00474ABE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		946AADC22AA3633E00474ABE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -332,14 +330,6 @@
 			path = OnboardingView;
 			sourceTree = "<group>";
 		};
-		946AADA62AA349CD00474ABE /* Expense */ = {
-			isa = PBXGroup;
-			children = (
-				946AADB82AA360E900474ABE /* DetailExpenseView.swift */,
-			);
-			path = Expense;
-			sourceTree = "<group>";
-		};
 		946AADA72AA349D700474ABE /* Budget */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,14 +337,6 @@
 				9425511D2AB2156700AA33F3 /* Views */,
 			);
 			path = Budget;
-			sourceTree = "<group>";
-		};
-		946AADA82AA349E700474ABE /* Income */ = {
-			isa = PBXGroup;
-			children = (
-				946AADBC2AA3617A00474ABE /* IncomeDetailView.swift */,
-			);
-			path = Income;
 			sourceTree = "<group>";
 		};
 		946AADA92AA349F100474ABE /* Account */ = {
@@ -370,8 +352,7 @@
 		946AADAA2AA34A5100474ABE /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
-				946AADA82AA349E700474ABE /* Income */,
-				946AADA62AA349CD00474ABE /* Expense */,
+				946AADBC2AA3617A00474ABE /* TransactionDetailView.swift */,
 				946AADCA2AA3651800474ABE /* TransactionView.swift */,
 				946AADCC2AA3654300474ABE /* InsightsView.swift */,
 				946AADBA2AA3614E00474ABE /* NewTransactionView.swift */,
@@ -590,7 +571,7 @@
 				9443A00A2AAB87EA00902E88 /* User.swift in Sources */,
 				943C8F7F2ABE0ECB0007180D /* Chart.swift in Sources */,
 				944010AC2AA4A83C00648E4A /* CustomTopNavigationView.swift in Sources */,
-				946AADBD2AA3617A00474ABE /* IncomeDetailView.swift in Sources */,
+				946AADBD2AA3617A00474ABE /* TransactionDetailView.swift in Sources */,
 				946AADC72AA3639200474ABE /* DetailBudgetView.swift in Sources */,
 				9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */,
 				946AADD22AA369E900474ABE /* Constants.swift in Sources */,
@@ -601,7 +582,6 @@
 				94192AF92AB11CD200864CBF /* RoundedRectProgressViewStyle.swift in Sources */,
 				946AADB22AA35FFD00474ABE /* NotificationView.swift in Sources */,
 				946AADC12AA3632F00474ABE /* ProfileView.swift in Sources */,
-				946AADB92AA360E900474ABE /* DetailExpenseView.swift in Sources */,
 				942551272AB24E9000AA33F3 /* HomeViewModel.swift in Sources */,
 				946AADCD2AA3654300474ABE /* InsightsView.swift in Sources */,
 				946AADC32AA3633E00474ABE /* SettingsView.swift in Sources */,
