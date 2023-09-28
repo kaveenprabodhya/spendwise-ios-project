@@ -33,7 +33,7 @@ struct NewBudgetView: View {
                         BottomLineTextFieldView(label: "Name of Budget", placeholder: "", textInputVal: $inputValue)
                             .padding(.vertical, 6)
                         
-                        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20)
+                        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20) {}
                             .padding(.vertical, 6)
                             .padding(.horizontal, 15)
                         VStack {
@@ -93,7 +93,7 @@ struct NewBudgetView: View {
                                     }.padding()
                                     if openFrequency {
                                         VStack {
-                                            SelectOptionView(label: "Frequency", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Frequency", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"])
+                                            SelectOptionView(label: "Frequency", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Frequency", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"]){}
                                         }
                                     }
                                     MultiDatePickerExample()
@@ -110,7 +110,7 @@ struct NewBudgetView: View {
                             }
                         }.padding()
                         
-                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, sheetLabel: "Select Your Budget Category", placeholderString: "Select Category", options : viewModel.budgetCategoryArray, placeholderStringFontSize: 20)
+                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, sheetLabel: "Select Your Budget Category", placeholderString: "Select Category", options : viewModel.budgetCategoryArray, placeholderStringFontSize: 20) {}
                             .padding(.vertical, 6)
                             .padding(.horizontal, 15)
                             Spacer()
