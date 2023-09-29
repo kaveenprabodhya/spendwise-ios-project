@@ -12,6 +12,7 @@ struct WelcomeView: View {
     @State private var buttonOffset: CGFloat = 0
     @State var isAnimating: Bool = false
     @State var isSignInViewActive: Bool = false
+    @AppStorage("started") var isAlreadyStarted: Bool = false
     
     var body: some View {
         ZStack {
@@ -81,6 +82,7 @@ struct WelcomeView: View {
                                         if buttonOffset > buttonWidth / 2 {
                                             buttonOffset = buttonWidth - 80
                                             isSignInViewActive = true
+                                            isAlreadyStarted = true
                                         } else {
                                             buttonOffset = 0
                                         }
@@ -113,7 +115,7 @@ struct WelcomeView: View {
             startPoint: .top,
             endPoint: .bottom
         ))
-        .ignoresSafeArea(edges: .all)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
