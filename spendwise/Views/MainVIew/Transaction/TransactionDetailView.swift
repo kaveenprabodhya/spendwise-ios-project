@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TransactionDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @State var isSheetRemovePresented: Bool = false
+    
     var body: some View {
         NavigationStack {
             VStack{
@@ -95,7 +97,7 @@ struct TransactionDetailView: View {
                                 .padding(.horizontal, 15)
                                 .padding(.bottom, 10)
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(.gray)
+                                .fill(Color(.systemGray4))
                                 .frame(width: 368, height: 248)
                                 .overlay {
                                     Image("successful-alert")
@@ -113,6 +115,9 @@ struct TransactionDetailView: View {
                     }
                 }
             }
+            .sheet(isPresented: $isSheetRemovePresented, content: {
+                SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented)
+            })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -135,7 +140,9 @@ struct TransactionDetailView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        
+                        withAnimation(.linear(duration: 0.25)) {
+                            self.isSheetRemovePresented = true
+                        }
                     } label: {
                         Image(systemName: "trash")
                             .font(.system(size: 20, weight: .semibold))

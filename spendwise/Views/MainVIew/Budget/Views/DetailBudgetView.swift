@@ -75,11 +75,11 @@ struct DetailBudgetView: View {
                         } label: {
                             Circle()
                                 .fill(Color("ColorSilverGray"))
-                                .frame(width: 36, height: 36)
+                                .frame(width: 38, height: 38)
                                 .overlay {
                                     Image(systemName: "square.and.pencil")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 22))
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 20, weight: .medium))
                                 }
                         }
 
