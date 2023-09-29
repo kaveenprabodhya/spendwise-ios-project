@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("onboarding") var isOnboardingViewActive: Bool = false
+    @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
     @State var selectedTab:Int = 1
     var index: Int?
     
@@ -16,7 +16,7 @@ struct ContentView: View {
         NavigationStack{
             ZStack {
                 if isOnboardingViewActive {
-                    OnboardingView()
+                    WelcomeView()
                 } else {
                     ZStack {
                         TabView(selection: $selectedTab){
@@ -33,12 +33,13 @@ struct ContentView: View {
                             BottomNavigationBarView(index: $selectedTab)
                                 .padding(.bottom, 12)
                         }
-                    }.edgesIgnoringSafeArea(.bottom)
-                }
-            }
-            .onAppear{
-                if let currentIndex = index {
-                    selectedTab = currentIndex
+                    }
+                    .edgesIgnoringSafeArea(.bottom)
+                    .onAppear{
+                        if let currentIndex = index {
+                            selectedTab = currentIndex
+                        }
+                    }
                 }
             }
         }
