@@ -15,10 +15,12 @@ struct SignupView: View {
     @State var confirmPasswordInputVal: String = ""
     @State var isSigninSuccess: Bool = false
     @State var isSignupClick: Bool = false
+    @State private var isSecure: Bool = true
+    @State private var isConfirmSecure: Bool = true
     
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 0) {
                 Rectangle()
                     .fill(.clear)
                     .frame(width: 390, height: 178)
@@ -39,7 +41,7 @@ struct SignupView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 15)
-                .padding(.bottom, 8)
+                .padding(.bottom, 18)
                 VStack {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.white)
@@ -56,6 +58,7 @@ struct SignupView: View {
                             }
                             .padding(.horizontal, 10)
                         }
+                        .padding(.bottom, 10)
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.white)
                         .frame(width: 391, height: 62)
@@ -71,49 +74,80 @@ struct SignupView: View {
                             }
                             .padding(.horizontal, 10)
                         }
+                        .padding(.bottom, 10)
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.white)
                         .frame(width: 391, height: 62)
                         .overlay {
                             HStack {
-                                SecureField(text: $passwordInputVal) {
-                                    Text("Password")
-                                        .foregroundStyle(Color("ColorSteelGray"))
-                                        .font(.system(size: 20, weight: .medium))
-                                }
-                                .foregroundStyle(Color("ColorSteelGray"))
-                                Image(systemName: "eye")
+                                if isSecure {
+                                    SecureField(text: $passwordInputVal) {
+                                        Text("Password")
+                                            .foregroundStyle(Color("ColorSteelGray"))
+                                            .font(.system(size: 20, weight: .medium))
+                                    }
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
+                                } else {
+                                    TextField(text: $passwordInputVal) {
+                                        Text("Password")
+                                            .foregroundStyle(Color("ColorSteelGray"))
+                                            .font(.system(size: 20, weight: .medium))
+                                    }
+                                    .foregroundStyle(Color("ColorSteelGray"))
+                                    .font(.system(size: 20, weight: .medium))
+                                }
+                                Image(systemName: isSecure ? "eye.slash" : "eye")
+                                    .foregroundStyle(Color("ColorSteelGray"))
+                                    .font(.system(size: 20, weight: .medium))
+                                    .onTapGesture {
+                                        isSecure.toggle()
+                                    }
                             }
                             .padding(.horizontal, 10)
                         }
+                        .padding(.bottom, 10)
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.white)
                         .frame(width: 391, height: 62)
                         .overlay {
                             HStack {
-                                SecureField(text: $confirmPasswordInputVal) {
-                                    Text("Confirm Password")
-                                        .foregroundStyle(Color("ColorSteelGray"))
-                                        .font(.system(size: 20, weight: .medium))
-                                }
-                                .foregroundStyle(Color("ColorSteelGray"))
-                                Image(systemName: "eye")
+                                if isConfirmSecure {
+                                    SecureField(text: $confirmPasswordInputVal) {
+                                        Text("Confirm Password")
+                                            .foregroundStyle(Color("ColorSteelGray"))
+                                            .font(.system(size: 20, weight: .medium))
+                                    }
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
+                                } else {
+                                    TextField(text: $confirmPasswordInputVal) {
+                                        Text("Confirm Password")
+                                            .foregroundStyle(Color("ColorSteelGray"))
+                                            .font(.system(size: 20, weight: .medium))
+                                    }
+                                    .foregroundStyle(Color("ColorSteelGray"))
+                                    .font(.system(size: 20, weight: .medium))
+                                }
+                                Image(systemName: isConfirmSecure ? "eye.slash" : "eye")
+                                    .foregroundStyle(Color("ColorSteelGray"))
+                                    .font(.system(size: 20, weight: .medium))
+                                    .onTapGesture {
+                                        isConfirmSecure.toggle()
+                                    }
                             }
                             .padding(.horizontal, 10)
                         }
+                        .padding(.bottom, 10)
                 }
                 Spacer()
                 VStack {
                     Text("By signing up, you agree to the ")
                         .foregroundColor(.white)
-                        .font(.system(size: 20, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                     + Text("Terms of Service and Privacy Policy")
                         .foregroundColor(.blue)
-                        .font(.system(size: 20, weight: .medium))
+                        .font(.system(size: 16, weight: .medium))
                         .underline()
                 }
                 HStack {
@@ -124,14 +158,14 @@ struct SignupView: View {
                             .fill(Color("ColorGoldenrod"))
                             .frame(width: 113, height: 48)
                             .overlay {
-                                Text("Sign up")
+                                Text("Sign in")
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundStyle(.white)
                             }
                     }
                     .buttonStyle(GrowButton())
                     .navigationDestination(isPresented: $isSignupClick) {
-                        SignupView()
+                        SigninView()
                     }
                     Spacer()
                     Button {
@@ -142,7 +176,7 @@ struct SignupView: View {
                             .fill(Color("ColorElectricIndigo"))
                             .frame(width: 186, height: 67)
                             .overlay {
-                                Text("Sign in")
+                                Text("Signup")
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundStyle(.white)
                             }
@@ -153,7 +187,6 @@ struct SignupView: View {
                     }
                 }
                 .padding(.horizontal, 15)
-                Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(LinearGradient(
