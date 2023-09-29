@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
+    @AppStorage("started") var isAlreadyStarted: Bool = false
     @State var selectedTab:Int = 1
     var index: Int?
     
@@ -16,7 +17,11 @@ struct ContentView: View {
         NavigationStack{
             ZStack {
                 if isOnboardingViewActive {
-                    WelcomeView()
+                    if isAlreadyStarted {
+                        SigninView()
+                    } else {
+                        WelcomeView()
+                    }
                 } else {
                     ZStack {
                         TabView(selection: $selectedTab){
