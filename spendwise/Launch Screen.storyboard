@@ -19,7 +19,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="launchScreenBackground" translatesAutoresizingMaskIntoConstraints="NO" id="l0t-M0-G5T">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch-screen" translatesAutoresizingMaskIntoConstraints="NO" id="5TC-CI-rYV">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="5TC-CI-rYV">
                                 <rect key="frame" x="21.666666666666657" y="311" width="331.66666666666674" height="190"/>
                             </imageView>
                         </subviews>
@@ -43,7 +43,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch-screen" width="313" height="316"/>
         <image name="launchScreenBackground" width="860" height="1864"/>
+        <image name="logo" width="313" height="316"/>
     </resources>
 </document>
