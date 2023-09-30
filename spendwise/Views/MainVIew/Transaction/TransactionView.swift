@@ -10,10 +10,12 @@ import SwiftUI
 struct TransactionView: View {
     @State var sortedBy: String = ""
     @State var defaultVal: Int = 0
-    @State var isOnFilterClicked: Bool = false
-    @State var isOnCategoryClicked: Bool = false
+    @State var isOnFilterClicked: Bool = true
+    @State var isOnCategoryClicked: Bool = true
     @State var isReportClicked: Bool = false
+    @State private var checkedStates: [Bool] =  Array(repeating: false, count: 18)
     @ObservedObject var transactionViewModel: TransactionViewModel = TransactionViewModel()
+    @ObservedObject var budgetViewModel: BudgetViewModel = BudgetViewModel()
     
     var body: some View {
         VStack {
@@ -68,10 +70,11 @@ struct TransactionView: View {
         }
         .sheet(isPresented: $isOnFilterClicked, content: {
             VStack(spacing: 0) {
+                VStack {
                 HStack {
-                  Text("Filter Transaction")
+                    Text("Filter Transaction")
                         .foregroundStyle(.black)
-                        .font(.system(size: 24, weight: .medium))
+                        .font(.system(size: 16, weight: .semibold))
                     Spacer()
                     Button(action: {
                         
@@ -86,13 +89,14 @@ struct TransactionView: View {
                             }
                     })
                 }
-                .padding(.top, 10)
-                .padding(.horizontal, 20)
-                VStack(spacing: 15) {
+                .padding(.horizontal, 15)
+                .padding(.top, 8)
+                VStack(spacing: 0) {
                     Text("Filter By")
                         .foregroundStyle(.black)
-                        .font(.system(size: 22, weight: .medium))
+                        .font(.system(size: 20, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 15)
                     HStack {
                         RoundedRectangle(cornerRadius: 25.0)
                             .fill(.gray)
@@ -115,71 +119,28 @@ struct TransactionView: View {
                                             .font(.system(size: 18, weight: .medium))
                                     }
                             }
-                    }.frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.horizontal, 15)
                     Text("Sort By")
                         .foregroundStyle(.black)
-                        .font(.system(size: 22, weight: .medium))
+                        .font(.system(size: 20, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(.gray, lineWidth: 2)
-                                    .frame(width: 98, height: 48)
-                                    .overlay {
-                                        Text("Highest")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 18, weight: .medium))
-                                    }
-                            }
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(.gray, lineWidth: 2)
-                                    .frame(width: 98, height: 48)
-                                    .overlay {
-                                        Text("Lowest")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 18, weight: .medium))
-                                    }
-                            }
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(.gray, lineWidth: 2)
-                                    .frame(width: 98, height: 48)
-                                    .overlay {
-                                        Text("Newset")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 18, weight: .medium))
-                                    }
-                            }
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(.gray, lineWidth: 2)
-                                    .frame(width: 98, height: 48)
-                                    .overlay {
-                                        Text("Oldest")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 18, weight: .medium))
-                                    }
-                            }
+                        .padding(.horizontal, 15)
+                        .padding(.bottom, 8)
+                    let sortList: [String] = ["Highest", "Lowest","Newest", "Oldest"]
+                    let columns: [GridItem] = Array(repeating: .init(.fixed(100)), count: 3)
+                    LazyVGrid(columns: columns, spacing: 8) {
+                        ForEach(sortList, id: \.self) { sort in
+                            VGridListItem(label: sort)
+                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 8)
                     Text("Category")
                         .foregroundStyle(.black)
-                        .font(.system(size: 22, weight: .medium))
+                        .font(.system(size: 20, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+                        .padding(.horizontal, 15)
+                        .padding(.bottom, 8)
                     Button {
                         isOnCategoryClicked = true
                     } label: {
@@ -205,26 +166,45 @@ struct TransactionView: View {
                     }
                     .sheet(isPresented: $isOnCategoryClicked, content: {
                         VStack {
-                            Text("Hey")
+                            let items = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+                            VStack {
+                                ScrollView {
+                                    ForEach(budgetViewModel.budgetCategoryArray.indices, id: \.self) { index in
+                                                    HStack {
+                                                        Text(budgetViewModel.budgetCategoryArray[index].name)
+                                                        Spacer()
+                                                        CheckboxView(checked: self.$checkedStates[index])
+                                                    }
+                                                    .padding()
+                                                }
+                                }
+                                .padding(.vertical, 6)
+                            }
+                            
+                            Button {
+                                
+                            } label: {
+                                
+                            }
+                            .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
                         }
                         .presentationDetents([.medium, .large])
                         .presentationCornerRadius(16)
                         .presentationDragIndicator(.visible)
                     })
+                    .padding(.horizontal, 35)
                     Spacer()
                     Button {
                         
                     } label: {
                         
                     }
-                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 343, height: 56, label: "Apply", cornerRadius: 16))
+                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
                 }
-                
-                .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 Spacer()
             }
-            .padding(.horizontal, 25)
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.medium])
             .presentationCornerRadius(16)
             .presentationDragIndicator(.visible)
         })
@@ -243,6 +223,40 @@ struct TransactionView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
+    }
+}
+
+struct CheckboxView: View {
+    @Binding var checked: Bool
+
+    var body: some View {
+        Image(systemName: checked ? "checkmark.square.fill" : "square")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 24, height: 24)
+            .foregroundColor(checked ? .blue : .black)
+            .onTapGesture {
+                self.checked.toggle()
+            }
+    }
+}
+
+struct VGridListItem: View {
+    var label: String
+    var body: some View {
+        RoundedRectangle(cornerRadius: 25.0)
+            .fill(.white)
+            .frame(width: 98, height: 48)
+            .overlay {
+                RoundedRectangle(cornerRadius: 25.0)
+                    .stroke(.gray, lineWidth: 2)
+                    .frame(width: 98, height: 48)
+                    .overlay {
+                        Text(label)
+                            .foregroundStyle(.black)
+                            .font(.system(size: 18, weight: .medium))
+                    }
+            }
     }
 }
 
