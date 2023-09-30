@@ -6,3 +6,41 @@
 //
 
 import Foundation
+
+class TransactionViewModel: ObservableObject {
+    @Published var transactionsArray: [BudgetTransaction] = [
+        BudgetTransaction(
+            id: UUID(),
+            category: .expense,
+            transactionObject: Transaction(
+                id: UUID(),
+                date: Date.now,
+                category: "Shopping",
+                amount: 19800,
+                description: "Buy some cloths",
+                paymentMethod: "Wallet",
+                location: "RV",
+                attachment: Attachment(type: "", url: URL(fileURLWithPath: "")),
+                recurring: RecurringTransaction(frequency: "", date: ""))
+        ),
+        BudgetTransaction(
+            id: UUID(),
+            category: .income,
+            transactionObject: Transaction(
+                id: UUID(),
+                date: Date.now,
+                category: "Groceries",
+                amount: 19800,
+                description: "Buy some grocery",
+                paymentMethod: "Wallet",
+                location: "Supermarket",
+                attachment: Attachment(type: "", url: URL(fileURLWithPath: "")),
+                recurring: RecurringTransaction(frequency: "", date: ""))
+        )
+    ]
+    
+    func filterTransactions(by category: TransactionCategory) -> [BudgetTransaction] {
+        return transactionsArray.filter { $0.category == category }
+    }
+    
+}

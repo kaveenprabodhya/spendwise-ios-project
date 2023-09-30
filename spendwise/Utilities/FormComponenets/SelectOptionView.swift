@@ -19,6 +19,8 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
     var placeholderStringColor: Color?
     var placeholderStringFontSize: CGFloat?
     var fontSize: CGFloat?
+    var height: CGFloat?
+    var cornerRadius: CGFloat?
     var strokeColor: Color?
     @Binding var dismiss: Bool
     @ViewBuilder let sheetContent: SheetContent
@@ -33,6 +35,8 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
          placeholderStringColor: Color? = nil,
          placeholderStringFontSize: CGFloat? = nil,
          fontSize: CGFloat? = nil,
+         height: CGFloat? = nil,
+         cornerRadius: CGFloat? = nil,
          strokeColor: Color? = nil,
          dismiss: Binding<Bool>? = nil,
          @ViewBuilder content: @escaping () -> SheetContent) {
@@ -46,6 +50,8 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
         self.placeholderStringColor = placeholderStringColor
         self.placeholderStringFontSize = placeholderStringFontSize
         self.fontSize = fontSize
+        self.height = height
+        self.cornerRadius = cornerRadius
         self.strokeColor = strokeColor
         self._dismiss = dismiss ?? .constant(false)
         self.sheetContent = content()
@@ -60,9 +66,9 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, 10)
                 }
-                RoundedRectangle(cornerRadius: 15)
+                RoundedRectangle(cornerRadius: cornerRadius != nil ? cornerRadius! : 15)
                     .stroke(strokeColor != nil ? strokeColor! : .black, lineWidth: 2)
-                    .frame(height: 65)
+                    .frame(height: height != nil ? height! : 65)
                     .overlay {
                         Button {
                             withAnimation {

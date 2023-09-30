@@ -7,35 +7,32 @@
 
 import Foundation
 
-struct Income: Identifiable {
-    let id: String
-    let date: Date
-    let amount: Double
-    let source: String
-    let description: String
-    let recurring: RecurringIncome
+struct BudgetTransaction: Identifiable {
+    let id: UUID
+    let category: TransactionCategory
+    let transactionObject: Transaction
 }
 
-struct RecurringIncome {
-    let frequency: String
-    let date: String
+enum TransactionCategory {
+    case income
+    case expense
 }
 
-struct Expense: Identifiable {
-    let id: String
+struct Transaction: Identifiable {
+    let id: UUID
     let date: Date
-    let category: Category
+    let category: String
     let amount: Double
     let description: String
     let paymentMethod: String
     let location: String
     let attachment: Attachment
-    let recurring: RecurringExpense
+    let recurring: RecurringTransaction
 }
 
-struct RecurringExpense {
+struct RecurringTransaction {
     let frequency: String
-    let endDate: String
+    let date: String
 }
 
 struct Attachment {
