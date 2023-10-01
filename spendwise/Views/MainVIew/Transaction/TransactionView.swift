@@ -10,8 +10,8 @@ import SwiftUI
 struct TransactionView: View {
     @State var sortedBy: String = ""
     @State var defaultVal: Int = 0
-    @State var isOnFilterClicked: Bool = true
-    @State var isOnCategoryClicked: Bool = true
+    @State var isOnFilterClicked: Bool = false
+    @State var isOnCategoryClicked: Bool = false
     @State var isReportClicked: Bool = false
     @State private var checkedStates: [Bool] =  Array(repeating: false, count: 18)
     @ObservedObject var transactionViewModel: TransactionViewModel = TransactionViewModel()
@@ -166,7 +166,6 @@ struct TransactionView: View {
                     }
                     .sheet(isPresented: $isOnCategoryClicked, content: {
                         VStack {
-                            let items = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
                             VStack {
                                 ScrollView {
                                     ForEach(budgetViewModel.budgetCategoryArray.indices, id: \.self) { index in
