@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "tutorial -secure.jpg",
+      "filename" : "tutorial-secure.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "tutorial-secure@2x.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tutorial-secure@3x.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

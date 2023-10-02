@@ -266,11 +266,12 @@ struct TransactionListItem: View {
     var transactionDescription: String
     var transactionTime: String
     var transactionType: TransactionCategory
+    var fillColor: Color?
     
     var body: some View {
         VStack {
             RoundedRectangle(cornerRadius: 25.0)
-                .fill(.white)
+                .fill(fillColor != nil ? fillColor! : .white)
                 .frame(width: 385, height: 99)
                 .overlay {
                     HStack {

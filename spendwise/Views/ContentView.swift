@@ -20,7 +20,7 @@ struct ContentView: View {
                     if isAlreadyStarted {
                         SigninView()
                     } else {
-                        WelcomeView()
+                        OnboardingView()
                     }
                 } else {
                     ZStack {

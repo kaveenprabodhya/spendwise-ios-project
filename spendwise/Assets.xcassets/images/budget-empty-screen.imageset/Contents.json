@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "budget-empty-screen@2x.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "budget-empty-screen@3x.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

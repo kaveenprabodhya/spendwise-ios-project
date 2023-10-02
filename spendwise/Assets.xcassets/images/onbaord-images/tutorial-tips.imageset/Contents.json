@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "tutorial-tips@2x.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tutorial-tips@3x.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

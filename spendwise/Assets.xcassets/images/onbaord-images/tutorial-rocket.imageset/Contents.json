@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "tutorial-faster.jpg",
+      "filename" : "tutorial-rocket.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "tutorial-rocket@2x.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "tutorial-rocket@3x.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

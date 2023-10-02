@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "insight-expense@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "insight-expense@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

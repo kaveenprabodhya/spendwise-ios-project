@@ -15,6 +15,7 @@ struct SigninView: View {
     @State var isForetPasswordSuccess: Bool = false
     @State var isSignupClick: Bool = false
     @State private var isSecure: Bool = true
+    @State private var isForgetPasswordOn: Bool = false
     
     var body: some View {
         VStack {
@@ -91,6 +92,12 @@ struct SigninView: View {
                         .foregroundStyle(.white)
                         .font(.system(size: 20))
                         .frame(maxWidth: .infinity, alignment: .trailing)
+                        .onTapGesture {
+                            isForgetPasswordOn = true
+                        }
+                        .navigationDestination(isPresented: $isForgetPasswordOn) {
+                            ForgetPasswordView()
+                        }
                 }
                 .padding(.top, 25)
                 .padding(.trailing, 20)
