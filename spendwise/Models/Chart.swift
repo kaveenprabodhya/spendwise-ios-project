@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SpentAmountForPreviousSevenDays: Identifiable {
+struct SpentAmountForPreviousSevenDays: Identifiable, Codable {
     let id: UUID
     let amount: Double
     let monthOrYear: String

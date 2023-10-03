@@ -34,7 +34,7 @@ struct BudgetType {
     let limit: Double
 }
 
-enum BudgetTypeOption: String {
+enum BudgetTypeOption: String, Codable {
     case monthly = "monthly"
     case weekly = "weekly"
     case yearly = "yearly"

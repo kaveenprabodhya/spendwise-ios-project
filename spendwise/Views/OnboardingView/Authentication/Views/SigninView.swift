@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SigninView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
-    @State var emailInputVal: String = ""
-    @State var passwordInputVal: String = ""
     @State var isSigninSuccess: Bool = false
     @State var isForetPasswordSuccess: Bool = false
     @State var isSignupClick: Bool = false
     @State private var isSecure: Bool = true
     @State private var isForgetPasswordOn: Bool = false
+    @ObservedObject var viewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var keyboard = KeyboardResponder()
     
     var body: some View {
         VStack {
@@ -45,7 +45,7 @@ struct SigninView: View {
                     .frame(width: 391, height: 62)
                     .overlay {
                         HStack {
-                            TextField(text: $emailInputVal) {
+                            TextField(text: $viewModel.email) {
                                 Text("Email")
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
@@ -55,14 +55,22 @@ struct SigninView: View {
                         }
                         .padding(.horizontal, 10)
                     }
-                    .padding(.bottom, 18)
+                    .padding(.bottom, viewModel.errorEmail == nil ? 18 : 4)
+                if let error = viewModel.errorEmail {
+                    Text("\(error)")
+                        .foregroundStyle(Color("ColorCherryRed"))
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.bottom, 16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 30)
+                }
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.white)
                     .frame(width: 391, height: 62)
                     .overlay {
                         HStack {
                             if isSecure {
-                                SecureField(text: $passwordInputVal) {
+                                SecureField(text: $viewModel.password) {
                                     Text("Password")
                                         .foregroundStyle(Color("ColorSteelGray"))
                                         .font(.system(size: 20, weight: .medium))
@@ -70,7 +78,7 @@ struct SigninView: View {
                                 .foregroundStyle(Color("ColorSteelGray"))
                                 .font(.system(size: 20, weight: .medium))
                             } else {
-                                TextField(text: $passwordInputVal) {
+                                TextField(text: $viewModel.password) {
                                     Text("Password")
                                         .foregroundStyle(Color("ColorSteelGray"))
                                         .font(.system(size: 20, weight: .medium))
@@ -87,6 +95,15 @@ struct SigninView: View {
                         }
                         .padding(.horizontal, 10)
                     }
+                    .padding(.bottom, viewModel.errorEmail == nil ? 0 : 4)
+                if let error = viewModel.errorPassword {
+                    Text("\(error)")
+                        .foregroundStyle(Color("ColorCherryRed"))
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.bottom, 16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 30)
+                }
                 VStack {
                     Text("Forget password?")
                         .foregroundStyle(.white)
@@ -122,8 +139,12 @@ struct SigninView: View {
                     }
                     Spacer()
                     Button {
-                        isOnboardingViewActive = false
-                        isSigninSuccess = true
+                        viewModel.authenticate()
+                        
+                        if viewModel.isAuthenticated {
+                            isOnboardingViewActive = false
+                            isSigninSuccess = true
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: 25)
                             .fill(Color("ColorElectricIndigo"))
