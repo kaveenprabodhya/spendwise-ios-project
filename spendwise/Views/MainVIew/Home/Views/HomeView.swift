@@ -12,6 +12,7 @@ struct HomeView: View {
     @State var index = 0
     @State var expand = false
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
+    @ObservedObject var homeViewModel: HomeViewModel = HomeViewModel()
     
     // MARK: - Body
     var body: some View {
@@ -25,7 +26,9 @@ struct HomeView: View {
                         .overlay {
                             VStack{
                                 VStack{
-                                    CustomTopNavigationView()
+                                    if let currentUser = UserManager.shared.getCurrentUser() {
+                                        CustomTopNavigationView(userName: currentUser.name)
+                                    }
                                 }
                                 .padding(.top, 26)
                                 VStack {
@@ -52,16 +55,18 @@ struct HomeView: View {
                                     VStack(spacing: 8) {
                                         Text("Your available balance is")
                                             .foregroundColor(.white)
-                                        Text("20,983")
+                                        Text("LKR \(formatCurrency(value: (viewModel.overview.overallAmount)))")
                                             .font(.system(size: 28))
                                             .foregroundColor(.white)
-                                        Text("By this time last month, you spent slightly higher (22,719)")
+                                        if homeViewModel.prevoiusMonthlyAverage.amount > 0 {
+                                            Text("By this time last month, you spent slightly higher (\(formatCurrency(value: homeViewModel.prevoiusMonthlyAverage.amount)))")
                                             .frame(width: 250)
                                             .lineLimit(nil)
                                             .foregroundColor(.white)
                                             .multilineTextAlignment(.center)
                                             .fixedSize(horizontal: false, vertical: true)
                                     }
+                                }
                                 }
                                 VStack {
                                     Spacer()
@@ -84,7 +89,7 @@ struct HomeView: View {
                                                         Text("Income")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 14))
-                                                        Text("LKR 5000")
+                                                        Text("LKR \(formatCurrency(value: viewModel.overview.overallIncomeAmount))")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 16))
                                                             .fontWeight(.semibold)
@@ -109,7 +114,7 @@ struct HomeView: View {
                                                         Text("Expense")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 14))
-                                                        Text("LKR 5000")
+                                                        Text("LKR \(formatCurrency(value: viewModel.overview.overallExpenseAmount))")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 16))
                                                             .fontWeight(.semibold)
@@ -132,7 +137,16 @@ struct HomeView: View {
                                 Spacer()
                             }
                             VStack {
-                                BudgetChartView(budgetArray: viewModel.budgetArray, budgetCategory: viewModel.budgetCategoryArray)
+                                TabView {
+                                    BudgetChartView(filterBudgetArray: viewModel.budgetArray, type: .weekly)
+                                        .tag(0)
+                                    BudgetChartView(filterBudgetArray: viewModel.budgetArray, type: .monthly)
+                                        .tag(1)
+                                    BudgetChartView(filterBudgetArray: viewModel.budgetArray, type: .yearly)
+                                        .tag(2)
+                                }
+                                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                                .frame(width: 400 , height: 350)
                                 Spacer()
                             }
                     }
@@ -141,10 +155,22 @@ struct HomeView: View {
             }
         }
         .onAppear{
-            viewModel.fetchData()
+            viewModel.fetchBudgetData()
+            viewModel.fetchAmountSpentForLast7Days()
+            if let currentUser = UserManager.shared.getCurrentUser() {
+                viewModel.fetchOverallBudgetForUser(currentUser: currentUser)
+                homeViewModel.fetchPrevoiusMonthlyAverage(currentUser: currentUser)
+                homeViewModel.fetchOngoingWeekExpenseAndIncomeByDay(currentUser: currentUser)
+            }
+            setupAppearance()
         }
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
+    }
+    
+    func setupAppearance() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = .black
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
 }
 

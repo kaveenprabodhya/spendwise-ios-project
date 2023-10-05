@@ -74,9 +74,9 @@ struct OverallBudgetCategoryCardView: View {
                             if(footerMessage.warning){
                                 Image(systemName: "exclamationmark.circle.fill")
                                     .foregroundColor(.white)
-                                    .font(.system(size: 24))
+                                    .font(.system(size: 18))
                                 Text(footerMessage.message)
-                                    .font(.system(size: 20, weight: .bold))
+                                    .font(.system(size: 14, weight: .bold))
                                     .foregroundColor(.white)
                                     .lineLimit(nil)
                                     .frame(maxWidth: .infinity, alignment: .leading)

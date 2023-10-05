@@ -63,7 +63,7 @@ struct TransactionView: View {
             }
             ScrollView() {
                 ForEach(transactionViewModel.transactionsArray) { transaction in
-                    TransactionListItem(iconName: "basket.fill", transactionName: transaction.transactionObject.category, transactionAmount: transaction.transactionObject.amount, transactionDescription: transaction.transactionObject.description, transactionTime: formattedTime(from: transaction.transactionObject.date), transactionType: transaction.category)
+                    TransactionListItem(iconName: "basket.fill", transactionName: transaction.transaction.budgetCategory, transactionAmount: transaction.transaction.amount, transactionDescription: transaction.transaction.description, transactionTime: formattedTime(from: transaction.transaction.date), transactionType: transaction.category)
                 }
             }
             Spacer()

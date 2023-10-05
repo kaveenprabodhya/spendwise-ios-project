@@ -36,7 +36,7 @@ struct BudgetView: View {
             }
         }
         .onAppear{
-            viewModel.fetchData()
+            viewModel.fetchBudgetData()
             if selectedTab == .monthly || selectedTab == .weekly{
                 date = DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1]
             } else if selectedTab == .yearly {

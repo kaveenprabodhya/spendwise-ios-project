@@ -28,15 +28,11 @@ struct DetailBudgetView: View {
             CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorLavenderPurple"), Color("ColorTealGreenBlue")], headerContent: {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        HStack(alignment: .bottom , spacing: 0) {
+                        VStack(spacing: 0) {
                             Text("Monthly Budget")
                                 .foregroundColor(.white)
                                 .font(.system(size: 28, weight: .semibold))
-                            Spacer()
-                            Text("\(formatCurrency(value: budget.allocatedAmount))")
-                                .font(.system(size: 22, weight: .medium))
-                                .foregroundColor(.white)
-                        }.frame(maxWidth: .infinity, alignment: .leading)
+                        }.frame(maxWidth: .infinity, alignment: .center)
                         VStack {
                             Text("You’ve spent")
                                 .font(.system(size: 14, weight: .medium))
@@ -83,13 +79,25 @@ struct DetailBudgetView: View {
                     .padding(.horizontal, 30)
                     .padding(.bottom, 10)
                     HStack {
+                        Text("Allocated Ammount")
+                            .font(.system(size: 18, weight: .semibold))
+                        Spacer()
+                        Text("LKR \(formatCurrency(value: budget.allocatedAmount))")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.black)
+                    }
+                    .padding(.bottom, 10)
+                    .padding(.horizontal, 20)
+                    
+                    HStack {
                         Text("What’s left to spend")
                             .font(.system(size: 18, weight: .semibold))
                         Spacer()
                         Text("LKR \(formatCurrency(value: 170001))")
                             .font(.system(size: 18, weight: .semibold))
                     }
-                    .padding(20)
+                    .padding(.bottom, 20)
+                    .padding(.horizontal, 20)
                     
                     BudgetSpendingCardView(budget: budget)
                         .padding(.bottom, 10)
@@ -275,11 +283,11 @@ struct BudgetSpendingCardView: View {
                     HStack {
                         Text("You’ve already spent")
                             .foregroundColor(.white)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                         Spacer()
                         Text("Spend Limit per Day")
                             .foregroundColor(.white)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                     }.padding(.bottom, 10)
                     HStack {
                         Text("LKR \(formatCurrency(value: 10000000))")
@@ -309,14 +317,14 @@ struct BudgetSpendingCardView: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 24))
                             Text(budget.footerMessage.message)
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 16, weight: .bold))
                                 .lineLimit(nil)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .fixedSize(horizontal: false, vertical: true)
                         }else {
                             Text(budget.footerMessage.message)
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.white)
                                 .lineLimit(nil)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

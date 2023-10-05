@@ -33,13 +33,17 @@ class AuthViewModel: ObservableObject {
         }
         
         ApiService.authenticate(email: email, password: password) { result in
-            switch result {
-            case .success(let user):
-                self.user = user
-                self.errorMessage = nil
-            case .failure(let error):
-                self.user = nil
-                self.errorMessage = error.localizedDescription
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    self.user = user
+                    self.isAuthenticated = true
+                    self.errorMessage = nil
+                case .failure(let error):
+                    self.user = nil
+                    self.isAuthenticated = false
+                    self.errorMessage = error.localizedDescription
+                }
             }
         }
     }

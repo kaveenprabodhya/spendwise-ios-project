@@ -8,21 +8,43 @@
 import SwiftUI
 
 struct BudgetChartView: View {
-    @State var totalBudget: Double = 100000.00
-    @State var totalSpendFromBudget: Double = 29000.00
-    @State var progressValue: Float = 0.3
-    
-    let budgetArray: [Budget]
-    let budgetCategory: [BudgetCategory]
+    let filterBudgetArray: [Budget]
+    var type: BudgetTypeOption
     
     var body: some View {
         VStack {
-            HStack {
-                Text("My Budgets")
-                    .font(.system(size: 20, weight: .semibold))
-                Spacer()
+            switch type{
+            case .monthly:
+                HStack {
+                    Text("My Monthly Budgets")
+                        .font(.system(size: 20, weight: .semibold))
+                    Spacer()
+                    Text("\(DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1])")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .padding(.trailing, 12)
+            case .weekly:
+                HStack {
+                    Text("My Weekly Budgets")
+                        .font(.system(size: 20, weight: .semibold))
+                    Spacer()
+                    Text("\(DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1])")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .padding(.trailing, 12)
+            case .yearly:
+                HStack {
+                    Text("My Yealry Budgets")
+                        .font(.system(size: 20, weight: .semibold))
+                    Spacer()
+                    Text("\(String(Calendar.current.component(.year, from: Date())))")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .padding(.trailing, 12)
             }
             VStack {
+                let filteredBudgets = filterBudgets(by: Date(), budgets: filterBudgetArray)
+                let (totalAllocatedAmount, totalSpentAmount) = calculateTotals(for: type, in: filteredBudgets)
                 CustomRoudedRectangle()
                     .fill(LinearGradient(
                         gradient: Gradient(colors: [Color("ColorDarkBlue").opacity(0.88), Color("ColorTurquoiseBlue")]),
@@ -35,26 +57,30 @@ struct BudgetChartView: View {
                                 VStack(alignment: .leading){
                                     Text("You have").foregroundColor(.white)
                                     HStack{
-                                        Text("LKR \(formatCurrency(value: totalSpendFromBudget))")
+                                        Text("LKR \(formatCurrency(value: totalSpentAmount))")
                                             .font(.system(size: 22, weight: .bold))
                                             .foregroundColor(.white)
-                                        Text("left of \(formatCurrency(value: totalBudget))")
+                                        Text("left of \(formatCurrency(value: totalAllocatedAmount))")
                                             .font(.system(size: 16))
                                             .foregroundColor(.white)
                                         
                                     }
                                 }.padding(.top, 15)
-                                ProgressView(value: 90, total: 100)
+                                ProgressView(value: totalSpentAmount, total: totalAllocatedAmount)
                                     .progressViewStyle(RoundedRectProgressViewStyle(color: Color("ColorFreshMintGreen"), width: 360))
                                     .accentColor(Color("ColorFreshMintGreen"))
                             }.frame(height: 74).padding(.top, 8).padding(.bottom, 5)
                             VStack(spacing: 0) {
                                 ScrollView(.horizontal) {
                                     HStack(spacing: 0) {
-                                        ForEach(budgetArray) { budget in
-                                            ForEach(budget.category) { category in
-                                                VStack {
-                                                    CategoryProgressView(progressValue: progressValue, categoryName: category.name)
+                                        ForEach(filteredBudgets) { budget in
+                                            if budget.budgetType.type == type {
+                                                let progress = budget.currentAmountSpent / budget.allocatedAmount
+                                                let progressVal = min(1.0, max(0.0, progress))
+                                                ForEach(budget.category) { category in
+                                                    VStack {
+                                                        CategoryProgressView(progressValue: Float(progressVal), categoryName: category.name)
+                                                    }
                                                 }
                                             }
                                         }
@@ -66,14 +92,36 @@ struct BudgetChartView: View {
             }
         }.padding()
     }
+    
+    func calculateTotals(for type: BudgetTypeOption, in budgets: [Budget]) -> (totalAllocated: Double, totalSpent: Double) {
+        let filteredBudgets = budgets.filter { $0.budgetType.type == type }
+        let totalAllocated = filteredBudgets.reduce(0.0) { $0 + $1.allocatedAmount }
+        let totalSpent = filteredBudgets.reduce(0.0) { $0 + $1.currentAmountSpent }
+        return (totalAllocated, totalSpent)
+    }
+    
+    func filterBudgets(by date: Date, budgets: [Budget]) -> [Budget] {
+        return budgets.filter { budget in
+            switch budget.budgetType.date {
+            case .monthOnly(let month):
+                return Calendar.current.component(.month, from: date) == month
+            case .yearOnly(let year):
+                return Calendar.current.component(.year, from: date) == year
+            case .dateRange(let month, let start, let end):
+                let currentMonth = Calendar.current.component(.month, from: date)
+                return currentMonth == month && start <= end
+            }
+        }
+    }
 }
 
 struct CategoryProgressView: View {
-    @State var progressValue:Float
-    @State var categoryName: String
+    var progressValue:Float
+    var categoryName: String
+    
     var body: some View {
         VStack(spacing: 0) {
-            ProgressBarViewOne(progress: self.$progressValue)
+            ProgressBarViewOne(progress: self.progressValue)
                 .frame(width: 75, height: 75)
                 .padding(.bottom, 5)
             Text(categoryName)
@@ -86,7 +134,7 @@ struct CategoryProgressView: View {
 }
 
 struct ProgressBarViewOne: View {
-    @Binding var progress: Float
+    var progress: Float
     var body: some View {
         ZStack {
             Circle()
@@ -111,11 +159,6 @@ struct ProgressBarViewOne: View {
     }
 }
 
-struct BudgetChartView_Previews: PreviewProvider {
-    static var previews: some View {
-        BudgetChartView(budgetArray: [], budgetCategory: [])
-    }
-}
 
 struct CustomRoudedRectangle: Shape {
     func path(in rect: CGRect) -> Path {
@@ -134,5 +177,43 @@ struct CustomRoudedRectangle: Shape {
         path.addArc(center: CGPoint(x: cornerRadius, y: height - cornerRadius), radius: cornerRadius, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
         path.closeSubpath()
         return path
+    }
+}
+
+struct BudgetChartView_Previews: PreviewProvider {
+    static var previews: some View {
+        BudgetChartView(filterBudgetArray: [
+            Budget(
+                id: UUID(),
+                budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
+                category:
+                    [
+                        BudgetCategory(
+                            id: UUID(),
+                            name: "Shopping",
+                            primaryBackgroundColor: "ColorGoldenrod"
+                        )
+                    ],
+                allocatedAmount: 400000.00,
+                currentAmountSpent: 100000.00,
+                numberOfDaysSpent: 8,
+                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+            ),
+            Budget(
+                id: UUID(),
+                budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
+                category:
+                    [
+                        BudgetCategory(
+                            id: UUID(),
+                            name: "Entertainment",
+                            primaryBackgroundColor: "ColorGoldenrod"
+                        )
+                    ],
+                allocatedAmount: 100000.00,
+                currentAmountSpent: 10600.00,
+                numberOfDaysSpent: 8,
+                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+            ),], type: .monthly)
     }
 }

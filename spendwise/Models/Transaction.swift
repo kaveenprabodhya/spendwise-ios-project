@@ -10,10 +10,10 @@ import Foundation
 struct BudgetTransaction: Identifiable {
     let id: UUID
     let category: TransactionCategory
-    let transactionObject: Transaction
+    let transaction: Transaction
 }
 
-enum TransactionCategory {
+enum TransactionCategory: Codable {
     case income
     case expense
 }
@@ -21,7 +21,7 @@ enum TransactionCategory {
 struct Transaction: Identifiable {
     let id: UUID
     let date: Date
-    let category: String
+    let budgetCategory: String
     let amount: Double
     let description: String
     let paymentMethod: String

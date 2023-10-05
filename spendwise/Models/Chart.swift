@@ -14,3 +14,15 @@ struct SpentAmountForPreviousSevenDays: Identifiable, Codable {
     let daysCount: Int
     let budgetType: BudgetTypeOption
 }
+
+struct PreviousMonthSpentAmountRelatedToCurrentPeriod: Identifiable, Codable {
+    let id: UUID
+    let amount: Double
+}
+
+struct OngoingWeekExpensesByDay: Identifiable, Codable {
+    let id: UUID
+    let type: TransactionCategory
+    let amount: Double
+    let shortDay: String
+}

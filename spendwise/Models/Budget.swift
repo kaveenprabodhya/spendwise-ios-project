@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Budget: Identifiable {
+struct Budget: Identifiable, Codable {
     let id: UUID
     let budgetType: BudgetType
     let category: [BudgetCategory]
@@ -17,18 +17,18 @@ struct Budget: Identifiable {
     let footerMessage: FooterMessage
 }
 
-struct FooterMessage {
+struct FooterMessage: Codable {
     let message: String
     let warning: Bool
 }
 
-struct BudgetCategory: Identifiable, Hashable {
+struct BudgetCategory: Identifiable, Hashable, Codable {
     let id: UUID
     let name: String
     let primaryBackgroundColor: String
 }
 
-struct BudgetType {
+struct BudgetType: Codable {
     let type: BudgetTypeOption
     let date: BudgetDateOption
     let limit: Double
@@ -40,9 +40,17 @@ enum BudgetTypeOption: String, Codable {
     case yearly = "yearly"
 }
 
-enum BudgetDateOption {
+enum BudgetDateOption: Codable {
     case yearOnly(Int)
     case monthOnly(Int)
     // month, start-date, end-date
     case dateRange(Int, Int, Int)
+}
+
+struct BudgetOverViewForUser: Identifiable, Codable {
+    let id: UUID
+    let overallAmount: Double
+    let overallSpentAmount: Double
+    let overallExpenseAmount: Double
+    let overallIncomeAmount: Double
 }

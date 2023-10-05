@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NotificationView: View {
     @Environment(\.dismiss) private var dismiss
+    @Binding var newCount: Int
+    
     var body: some View {
         VStack{
             
@@ -47,6 +49,6 @@ struct NotificationView: View {
 
 struct NotificationView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationView()
+        NotificationView(newCount: .constant(0))
     }
 }

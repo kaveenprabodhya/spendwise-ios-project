@@ -8,6 +8,8 @@
 import SwiftUI
 
 class BudgetViewModel: ObservableObject {
+    @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
+    @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     @Published var budgetCategoryArray: [BudgetCategory]  =
     [
         BudgetCategory(
@@ -101,7 +103,6 @@ class BudgetViewModel: ObservableObject {
             primaryBackgroundColor: "ColorEducation"
         )
     ]
-    @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
     @Published var budgetArray:[Budget] =
     [
         Budget(
@@ -631,7 +632,7 @@ class BudgetViewModel: ObservableObject {
     }
     
     
-    func fetchData() {
+    func fetchBudgetData() {
         ApiService.fetchBudgetData { result in
             DispatchQueue.main.async {
                 switch result {
@@ -650,6 +651,19 @@ class BudgetViewModel: ObservableObject {
                 switch result {
                 case .success(let amount):
                     self.amountSpentForLast7Days = amount
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func fetchOverallBudgetForUser(currentUser: User) {
+        ApiService.fetchOverallBudgetForUser(currentUser: currentUser) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let overview):
+                    self.overview = overview
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }

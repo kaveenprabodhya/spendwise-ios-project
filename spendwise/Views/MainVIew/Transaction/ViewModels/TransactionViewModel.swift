@@ -12,10 +12,10 @@ class TransactionViewModel: ObservableObject {
         BudgetTransaction(
             id: UUID(),
             category: .expense,
-            transactionObject: Transaction(
+            transaction: Transaction(
                 id: UUID(),
                 date: Date.now,
-                category: "Shopping",
+                budgetCategory: "Shopping",
                 amount: 19800,
                 description: "Buy some cloths",
                 paymentMethod: "Wallet",
@@ -26,10 +26,10 @@ class TransactionViewModel: ObservableObject {
         BudgetTransaction(
             id: UUID(),
             category: .income,
-            transactionObject: Transaction(
+            transaction: Transaction(
                 id: UUID(),
                 date: Date.now,
-                category: "Groceries",
+                budgetCategory: "Groceries",
                 amount: 19800,
                 description: "Buy some grocery",
                 paymentMethod: "Wallet",
