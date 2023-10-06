@@ -20,9 +20,11 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
     var placeholderStringFontSize: CGFloat?
     var fontSize: CGFloat?
     var height: CGFloat?
+    var sheetCornerRadius: CGFloat?
+    var sheetHeight: CGFloat?
     var cornerRadius: CGFloat?
     var strokeColor: Color?
-    @Binding var dismiss: Bool
+    let dismiss: Bool?
     @ViewBuilder let sheetContent: SheetContent
     
     init(label: String,
@@ -36,9 +38,11 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
          placeholderStringFontSize: CGFloat? = nil,
          fontSize: CGFloat? = nil,
          height: CGFloat? = nil,
+         sheetCornerRadius: CGFloat? = nil,
+         sheetHeight: CGFloat? = nil,
          cornerRadius: CGFloat? = nil,
          strokeColor: Color? = nil,
-         dismiss: Binding<Bool>? = nil,
+         dismiss: Bool? = nil,
          @ViewBuilder content: @escaping () -> SheetContent) {
         self.label = label
         self._selectedOption = selectedOption
@@ -51,9 +55,11 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
         self.placeholderStringFontSize = placeholderStringFontSize
         self.fontSize = fontSize
         self.height = height
+        self.sheetCornerRadius = sheetCornerRadius
+        self.sheetHeight = sheetHeight
         self.cornerRadius = cornerRadius
         self.strokeColor = strokeColor
-        self._dismiss = dismiss ?? .constant(false)
+        self.dismiss = dismiss
         self.sheetContent = content()
     }
     
@@ -144,6 +150,17 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
                                 self.sheetContent
                             }
                         }
+                        if let dismissBool = dismiss {
+                            if dismissBool {
+                                Button {
+                                    isOptionPresented = false
+                                } label: {
+                                    
+                                }
+                                .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 54, label: "Done", cornerRadius: 12))
+                            }
+                        }
+                        
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .padding()
@@ -155,7 +172,8 @@ struct SelectOptionView<T: Hashable, SheetContent: View>: View {
                 ))
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .edgesIgnoringSafeArea(.bottom)
-                .presentationDetents([.medium])
+                .presentationDetents(sheetHeight != nil ? [.height(sheetHeight!)] : [.medium, .large])
+                .presentationCornerRadius(sheetCornerRadius != nil ? sheetCornerRadius! : 25)
                 .presentationDragIndicator(.hidden)
             }
     }
@@ -201,10 +219,12 @@ struct DropDownMenuListRow: View {
 struct SelectOptionView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var viewModel = BudgetViewModel()
-        SelectOptionView<String?, VStack<Text>>(label: "Pick your Budget Type", sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options: ["OPtion"]) {
-             VStack {
+        SelectOptionView<String?, VStack<Text>>(label: "Pick your Budget Type", sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options: ["OPtion"], dismiss: true, content: {
+            
+            VStack {
                 Text("Hiiiiii")
             }
-        }.padding()
+            
+        }).padding()
     }
 }

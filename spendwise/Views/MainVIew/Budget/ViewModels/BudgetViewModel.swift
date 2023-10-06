@@ -15,92 +15,110 @@ class BudgetViewModel: ObservableObject {
         BudgetCategory(
             id: UUID(),
             name: "Shopping",
-            primaryBackgroundColor: "ColorShopping"
+            primaryBackgroundColor: "ColorShopping",
+            iconName: "cart"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Transportation",
-            primaryBackgroundColor: "ColorTransportation"
+            primaryBackgroundColor: "ColorTransportation",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Groceries",
-            primaryBackgroundColor: "ColorGroceries"
+            primaryBackgroundColor: "ColorGroceries",
+            iconName: "basket"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Dining Out",
-            primaryBackgroundColor: "ColorDiningOut"
+            primaryBackgroundColor: "ColorDiningOut",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Rent/Mortgage",
-            primaryBackgroundColor: "ColorRentAndMortgage"
+            primaryBackgroundColor: "ColorRentAndMortgage",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Utilities",
-            primaryBackgroundColor: "ColorUtilities"
+            primaryBackgroundColor: "ColorUtilities",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Healthcare",
-            primaryBackgroundColor: "ColorHealthcare"
+            primaryBackgroundColor: "ColorHealthcare",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Savings/Investments",
-            primaryBackgroundColor: "ColorSavingsAndInvestments"
+            primaryBackgroundColor: "ColorSavingsAndInvestments",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Clothing",
-            primaryBackgroundColor: "ColorClothing"
+            primaryBackgroundColor: "ColorClothing",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Travel",
-            primaryBackgroundColor: "ColorTravel"
+            primaryBackgroundColor: "ColorTravel",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Maintenance",
-            primaryBackgroundColor: "ColorMaintenance"
+            primaryBackgroundColor: "ColorMaintenance",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Gifts/Donations",
-            primaryBackgroundColor: "ColorGiftsAndDonations"
+            primaryBackgroundColor: "ColorGiftsAndDonations",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Subscriptions",
-            primaryBackgroundColor: "ColorSubscriptions"
+            primaryBackgroundColor: "ColorSubscriptions",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Miscellaneous",
-            primaryBackgroundColor: "ColorMiscellaneous"
+            primaryBackgroundColor: "ColorMiscellaneous",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Taxes",
-            primaryBackgroundColor: "ColorTaxes"
+            primaryBackgroundColor: "ColorTaxes",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Entertainment",
-            primaryBackgroundColor: "ColorEntertainment"
+            primaryBackgroundColor: "ColorEntertainment",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Debt Repayment",
-            primaryBackgroundColor: "ColorDebtRepayment"
+            primaryBackgroundColor: "ColorDebtRepayment",
+            iconName: ""
         ),
         BudgetCategory(
             id: UUID(),
             name: "Education",
-            primaryBackgroundColor: "ColorEducation"
+            primaryBackgroundColor: "ColorEducation",
+            iconName: ""
         )
     ]
     @Published var budgetArray:[Budget] =
@@ -113,7 +131,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod"
+                        primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
                     )
                 ],
             allocatedAmount: 300000.00,
@@ -129,7 +147,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod"
+                        primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
                     )
                 ],
             allocatedAmount: 300000.00,
@@ -145,7 +163,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Entertainment",
-                        primaryBackgroundColor: "ColorGoldenrod"
+                        primaryBackgroundColor: "ColorGoldenrod", iconName: ""
                     )
                 ],
             allocatedAmount: 100000.00,
@@ -161,7 +179,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Dining",
-                        primaryBackgroundColor: "ColorGoldenrod"
+                        primaryBackgroundColor: "ColorGoldenrod", iconName: ""
                     )
                 ],
             allocatedAmount: 300000.00,
@@ -177,7 +195,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 546321.00,
@@ -193,7 +211,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 546321.00,
@@ -209,7 +227,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 52362.00,
@@ -225,7 +243,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 52362.00,
@@ -241,7 +259,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Groceries",
-                        primaryBackgroundColor: "ColorSecondTealGreen"
+                        primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
                     )
                 ],
             allocatedAmount: 785697.00,
@@ -257,7 +275,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Rent",
-                        primaryBackgroundColor: "ColorLavenderPurple"
+                        primaryBackgroundColor: "ColorLavenderPurple", iconName: ""
                     )
                 ],
             allocatedAmount: 785697.00,
@@ -273,7 +291,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 785697.00,
@@ -289,7 +307,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Groceries",
-                        primaryBackgroundColor: "ColorSecondTealGreen"
+                        primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
                     )
                 ],
             allocatedAmount: 785697.00,
@@ -305,7 +323,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 458000.00,
@@ -321,7 +339,7 @@ class BudgetViewModel: ObservableObject {
                     BudgetCategory(
                         id: UUID(),
                         name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue"
+                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
                     )
                 ],
             allocatedAmount: 458000.00,

@@ -27,11 +27,17 @@ struct BottomLineTextFieldView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 6)
             }
-            TextField("", text: $textInputVal, prompt: Text("\(placeholder)").font(.system(size: placeholderFontSize != nil ? placeholderFontSize! : 24, weight: .medium)).foregroundColor(placeholderColor != nil ? placeholderColor! : .black))
+            TextField(
+                "",
+                text: $textInputVal,
+                prompt: Text("\(placeholder)")
+                    .font(.system(size: placeholderFontSize != nil ? placeholderFontSize! : 24, weight: .medium))
+                    .foregroundColor(placeholderColor != nil ? placeholderColor! : .black)
+            )
                 .foregroundColor(fontColor != nil ? fontColor! : .black)
                 .textFieldStyle(BottomLineTextFieldStyle(bottomLineColor: bottomLineColor))
                 .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24))
-        }.padding()
+        }
     }
 }
 
@@ -45,7 +51,7 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
                     Rectangle()
                         .frame(height: 2, alignment: .bottom)
                         .foregroundColor(bottomLineColor != nil ? bottomLineColor! : .black)
-                        .padding(.top, 45)
+                        .padding(.top, 34)
                 )
         }
     }
@@ -53,6 +59,7 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
 
 struct BottomLineTextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomLineTextFieldView(label: "Name of Budget", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, placeholderColor: .green, labelSize: 32, textFieldFontSize: 32, textInputVal: .constant(""))
+        BottomLineTextFieldView(label: "", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, placeholderColor: .green, labelSize: 20, textFieldFontSize: 32, textInputVal: .constant(""))
+            .padding()
     }
 }

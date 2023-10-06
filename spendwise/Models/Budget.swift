@@ -26,6 +26,7 @@ struct BudgetCategory: Identifiable, Hashable, Codable {
     let id: UUID
     let name: String
     let primaryBackgroundColor: String
+    let iconName: String
 }
 
 struct BudgetType: Codable {

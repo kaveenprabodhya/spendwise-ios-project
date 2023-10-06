@@ -21,6 +21,7 @@ enum TransactionCategory: Codable {
 struct Transaction: Identifiable {
     let id: UUID
     let date: Date
+    let budgetType: BudgetTypeOption
     let budgetCategory: String
     let amount: Double
     let description: String

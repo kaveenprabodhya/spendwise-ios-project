@@ -13,7 +13,7 @@ struct DetailBudgetView: View {
     @State private var capsuleWidth: CGFloat = 0
     @State private var categoryNameWidth: CGFloat = 0
     
-    var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue")], allocatedAmount: 300000000, currentAmountSpent: 3000000000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
+    var budget:Budget = Budget(id: UUID(), budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 300), category: [BudgetCategory(id: UUID(), name: "Shopping", primaryBackgroundColor: "ColorVividBlue", iconName: "cart")], allocatedAmount: 300000000, currentAmountSpent: 3000000000, numberOfDaysSpent: 2, footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: false))
     
     func getTextWidth(text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 18, weight: .bold)

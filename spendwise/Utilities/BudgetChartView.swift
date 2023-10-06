@@ -22,7 +22,7 @@ struct BudgetChartView: View {
                     Text("\(DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1])")
                         .font(.system(size: 16, weight: .semibold))
                 }
-                .padding(.trailing, 12)
+                .padding(.horizontal, 12)
             case .weekly:
                 HStack {
                     Text("My Weekly Budgets")
@@ -31,7 +31,7 @@ struct BudgetChartView: View {
                     Text("\(DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1])")
                         .font(.system(size: 16, weight: .semibold))
                 }
-                .padding(.trailing, 12)
+                .padding(.horizontal, 12)
             case .yearly:
                 HStack {
                     Text("My Yealry Budgets")
@@ -40,7 +40,7 @@ struct BudgetChartView: View {
                     Text("\(String(Calendar.current.component(.year, from: Date())))")
                         .font(.system(size: 16, weight: .semibold))
                 }
-                .padding(.trailing, 12)
+                .padding(.horizontal, 12)
             }
             VStack {
                 let filteredBudgets = filterBudgets(by: Date(), budgets: filterBudgetArray)
@@ -191,7 +191,7 @@ struct BudgetChartView_Previews: PreviewProvider {
                         BudgetCategory(
                             id: UUID(),
                             name: "Shopping",
-                            primaryBackgroundColor: "ColorGoldenrod"
+                            primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
                         )
                     ],
                 allocatedAmount: 400000.00,
@@ -207,7 +207,7 @@ struct BudgetChartView_Previews: PreviewProvider {
                         BudgetCategory(
                             id: UUID(),
                             name: "Entertainment",
-                            primaryBackgroundColor: "ColorGoldenrod"
+                            primaryBackgroundColor: "ColorGoldenrod", iconName: ""
                         )
                     ],
                 allocatedAmount: 100000.00,
