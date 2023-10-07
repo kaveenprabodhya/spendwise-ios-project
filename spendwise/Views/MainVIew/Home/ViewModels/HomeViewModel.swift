@@ -45,7 +45,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func fetchPrevoiusMonthlyAverage(currentUser: User) {
-        ApiService.fetchPreviousMonthSpentAmountRelatedToCurrentPeriod(currentUser: currentUser) { result in
+        ChartApiService.fetchPreviousMonthSpentAmountRelatedToCurrentPeriod(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let prevoiusMonthlyAverage):
@@ -58,7 +58,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func fetchOngoingWeekExpenseAndIncomeByDay(currentUser: User) {
-        ApiService.fetchOngoingWeekExpenseAndIncomeByDay(currentUser: currentUser) { result in
+        ChartApiService.fetchOngoingWeekExpenseAndIncomeByDay(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let ongoingWeekExpensesAndIncome):

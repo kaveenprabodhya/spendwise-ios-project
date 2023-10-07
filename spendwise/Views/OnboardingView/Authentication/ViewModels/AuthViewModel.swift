@@ -32,7 +32,7 @@ class AuthViewModel: ObservableObject {
             errorPassword = nil
         }
         
-        ApiService.authenticate(email: email, password: password) { result in
+        AuthApiService.authenticate(email: email, password: password) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):

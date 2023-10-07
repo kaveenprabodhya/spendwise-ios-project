@@ -6,23 +6,24 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct NewTransactionView: View {
     @Environment(\.dismiss) private var dismiss
-    @State var inputAmount: String = ""
-    @State var typeSelectedOption: String = ""
-    @State var categorySelectedOption: String = ""
-    @State var budgetTypeSelectedOption: String = ""
-    @State var descriptionVal: String = ""
-    @State var walletSecletedOption: String = ""
-    @State var frequencySelectedOption: String = ""
-    @State var endAfterSecletedOption: String = ""
-    @State var repeatTransaction: Bool = false
-    @State var addAttachment: Bool = false
-    @State var isSuccess: Bool = false
-    @State var selectedDate = Date()
-    @State var selectedDate2 = Date()
-    @ObservedObject var budgetViewModel = BudgetViewModel()
+    @ObservedObject var budgetViewModel: BudgetViewModel = BudgetViewModel()
+    @ObservedObject var transactionViewModel:TransactionViewModel = TransactionViewModel()
+    
+    func getGradientForType(typeSelectedOption: String) -> [Color] {
+        let lowercasedOption = typeSelectedOption.lowercased()
+        switch lowercasedOption {
+        case "expense":
+            return [Color("ColorBrickRed"), Color("ColorDeepEspressoBrown")]
+        case "income":
+            return [Color("ColorForestGreen"), Color("ColorTeal")]
+        default:
+            return [Color("ColorAzureBlue")]
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -30,22 +31,13 @@ struct NewTransactionView: View {
                 CustomContainerBodyView(
                     gradientHeight: 240,
                     sheetHeight: 637,
-                    gradientColors: [Color("ColorAzureBlue")],
+                    gradientColors: getGradientForType(typeSelectedOption: transactionViewModel.typeSelectedOption),
                     headerContent: {
-                        TransactionHeaderView(inputAmount: $inputAmount)
+                        TransactionHeaderView(inputAmount: $transactionViewModel.inputAmount)
                     }){
                         TransactionBodyView(
-                            typeSelectedOption: $typeSelectedOption,
-                            categorySelectedOption: $categorySelectedOption,
-                            budgetTypeSelectedOption: $budgetTypeSelectedOption,
-                            descriptionVal: $descriptionVal,
-                            walletSecletedOption: $walletSecletedOption,
-                            repeatTransaction: $repeatTransaction,
-                            addAttachment: $addAttachment, budgetViewModel: budgetViewModel,
-                            isSuccess: $isSuccess,
-                            frequencySelectedOption: $frequencySelectedOption,
-                            selectedDate: $selectedDate,
-                            selectedDate2: $selectedDate2
+                            budgetViewModel: budgetViewModel,
+                            transactionViewModel: transactionViewModel
                         )
                     }
             }
@@ -71,14 +63,17 @@ struct NewTransactionView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        
+                        transactionViewModel.submit()
                     } label: {
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(Color("ColorVividBlue"))
-                            .frame(width: 82, height: 32)
+                            .fill(Color("ColorDarkBlue"))
+                            .frame(width: 78, height: 32)
                             .overlay {
-                                Text("Create")
-                                    .foregroundStyle(.white)
+                                HStack(alignment: .center) {
+                                    Text("Create")
+                                        .foregroundStyle(.white)
+                                    .fontWeight(.medium)
+                                }
                             }
                     }
                 }
@@ -95,43 +90,30 @@ struct TransactionHeaderView: View {
                 .foregroundColor(.white)
                 .font(.system(size: 24, weight: .semibold))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            HStack {
+            HStack(alignment: .bottom) {
                 Text("LKR")
                     .foregroundColor(.white)
                     .font(.system(size: 64, weight: .semibold))
                 BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, textInputVal: $inputAmount)
+                    .padding(.vertical, 15)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
+        .padding(.top, 15)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 struct TransactionBodyView: View {
-    @Binding var typeSelectedOption: String
-    @Binding var categorySelectedOption: String
-    @Binding var budgetTypeSelectedOption: String
-    @Binding var descriptionVal: String
-    @Binding var walletSecletedOption: String
-    @Binding var repeatTransaction: Bool
-    @Binding var addAttachment: Bool
     @ObservedObject var budgetViewModel: BudgetViewModel
-    @Binding var isSuccess: Bool
-    @State var isRepeatTransactionSuccess: Bool = false
-    @State var isAddAttachmentSuccess: Bool = false
-    @Binding var frequencySelectedOption: String
-    @Binding var selectedDate: Date
-    @Binding var selectedDate2: Date
-    @State var endAfter: String = ""
-    @State var pickdate: String = ""
+    @ObservedObject var transactionViewModel: TransactionViewModel
     
     var body: some View {
         VStack(spacing: 0) {
             let transactionOptions = ["Expense", "Income"]
             SelectOptionView(
                 label: "",
-                selectedOption: $typeSelectedOption,
+                selectedOption: $transactionViewModel.typeSelectedOption,
                 sheetLabel: "Pick Trtansaction Type",
                 placeholderString: "Select Transaction",
                 options: transactionOptions,
@@ -142,21 +124,31 @@ struct TransactionBodyView: View {
                 .padding(.top, 12)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
-            SelectOptionView(
-                label: "",
-                selectedOption: $categorySelectedOption,
-                sheetLabel: "Pick your Category",
-                placeholderString: "Select Category",
-                options: budgetViewModel.budgetCategoryArray,
-                placeholderStringFontSize: 20,
-                height: 54
-            ){}
-                .padding(.vertical, 5)
-                .padding(.horizontal, 15)
+            if let error = transactionViewModel.errorInputAmount {
+//                Text("\(error)")
+//                    .foregroundStyle(Color("ColorCherryRed"))
+//                    .font(.system(size: 16, weight: .semibold))
+//                    .padding(.bottom, 16)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.horizontal, 30)
+            }
+            if transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense") {
+                SelectOptionView(
+                    label: "",
+                    selectedOption: $transactionViewModel.categorySelectedOption,
+                    sheetLabel: "Pick your Category",
+                    placeholderString: "Select Category",
+                    options: budgetViewModel.budgetCategoryArray,
+                    placeholderStringFontSize: 20,
+                    height: 54
+                ){}
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 15)
+            }
             let budgetTypeOptions = ["Weekly", "Monthly", "Yearly"]
             SelectOptionView(
                 label: "",
-                selectedOption: $budgetTypeSelectedOption,
+                selectedOption: $transactionViewModel.budgetTypeSelectedOption,
                 sheetLabel: "Pick your Budget Type",
                 placeholderString: "Select Budget Type", 
                 options: budgetTypeOptions,
@@ -168,25 +160,26 @@ struct TransactionBodyView: View {
                 .padding(.horizontal, 15)
             SelectOptionView<String, VStack>(
                 label: "",
-                selectedOption: $pickdate,
+                selectedOption: $transactionViewModel.pickdate,
                 sheetLabel: "Date",
                 placeholderString: "Select Date",
                 placeholderStringFontSize: 20,
                 height: 54,
+                dismiss: true,
                 content: {
                     VStack(alignment: .center, spacing: 10) {
-                        DatePicker("", selection: $selectedDate2, displayedComponents: .date)
+                        DatePicker("", selection: $transactionViewModel.selectedDate2, displayedComponents: .date)
                             .datePickerStyle(.wheel).foregroundStyle(.white)
-                            .onChange(of: selectedDate) { newDate in
-                                pickdate = formatDate(date: newDate)
+                            .onChange(of: transactionViewModel.selectedDate2) { newDate in
+                                transactionViewModel.pickdate = formatDate(date: newDate)
                             }
                             .onAppear {
-                                pickdate = formatDate(date: Date())
+                                transactionViewModel.pickdate = formatDate(date: Date())
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                         
                         Spacer()
-                        Text("\(formatDate(date: selectedDate2))")
+                        Text("\(formatDate(date: transactionViewModel.selectedDate2))")
                             .font(.system(size: 20))
                             .fontWeight(.medium)
                             .foregroundStyle(.black)
@@ -207,7 +200,7 @@ struct TransactionBodyView: View {
                             fontColor: .black,
                             textFieldFontSize: 20, 
                             placeholderFontSize: 20,
-                            textInputVal: $descriptionVal
+                            textInputVal: $transactionViewModel.descriptionVal
                         )
                     }
                     .padding(.horizontal, 15)
@@ -216,7 +209,7 @@ struct TransactionBodyView: View {
                 .padding(.horizontal, 15)
             SelectOptionView(
                 label: "",
-                selectedOption: $walletSecletedOption,
+                selectedOption: $transactionViewModel.walletSecletedOption,
                 sheetLabel: "Pick your Wallet Type",
                 placeholderString: "Select Wallet",
                 options: ["Cash", "Paypal", "Apple", "Samsung Pay", "Amazon Pay"],
@@ -225,10 +218,10 @@ struct TransactionBodyView: View {
             ){}
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
-            if !isAddAttachmentSuccess {
+            if !transactionViewModel.isAddAttachmentSuccess {
                 Spacer()
                 Button(action: {
-                    self.addAttachment = true
+                    transactionViewModel.addAttachment = true
                 }, label: {
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
@@ -248,20 +241,22 @@ struct TransactionBodyView: View {
                 Spacer()
             } else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color("ColorAzureBlue"))
-                        .frame(width: 112, height: 112)
-                        .overlay {
-                            Image("successful-alert")
-                                .resizable()
-                                .scaledToFit()
-                        }
+                    if let avatarImg = transactionViewModel.avatarImage {
+                        avatarImg
+                            .resizable()
+                            .scaledToFill()
+                            .background(.red)
+                            .frame(width: 112, height: 112)
+                            .clipShape(RoundedRectangle(cornerRadius: 25.0))
+                    }
                     Circle()
                         .fill(.secondary)
                         .frame(width: 28, height: 28)
                         .overlay {
                             Button(action: {
-                                
+                                transactionViewModel.avatarItem = nil
+                                transactionViewModel.avatarImage = nil
+                                transactionViewModel.isAddAttachmentSuccess = false
                             }, label: {
                                 Image(systemName: "xmark")
                                     .font(.system(size: 14, weight: .medium))
@@ -273,9 +268,10 @@ struct TransactionBodyView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
                 .padding(.vertical, 5)
+                .padding(.top, 10)
+                .padding(.bottom, 10)
             }
-            
-            if !isRepeatTransactionSuccess {
+            if !transactionViewModel.isRepeatTransactionSuccess {
                 VStack(spacing: 0) {
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(.black, lineWidth: 2)
@@ -293,7 +289,7 @@ struct TransactionBodyView: View {
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     Spacer()
-                                    CustomToggleView(isOn: $repeatTransaction)
+                                    CustomToggleView(isOn: $transactionViewModel.repeatTransaction)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal, 15)
@@ -309,11 +305,11 @@ struct TransactionBodyView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Frequency").fontWeight(.medium)
-                            Text("\(frequencySelectedOption)")
+                            Text("\(transactionViewModel.frequencySelectedOption)")
                         }.padding(.trailing, 15)
                         VStack {
                             Text("End After").fontWeight(.medium).frame(maxWidth: .infinity, alignment: .leading)
-                            Text("\(formatDate(date: selectedDate))")
+                            Text("\(formatDate(date: transactionViewModel.selectedDate))")
                                 .lineLimit(1)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -335,50 +331,32 @@ struct TransactionBodyView: View {
                     }
                 }
                 .padding(.horizontal, 15)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .padding(.vertical, 5)
             }
             Spacer()
             
         }
-        .sheet(isPresented: $addAttachment) {
+        .sheet(isPresented: $transactionViewModel.addAttachment) {
             VStack {
-                HStack(spacing: 40) {
-                    Button(action: {
-                        isAddAttachmentSuccess = true
-                        addAttachment = false
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 16.0)
-                            .fill(Color("ColorVividBlue"))
-                            .frame(width: 107, height: 91)
-                            .overlay {
-                                VStack {
-                                    Image(systemName: "camera")
-                                        .font(.system(size: 24))
-                                        .foregroundStyle(.white)
-                                    Text("Camera")
-                                        .font(.system(size: 22))
-                                        .foregroundStyle(.white)
+                HStack(spacing: 60) {
+                    VStack {
+                        PhotosPicker("", selection: $transactionViewModel.avatarItem, matching: .images)
+                            .buttonStyle(CustomImageButtonStyle(iconName: "photo", labelName: "Image" ,width: 107, height: 91))
+                    }
+                    .onChange(of: transactionViewModel.avatarItem) { _ in
+                        transactionViewModel.isAddAttachmentSuccess = true
+                        transactionViewModel.addAttachment = false
+                        Task {
+                            if let data = try? await transactionViewModel.avatarItem?.loadTransferable(type: Data.self) {
+                                if let uiImage = UIImage(data: data) {
+                                    transactionViewModel.avatarImage = Image(uiImage: uiImage)
+                                    return
                                 }
                             }
-                    })
-                    Button(action: {
-                        isAddAttachmentSuccess = true
-                        addAttachment = false
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 16.0)
-                            .fill(Color("ColorVividBlue"))
-                            .frame(width: 107, height: 91)
-                            .overlay {
-                                VStack {
-                                    Image(systemName: "photo")
-                                        .font(.system(size: 24))
-                                        .foregroundStyle(.white)
-                                    Text("Image")
-                                        .font(.system(size: 22))
-                                        .foregroundStyle(.white)
-                                }
-                            }
-                    })
+                            
+                            print("Failed")
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 
@@ -390,12 +368,12 @@ struct TransactionBodyView: View {
             .presentationBackground(.orange)
             .presentationCornerRadius(25)
         }
-        .sheet(isPresented: $repeatTransaction) {
+        .sheet(isPresented: $transactionViewModel.repeatTransaction) {
             VStack {
                 let budgetTypeOptionsList = ["Monthly", "Weekly", "Yearly"]
                 SelectOptionView(
                     label: "",
-                    selectedOption: $frequencySelectedOption,
+                    selectedOption: $transactionViewModel.frequencySelectedOption,
                     sheetLabel: "Pick your Frequency",
                     placeholderString: "Frequency",
                     options: budgetTypeOptionsList,
@@ -409,44 +387,39 @@ struct TransactionBodyView: View {
                     .padding(.horizontal, 15)
                 SelectOptionView<String, VStack>(
                     label: "",
-                    selectedOption: $endAfter,
+                    selectedOption: $transactionViewModel.endAfter,
                     sheetLabel: "Date",
                     placeholderString: "End After",
                     iconColor: .white,
                     placeholderStringColor: .white,
                     placeholderStringFontSize: 20,
-                    strokeColor: .white, content: {
+                    strokeColor: .white,
+                    dismiss: true,
+                    content: {
                     VStack(spacing: 10) {
-                        DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                        DatePicker("", selection: $transactionViewModel.selectedDate, displayedComponents: .date)
                             .datePickerStyle(.wheel).foregroundStyle(.white)
-                            .onChange(of: selectedDate) { newDate in
-                                endAfter = formatDate(date: newDate)
+                            .onChange(of: transactionViewModel.selectedDate) { newDate in
+                                transactionViewModel.endAfter = formatDate(date: newDate)
                             }
                             .onAppear {
-                                endAfter = formatDate(date: Date())
+                                transactionViewModel.endAfter = formatDate(date: Date())
                             }
                         
                         Spacer()
-                        Text("\(formatDate(date: selectedDate))")
+                        Text("\(formatDate(date: transactionViewModel.selectedDate))")
                             .font(.system(size: 20))
                             .fontWeight(.medium)
                             .foregroundStyle(.black)
                             .frame(maxWidth: .infinity, alignment: .center)
-                        Spacer()
-                        HStack(alignment: .center) {
-                            Image(systemName: "exclamationmark.circle")
-                                .font(.system(size: 28))
-                            Text("After selecting the date, close the sheet and continue process.")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
                     }
                 })
                 .padding(.vertical, 6)
                 .padding(.horizontal, 15)
                 .padding(.bottom, 15)
                 Button(action: {
-                    self.repeatTransaction = false
-                    self.isRepeatTransactionSuccess = true
+                    transactionViewModel.repeatTransaction = false
+                    transactionViewModel.isRepeatTransactionSuccess = true
                 }, label: {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color("ColorVividBlue"))
@@ -477,6 +450,36 @@ struct TransactionBodyView: View {
         return dateFormatter.string(from: date)
     }
     
+}
+
+struct CustomImageButtonStyle: ButtonStyle {
+    var iconName: String
+    var labelName: String
+    var width: CGFloat
+    var height: CGFloat
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+            .frame(width: width, height: height)
+            .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 16.0)
+                    .fill(Color("ColorVividBlue"))
+                    .frame(width: width, height: height)
+                    .opacity(configuration.isPressed ? 0.8 : 1)
+                    .overlay(
+                        VStack {
+                            Image(systemName: iconName)
+                                .font(.system(size: 24))
+                                .foregroundStyle(.white)
+                            Text(labelName)
+                                .font(.system(size: 22))
+                                .foregroundStyle(.white)
+                        }
+                    )
+            )
+            .scaleEffect(configuration.isPressed ? 0.9 : 1)
+    }
 }
 
 struct NewIncomeView_Previews: PreviewProvider {

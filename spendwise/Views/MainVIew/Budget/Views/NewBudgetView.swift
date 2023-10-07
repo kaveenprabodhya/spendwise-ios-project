@@ -31,7 +31,8 @@ struct NewBudgetView: View {
                             .padding(.horizontal, 15)
                         
                         BottomLineTextFieldView(label: "Name of Budget", placeholder: "", textInputVal: $inputValue)
-                            .padding(.vertical, 6)
+                            .padding(.bottom, 12)
+                            .padding(.horizontal, 15)
                         
                         SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20) {}
                             .padding(.vertical, 6)

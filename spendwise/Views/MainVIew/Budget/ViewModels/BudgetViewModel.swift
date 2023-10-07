@@ -651,7 +651,7 @@ class BudgetViewModel: ObservableObject {
     
     
     func fetchBudgetData() {
-        ApiService.fetchBudgetData { result in
+        BudgetApiService.fetchAllBudgetDataForUser { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let budgetItems):
@@ -664,7 +664,7 @@ class BudgetViewModel: ObservableObject {
     }
     
     func fetchAmountSpentForLast7Days() {
-        ApiService.fetchAmountSpentForLast7Days { result in
+        ChartApiService.fetchAmountSpentForLast7Days { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let amount):
@@ -677,7 +677,7 @@ class BudgetViewModel: ObservableObject {
     }
     
     func fetchOverallBudgetForUser(currentUser: User) {
-        ApiService.fetchOverallBudgetForUser(currentUser: currentUser) { result in
+        BudgetApiService.fetchOverallBudgetForUser(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let overview):

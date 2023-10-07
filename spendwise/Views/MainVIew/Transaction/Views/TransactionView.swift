@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct TransactionView: View {
+    @Environment(\.dismiss) private var dismiss
     @State var sortedBy: String = "Monthly"
     @State var defaultVal: Int = 0
     @State var isOnFilterClicked: Bool = false
     @State var isOnCategoryClicked: Bool = false
     @State var isReportClicked: Bool = false
+    @State var filterByIncome: Bool = false
+    @State var filterByExpense: Bool = false
+    @State var sortByHighest: Bool = false
+    @State var sortByLowest: Bool = false
+    @State var sortByNewest: Bool = false
+    @State var sortByOldest: Bool = false
     @State private var checkedStates: [Bool] =  Array(repeating: false, count: 18)
     @ObservedObject var transactionViewModel: TransactionViewModel = TransactionViewModel()
     @ObservedObject var budgetViewModel: BudgetViewModel = BudgetViewModel()
@@ -88,6 +95,9 @@ struct TransactionView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
+        .onAppear {
+            transactionViewModel.fetchAllTransactionData()
+        }
         .sheet(isPresented: $isOnFilterClicked, content: {
             VStack(spacing: 0) {
                 VStack {
@@ -97,11 +107,16 @@ struct TransactionView: View {
                         .font(.system(size: 16, weight: .semibold))
                     Spacer()
                     Button(action: {
-                        
+                        filterByIncome = false
+                        filterByExpense = false
+                        sortByHighest = false
+                        sortByLowest = false
+                        sortByNewest = false
+                        sortByOldest = false
                     }, label: {
                         RoundedRectangle(cornerRadius: 25.0)
-                            .fill(Color("ColorEtherealMist"))
-                            .frame(width: 88, height: 48)
+                            .fill(Color(.systemGray3))
+                            .frame(width: 88, height: 38)
                             .overlay {
                                 Text("Reset")
                                     .foregroundStyle(Color("ColorVividBlue"))
@@ -119,25 +134,48 @@ struct TransactionView: View {
                         .padding(.horizontal, 15)
                     HStack {
                         RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.gray)
+                            .fill(filterByIncome ? .gray : .white)
                             .frame(width: 98, height: 48)
                             .overlay {
-                                Text("Income")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 18, weight: .medium))
+                                if !filterByIncome {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(.gray, lineWidth: 2)
+                                        .frame(width: 98, height: 48)
+                                        .overlay {
+                                            Text("Income")
+                                                .foregroundStyle(.black)
+                                                .font(.system(size: 18, weight: .medium))
+                                        }
+                                } else {
+                                    Text("Income")
+                                        .foregroundStyle(.white)
+                                        .font(.system(size: 18, weight: .medium))
+                                }
+                            }
+                            .onTapGesture {
+                                filterByIncome.toggle()
                             }
                         RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.white)
+                            .fill(filterByExpense ? .gray : .white)
                             .frame(width: 98, height: 48)
                             .overlay {
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .stroke(.gray, lineWidth: 2)
-                                    .frame(width: 98, height: 48)
-                                    .overlay {
-                                        Text("Income")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 18, weight: .medium))
-                                    }
+                                if !filterByExpense {
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .stroke(.gray, lineWidth: 2)
+                                        .frame(width: 98, height: 48)
+                                        .overlay {
+                                            Text("Expense")
+                                                .foregroundStyle(.black)
+                                                .font(.system(size: 18, weight: .medium))
+                                        }
+                                } else {
+                                    Text("Expense")
+                                        .foregroundStyle(.white)
+                                        .font(.system(size: 18, weight: .medium))
+                                }
+                            }
+                            .onTapGesture {
+                                filterByExpense.toggle()
                             }
                     }
                     .padding(.horizontal, 15)
@@ -147,11 +185,16 @@ struct TransactionView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 15)
                         .padding(.bottom, 8)
-                    let sortList: [String] = ["Highest", "Lowest","Newest", "Oldest"]
+                    let sortList: [(String, Binding<Bool>)] = [
+                        ("Highest", $sortByHighest),
+                        ("Lowest", $sortByLowest),
+                        ("Newest", $sortByNewest),
+                        ("Oldest", $sortByOldest)
+                    ]
                     let columns: [GridItem] = Array(repeating: .init(.fixed(100)), count: 3)
                     LazyVGrid(columns: columns, spacing: 8) {
-                        ForEach(sortList, id: \.self) { sort in
-                            VGridListItem(label: sort)
+                        ForEach(sortList, id: \.0) { sortLabel, boolVal in
+                            VGridListItem(label: sortLabel, clicked: boolVal)
                         }
                     }
                     .padding(.bottom, 8)
@@ -160,12 +203,12 @@ struct TransactionView: View {
                         .font(.system(size: 20, weight: .medium))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 15)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, 14)
                     Button {
                         isOnCategoryClicked = true
                     } label: {
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(.gray, lineWidth: 2)
+                            .stroke(.gray, lineWidth: 1)
                             .frame(height: 53)
                             .overlay {
                                 HStack(alignment: .center) {
@@ -189,22 +232,25 @@ struct TransactionView: View {
                             VStack {
                                 ScrollView {
                                     ForEach(budgetViewModel.budgetCategoryArray.indices, id: \.self) { index in
-                                                    HStack {
-                                                        Text(budgetViewModel.budgetCategoryArray[index].name)
-                                                        Spacer()
-                                                        CheckboxView(checked: self.$checkedStates[index])
-                                                    }
-                                                    .padding()
-                                                }
+                                        HStack {
+                                            Text(budgetViewModel.budgetCategoryArray[index].name)
+                                            Spacer()
+                                            CheckboxView(checked: self.$checkedStates[index])
+                                        }
+                                        .padding()
+                                    }
                                 }
                                 .padding(.vertical, 6)
                             }
                             
                             Button {
-                                
-                            } label: {
-                                
-                            }
+                                let trueCount = checkedStates.reduce(0) { (count, value) in
+                                    return count + (value ? 1 : 0)
+                                }
+
+                                defaultVal = trueCount
+                                isOnCategoryClicked = false
+                            } label: {}
                             .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
                         }
                         .presentationDetents([.medium, .large])
@@ -236,6 +282,10 @@ struct TransactionView: View {
         )
         .navigationBarHidden(true)
         
+    }
+    
+    func countTrueValues() -> Int {
+        return checkedStates.filter { $0 }.count
     }
 }
 
@@ -358,51 +408,65 @@ struct TransactionList: View {
                 }
             }
             .padding(.horizontal, 12)
-            ScrollView() {
-                if let transactionByMonthOrWeek = transactionByMonthOrWeek {
-                    ForEach(transactionByMonthOrWeek, id: \.0) { month, transactions in
-                        if let monthVal = monthString {
-                            if monthVal == month {
-                                ForEach(transactions) { budgetTransaction in
-                                    ForEach(budgetCategoryArray) { category in
-                                        if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
-                                            TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+            GeometryReader { geometry in
+                ScrollView() {
+                    if let transactionByMonthOrWeek = transactionByMonthOrWeek {
+                        ForEach(transactionByMonthOrWeek, id: \.0) { month, transactions in
+                            if let monthVal = monthString {
+                                if monthVal == month {
+                                    ForEach(transactions) { budgetTransaction in
+                                        ForEach(budgetCategoryArray) { category in
+                                            if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
+                                                NavigationLink {
+                                                    
+                                                } label: {
+                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else {
-                                VStack {
-                                    Text("No transactions Found.")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.black)
+                                else {
+                                    VStack {
+                                        Text("No transactions Found.")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundStyle(.white)
+                                    }
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
                                 }
                             }
                         }
                     }
-                }
-                if let transactionByYear = transactionByYear {
-                    ForEach(transactionByYear, id: \.0) { year, transactions in
-                        if let yearVal = yearString {
-                            if yearVal == year {
-                                ForEach(transactions) { budgetTransaction in
-                                    ForEach(budgetCategoryArray) { category in
-                                        if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
-                                            TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+                    if let transactionByYear = transactionByYear {
+                        ForEach(transactionByYear, id: \.0) { year, transactions in
+                            if let yearVal = yearString {
+                                if yearVal == year {
+                                    ForEach(transactions) { budgetTransaction in
+                                        ForEach(budgetCategoryArray) { category in
+                                            if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
+                                                NavigationLink {
+                                                    
+                                                } label: {
+                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+                                                }
+
+                                                
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else {
-                                VStack {
-                                    Text("No transactions Found.")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.black)
+                                else {
+                                    VStack {
+                                        Text("No transactions Found.")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundStyle(.white)
+                                    }
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
                                 }
                             }
                         }
                     }
-                }
+                }.frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }
@@ -432,40 +496,6 @@ struct TransactionList: View {
         let calendar = Calendar.current
         let year = calendar.component(.year, from: date)
         return String(year)
-    }
-}
-
-struct CheckboxView: View {
-    @Binding var checked: Bool
-
-    var body: some View {
-        Image(systemName: checked ? "checkmark.square.fill" : "square")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 24, height: 24)
-            .foregroundColor(checked ? .blue : .black)
-            .onTapGesture {
-                self.checked.toggle()
-            }
-    }
-}
-
-struct VGridListItem: View {
-    var label: String
-    var body: some View {
-        RoundedRectangle(cornerRadius: 25.0)
-            .fill(.white)
-            .frame(width: 98, height: 48)
-            .overlay {
-                RoundedRectangle(cornerRadius: 25.0)
-                    .stroke(.gray, lineWidth: 2)
-                    .frame(width: 98, height: 48)
-                    .overlay {
-                        Text(label)
-                            .foregroundStyle(.black)
-                            .font(.system(size: 18, weight: .medium))
-                    }
-            }
     }
 }
 
@@ -519,6 +549,51 @@ struct TransactionListItem: View {
                 }
         }
         .padding(.horizontal, 15)
+    }
+}
+
+struct CheckboxView: View {
+    @Binding var checked: Bool
+
+    var body: some View {
+        Image(systemName: checked ? "checkmark.square.fill" : "square")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 24, height: 24)
+            .foregroundColor(checked ? .blue : .black)
+            .onTapGesture {
+                self.checked.toggle()
+            }
+    }
+}
+
+struct VGridListItem: View {
+    var label: String
+    @Binding var clicked: Bool
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 25.0)
+            .fill(clicked ? .gray : .white)
+            .frame(width: 98, height: 48)
+            .overlay {
+                if !clicked {
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(.gray, lineWidth: 2)
+                        .frame(width: 98, height: 48)
+                        .overlay {
+                            Text("Expense")
+                                .foregroundStyle(.black)
+                                .font(.system(size: 18, weight: .medium))
+                        }
+                } else {
+                    Text("Expense")
+                        .foregroundStyle(.white)
+                        .font(.system(size: 18, weight: .medium))
+                }
+            }
+            .onTapGesture {
+                clicked.toggle()
+            }
     }
 }
 

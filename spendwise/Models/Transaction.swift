@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BudgetTransaction: Identifiable {
+struct BudgetTransaction: Identifiable, Codable {
     let id: UUID
     let category: TransactionCategory
     let transaction: Transaction
@@ -18,7 +18,7 @@ enum TransactionCategory: Codable {
     case expense
 }
 
-struct Transaction: Identifiable {
+struct Transaction: Identifiable, Codable {
     let id: UUID
     let date: Date
     let budgetType: BudgetTypeOption
@@ -31,12 +31,12 @@ struct Transaction: Identifiable {
     let recurring: RecurringTransaction
 }
 
-struct RecurringTransaction {
+struct RecurringTransaction: Codable {
     let frequency: String
     let date: String
 }
 
-struct Attachment {
+struct Attachment: Codable {
     let type: String
     let url: URL
 }

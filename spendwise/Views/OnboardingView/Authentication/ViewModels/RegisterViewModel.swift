@@ -21,10 +21,10 @@ class RegisterViewModel: ObservableObject {
     @Published var confirmPassword: String = ""
     
     func register() {
-        let isNameEmpty = isEmptyName(name)
-        let isEmailEmpty = isEmptyEmail(email)
-        let isPasswordEmpty = isEmptyPassword(password)
-        let isConfirmPasswordEmpty = isEmptyConfirmPassword(confirmPassword)
+        let isNameEmpty = isFieldEmpty(name)
+        let isEmailEmpty = isFieldEmpty(email)
+        let isPasswordEmpty = isFieldEmpty(password)
+        let isConfirmPasswordEmpty = isFieldEmpty(confirmPassword)
         let isNameValid = isValidName(name)
         let isEmailValid = isValidEmail(email)
         let isPasswordValid = isValidPassword(password)
@@ -66,7 +66,7 @@ class RegisterViewModel: ObservableObject {
             errorConfirmPassword = nil
         }
         
-        ApiService.register(name: name, email: email, password: password) { result in
+        RegisterApiService.register(name: name, email: email, password: password) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
@@ -86,20 +86,8 @@ class RegisterViewModel: ObservableObject {
         return name.count <= 25
     }
     
-    private func isEmptyName(_ name: String) -> Bool {
-        return name.isEmpty
-    }
-    
-    private func isEmptyEmail(_ email: String) -> Bool {
-        return email.isEmpty
-    }
-    
-    private func isEmptyPassword(_ password: String) -> Bool {
-        return password.isEmpty
-    }
-    
-    private func isEmptyConfirmPassword(_ confirmPassword: String) -> Bool {
-        return confirmPassword.isEmpty
+    private func isFieldEmpty(_ fieldName: String) -> Bool {
+        return fieldName.isEmpty
     }
     
     private func isValidEmail(_ email: String) -> Bool {

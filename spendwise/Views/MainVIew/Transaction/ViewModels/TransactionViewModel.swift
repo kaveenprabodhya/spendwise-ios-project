@@ -6,9 +6,37 @@
 //
 
 import Foundation
+import PhotosUI
+import SwiftUI
 
 class TransactionViewModel: ObservableObject {
-    @Published var transactionsArray: [BudgetTransaction] = [
+    @Published var inputAmount: String = ""
+    @Published var typeSelectedOption: String = ""
+    @Published var categorySelectedOption: String = ""
+    @Published var budgetTypeSelectedOption: String = ""
+    @Published var descriptionVal: String = ""
+    @Published var walletSecletedOption: String = ""
+    @Published var frequencySelectedOption: String = ""
+    @Published var endAfterSecletedOption: String = ""
+    @Published var selectedDate = Date()
+    @Published var selectedDate2 = Date()
+    @Published var avatarImage: Image?
+    @Published var avatarItem: PhotosPickerItem?
+    @Published var repeatTransaction: Bool = false
+    @Published var addAttachment: Bool = false
+    @Published var isSuccess: Bool = false
+    @Published var isRepeatTransactionSuccess: Bool = false
+    @Published var isAddAttachmentSuccess: Bool = false
+    @Published var endAfter: String = ""
+    @Published var pickdate: String = ""
+    @Published var errorInputAmount: String? = nil
+    @Published var errorCategory: String? = nil
+    @Published var errorBudgetType: String? = nil
+    @Published var errorDescription: String? = nil
+    @Published var errorWallet: String? = nil
+    @Published var errorFrequency: String? = nil
+    @Published var errorEndAfter: String? = nil
+    @Published var transactionArray: [BudgetTransaction] = [
         BudgetTransaction(
             id: UUID(),
             category: .expense,
@@ -57,15 +85,15 @@ class TransactionViewModel: ObservableObject {
     ]
     
     var yearlyTransactions: [BudgetTransaction] {
-        transactionsArray.filter { $0.transaction.budgetType == .yearly }
+        transactionArray.filter { $0.transaction.budgetType == .yearly }
     }
     
     var monthlyTransactions: [BudgetTransaction] {
-        transactionsArray.filter { $0.transaction.budgetType == .monthly }
+        transactionArray.filter { $0.transaction.budgetType == .monthly }
     }
     
     var weeklyTransactions: [BudgetTransaction] {
-        transactionsArray.filter { $0.transaction.budgetType == .weekly }
+        transactionArray.filter { $0.transaction.budgetType == .weekly }
     }
     
     var transactionByMonth: [(String, [BudgetTransaction])] {
@@ -153,12 +181,69 @@ class TransactionViewModel: ObservableObject {
     }
     
     func filterTransactions(by category: TransactionCategory) -> [BudgetTransaction] {
-        return transactionsArray.filter { $0.category == category }
+        return transactionArray.filter { $0.category == category }
     }
     
     func formattedTime(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
+    }
+    
+    func fetchAllTransactionData() {
+        TransactionApiService.fetchAllTransactionDataForUser { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let transactionItems):
+                    self.transactionArray = transactionItems
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    private func isFieldEmpty(_ fieldName: String) -> Bool {
+        return fieldName.isEmpty
+    }
+    
+    func submit() {
+        let amount = isFieldEmpty(inputAmount)
+        let category = isFieldEmpty(categorySelectedOption)
+        let budgetType = isFieldEmpty(budgetTypeSelectedOption)
+        let description = isFieldEmpty(descriptionVal)
+        let wallet = isFieldEmpty(walletSecletedOption)
+        
+        let emptyMessage = "Don't leave empty fields"
+        if amount {
+            errorInputAmount = emptyMessage
+        }
+        else {
+            errorInputAmount = nil
+        }
+        if category {
+            errorCategory = emptyMessage
+        }
+        else {
+            errorCategory = nil
+        }
+        if budgetType {
+            errorBudgetType = emptyMessage
+        }
+        else {
+            errorBudgetType = nil
+        }
+        if  description {
+            errorDescription = emptyMessage
+        }
+        else {
+            errorDescription = nil
+        }
+        if wallet {
+            errorWallet = emptyMessage
+        }
+        else {
+            errorWallet = nil
+        }
     }
 }
