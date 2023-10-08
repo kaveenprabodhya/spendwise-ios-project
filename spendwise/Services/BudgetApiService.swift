@@ -22,8 +22,8 @@ enum NetworkError: Error {
 }
 
 class BudgetApiService {
-    static func fetchAllBudgetDataForUser(completion: @escaping (Result<[Budget], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/budgets/user-id") else {
+    static func fetchAllBudgetDataForUser(currentUser: User, completion: @escaping (Result<[Budget], NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/budgets") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -68,7 +68,7 @@ class BudgetApiService {
     }
 
     static func fetchOverallBudgetForUser(currentUser: User, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/budget/user-id/overall") else {
+        guard let url = URL(string: "https://your-api-url/user-id/budget/overall") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -112,5 +112,16 @@ class BudgetApiService {
         }.resume()
     }
     
+    static func createBudget() {
+        
+    }
+    
+    static func updateBudget() {
+        
+    }
+    
+    static func deleteBudget() {
+        
+    }
     
 }

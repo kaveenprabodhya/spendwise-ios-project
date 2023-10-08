@@ -155,9 +155,9 @@ struct HomeView: View {
             }
         }
         .onAppear{
-            viewModel.fetchBudgetData()
-            viewModel.fetchAmountSpentForLast7Days()
             if let currentUser = UserManager.shared.getCurrentUser() {
+                viewModel.fetchBudgetData(currentUser: currentUser)
+                viewModel.fetchAmountSpentForLast7Days(currentUser: currentUser)
                 viewModel.fetchOverallBudgetForUser(currentUser: currentUser)
                 homeViewModel.fetchPrevoiusMonthlyAverage(currentUser: currentUser)
                 homeViewModel.fetchOngoingWeekExpenseAndIncomeByDay(currentUser: currentUser)

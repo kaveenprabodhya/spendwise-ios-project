@@ -27,6 +27,7 @@ struct TransactionView: View {
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     
     var body: some View {
+        NavigationStack {
         VStack {
             HStack {
                 SelectOptionView(
@@ -83,189 +84,191 @@ struct TransactionView: View {
             .navigationDestination(isPresented: $isReportClicked) {
                 FinancialReportView()
             }
-                TabView() {
-                    if sortedBy == "Weekly" {
-                        WeeklyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
-                    } else if sortedBy == "Monthly" {
-                        MonthlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
-                    } else if sortedBy == "Yearly" {
-                        YearlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel)
-                    }
-                    
+            TabView() {
+                if sortedBy == "Weekly" {
+                    WeeklyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
+                } else if sortedBy == "Monthly" {
+                    MonthlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
+                } else if sortedBy == "Yearly" {
+                    YearlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel)
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .onAppear {
-            transactionViewModel.fetchAllTransactionData()
+            if let currentUser = UserManager.shared.getCurrentUser() {
+                transactionViewModel.fetchAllTransactionData(currentUser: currentUser)
+            }
         }
         .sheet(isPresented: $isOnFilterClicked, content: {
             VStack(spacing: 0) {
                 VStack {
-                HStack {
-                    Text("Filter Transaction")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 16, weight: .semibold))
-                    Spacer()
-                    Button(action: {
-                        filterByIncome = false
-                        filterByExpense = false
-                        sortByHighest = false
-                        sortByLowest = false
-                        sortByNewest = false
-                        sortByOldest = false
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(Color(.systemGray3))
-                            .frame(width: 88, height: 38)
-                            .overlay {
-                                Text("Reset")
-                                    .foregroundStyle(Color("ColorVividBlue"))
-                                    .font(.system(size: 18, weight: .medium))
-                            }
-                    })
-                }
-                .padding(.horizontal, 15)
-                .padding(.top, 8)
-                VStack(spacing: 0) {
-                    Text("Filter By")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 20, weight: .medium))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
                     HStack {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(filterByIncome ? .gray : .white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                if !filterByIncome {
-                                    RoundedRectangle(cornerRadius: 25.0)
-                                        .stroke(.gray, lineWidth: 2)
-                                        .frame(width: 98, height: 48)
-                                        .overlay {
-                                            Text("Income")
-                                                .foregroundStyle(.black)
-                                                .font(.system(size: 18, weight: .medium))
-                                        }
-                                } else {
-                                    Text("Income")
-                                        .foregroundStyle(.white)
+                        Text("Filter Transaction")
+                            .foregroundStyle(.black)
+                            .font(.system(size: 16, weight: .semibold))
+                        Spacer()
+                        Button(action: {
+                            filterByIncome = false
+                            filterByExpense = false
+                            sortByHighest = false
+                            sortByLowest = false
+                            sortByNewest = false
+                            sortByOldest = false
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(Color(.systemGray3))
+                                .frame(width: 88, height: 38)
+                                .overlay {
+                                    Text("Reset")
+                                        .foregroundStyle(Color("ColorVividBlue"))
                                         .font(.system(size: 18, weight: .medium))
                                 }
-                            }
-                            .onTapGesture {
-                                filterByIncome.toggle()
-                            }
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(filterByExpense ? .gray : .white)
-                            .frame(width: 98, height: 48)
-                            .overlay {
-                                if !filterByExpense {
-                                    RoundedRectangle(cornerRadius: 25.0)
-                                        .stroke(.gray, lineWidth: 2)
-                                        .frame(width: 98, height: 48)
-                                        .overlay {
-                                            Text("Expense")
-                                                .foregroundStyle(.black)
-                                                .font(.system(size: 18, weight: .medium))
-                                        }
-                                } else {
-                                    Text("Expense")
-                                        .foregroundStyle(.white)
-                                        .font(.system(size: 18, weight: .medium))
-                                }
-                            }
-                            .onTapGesture {
-                                filterByExpense.toggle()
-                            }
+                        })
                     }
                     .padding(.horizontal, 15)
-                    Text("Sort By")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 20, weight: .medium))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 8)
-                    let sortList: [(String, Binding<Bool>)] = [
-                        ("Highest", $sortByHighest),
-                        ("Lowest", $sortByLowest),
-                        ("Newest", $sortByNewest),
-                        ("Oldest", $sortByOldest)
-                    ]
-                    let columns: [GridItem] = Array(repeating: .init(.fixed(100)), count: 3)
-                    LazyVGrid(columns: columns, spacing: 8) {
-                        ForEach(sortList, id: \.0) { sortLabel, boolVal in
-                            VGridListItem(label: sortLabel, clicked: boolVal)
-                        }
-                    }
-                    .padding(.bottom, 8)
-                    Text("Category")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 20, weight: .medium))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 14)
-                    Button {
-                        isOnCategoryClicked = true
-                    } label: {
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(.gray, lineWidth: 1)
-                            .frame(height: 53)
-                            .overlay {
-                                HStack(alignment: .center) {
-                                    Text("Choose Category")
-                                        .font(.system(size: 20, weight: .medium))
-                                        .foregroundStyle(.black)
-                                    Spacer()
-                                    Text("\(defaultVal) count")
-                                        .foregroundStyle(Color(.systemGray))
-                                        .font(.system(size: 18, weight: .medium))
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 16, weight: .medium))
-                                        .foregroundStyle(Color("ColorVividBlue"))
-                                }
-                                .padding(.horizontal, 18)
-                            }
-                            .padding(.bottom, 10)
-                    }
-                    .sheet(isPresented: $isOnCategoryClicked, content: {
-                        VStack {
-                            VStack {
-                                ScrollView {
-                                    ForEach(budgetViewModel.budgetCategoryArray.indices, id: \.self) { index in
-                                        HStack {
-                                            Text(budgetViewModel.budgetCategoryArray[index].name)
-                                            Spacer()
-                                            CheckboxView(checked: self.$checkedStates[index])
-                                        }
-                                        .padding()
+                    .padding(.top, 8)
+                    VStack(spacing: 0) {
+                        Text("Filter By")
+                            .foregroundStyle(.black)
+                            .font(.system(size: 20, weight: .medium))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 15)
+                        HStack {
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(filterByIncome ? .gray : .white)
+                                .frame(width: 98, height: 48)
+                                .overlay {
+                                    if !filterByIncome {
+                                        RoundedRectangle(cornerRadius: 25.0)
+                                            .stroke(.gray, lineWidth: 2)
+                                            .frame(width: 98, height: 48)
+                                            .overlay {
+                                                Text("Income")
+                                                    .foregroundStyle(.black)
+                                                    .font(.system(size: 18, weight: .medium))
+                                            }
+                                    } else {
+                                        Text("Income")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 18, weight: .medium))
                                     }
                                 }
-                                .padding(.vertical, 6)
-                            }
-                            
-                            Button {
-                                let trueCount = checkedStates.reduce(0) { (count, value) in
-                                    return count + (value ? 1 : 0)
+                                .onTapGesture {
+                                    filterByIncome.toggle()
                                 }
-
-                                defaultVal = trueCount
-                                isOnCategoryClicked = false
-                            } label: {}
-                            .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(filterByExpense ? .gray : .white)
+                                .frame(width: 98, height: 48)
+                                .overlay {
+                                    if !filterByExpense {
+                                        RoundedRectangle(cornerRadius: 25.0)
+                                            .stroke(.gray, lineWidth: 2)
+                                            .frame(width: 98, height: 48)
+                                            .overlay {
+                                                Text("Expense")
+                                                    .foregroundStyle(.black)
+                                                    .font(.system(size: 18, weight: .medium))
+                                            }
+                                    } else {
+                                        Text("Expense")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 18, weight: .medium))
+                                    }
+                                }
+                                .onTapGesture {
+                                    filterByExpense.toggle()
+                                }
                         }
-                        .presentationDetents([.medium, .large])
-                        .presentationCornerRadius(25)
-                        .presentationDragIndicator(.visible)
-                    })
-                    .padding(.horizontal, 35)
-                    Spacer()
-                    Button {
-                        
-                    } label: {
-                        
+                        .padding(.horizontal, 15)
+                        Text("Sort By")
+                            .foregroundStyle(.black)
+                            .font(.system(size: 20, weight: .medium))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 15)
+                            .padding(.bottom, 8)
+                        let sortList: [(String, Binding<Bool>)] = [
+                            ("Highest", $sortByHighest),
+                            ("Lowest", $sortByLowest),
+                            ("Newest", $sortByNewest),
+                            ("Oldest", $sortByOldest)
+                        ]
+                        let columns: [GridItem] = Array(repeating: .init(.fixed(100)), count: 3)
+                        LazyVGrid(columns: columns, spacing: 8) {
+                            ForEach(sortList, id: \.0) { sortLabel, boolVal in
+                                VGridListItem(label: sortLabel, clicked: boolVal)
+                            }
+                        }
+                        .padding(.bottom, 8)
+                        Text("Category")
+                            .foregroundStyle(.black)
+                            .font(.system(size: 20, weight: .medium))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 15)
+                            .padding(.bottom, 14)
+                        Button {
+                            isOnCategoryClicked = true
+                        } label: {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(.gray, lineWidth: 1)
+                                .frame(height: 53)
+                                .overlay {
+                                    HStack(alignment: .center) {
+                                        Text("Choose Category")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundStyle(.black)
+                                        Spacer()
+                                        Text("\(defaultVal) count")
+                                            .foregroundStyle(Color(.systemGray))
+                                            .font(.system(size: 18, weight: .medium))
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundStyle(Color("ColorVividBlue"))
+                                    }
+                                    .padding(.horizontal, 18)
+                                }
+                                .padding(.bottom, 10)
+                        }
+                        .sheet(isPresented: $isOnCategoryClicked, content: {
+                            VStack {
+                                VStack {
+                                    ScrollView {
+                                        ForEach(budgetViewModel.budgetCategoryArray.indices, id: \.self) { index in
+                                            HStack {
+                                                Text(budgetViewModel.budgetCategoryArray[index].name)
+                                                Spacer()
+                                                CheckboxView(checked: self.$checkedStates[index])
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                    .padding(.vertical, 6)
+                                }
+                                
+                                Button {
+                                    let trueCount = checkedStates.reduce(0) { (count, value) in
+                                        return count + (value ? 1 : 0)
+                                    }
+                                    
+                                    defaultVal = trueCount
+                                    isOnCategoryClicked = false
+                                } label: {}
+                                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
+                            }
+                            .presentationDetents([.medium, .large])
+                            .presentationCornerRadius(25)
+                            .presentationDragIndicator(.visible)
+                        })
+                        .padding(.horizontal, 35)
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            
+                        }
+                        .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
                     }
-                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
-                }
                 }
                 Spacer()
             }
@@ -281,6 +284,7 @@ struct TransactionView: View {
                 endPoint: .bottomLeading)
         )
         .navigationBarHidden(true)
+    }
         
     }
     
@@ -418,9 +422,9 @@ struct TransactionList: View {
                                         ForEach(budgetCategoryArray) { category in
                                             if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
                                                 NavigationLink {
-                                                    
+                                                    TransactionDetailView(budgetTransaction: budgetTransaction)
                                                 } label: {
-                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.type)
                                                 }
                                             }
                                         }
@@ -445,9 +449,9 @@ struct TransactionList: View {
                                         ForEach(budgetCategoryArray) { category in
                                             if budgetTransaction.transaction.budgetCategory.localizedCaseInsensitiveContains(category.name) {
                                                 NavigationLink {
-                                                    
+                                                    TransactionDetailView(budgetTransaction: budgetTransaction)
                                                 } label: {
-                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.category)
+                                                    TransactionListItem(iconName: category.iconName, iconColor: Color(category.primaryBackgroundColor), transactionName: budgetTransaction.transaction.budgetCategory, transactionAmount: budgetTransaction.transaction.amount, transactionDescription: budgetTransaction.transaction.description, transactionTime: formattedTime(budgetTransaction.transaction.date), transactionType: budgetTransaction.type)
                                                 }
 
                                                 

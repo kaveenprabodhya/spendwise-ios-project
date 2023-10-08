@@ -8,8 +8,8 @@
 import Foundation
 
 class TransactionApiService {
-    static func fetchAllTransactionDataForUser(completion: @escaping (Result<[BudgetTransaction], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/transactions/user-id") else {
+    static func fetchAllTransactionDataForUser(currentUser: User, completion: @escaping (Result<[BudgetTransaction], NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/transactions/") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -51,5 +51,26 @@ class TransactionApiService {
                 completion(.failure(.unknownError))
             }
         }.resume()
+    }
+    
+    static func createTransaction(currentUser: User, transaction: BudgetTransaction, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/transactions") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+    }
+    
+    static func updateTransaction(currentUser: User, transaction: BudgetTransaction, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/transactions/transaction-id") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+    }
+    
+    static func deleteTransaction(currentUser: User, transactionId: UUID, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/transactions/transaction-id") else {
+            completion(.failure(.invalidURL))
+            return
+        }
     }
 }

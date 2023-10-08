@@ -16,26 +16,29 @@ struct AccountView: View {
     var body: some View {
         VStack {
             CustomContainerBodyView(gradientHeight: 240, sheetHeight: 667, gradientColors: [Color("ColorDeepTeal"), Color("ColorRoyalBlue")], headerContent: {
-                HStack {
-                    Circle()
-                        .fill(Color("ColorPeachyCream"))
-                        .frame(width: 80, height: 80)
-                        .overlay {
-                            Image(systemName: "person.crop.circle.fill")
-                                .font(.system(size: 72))
-                                .foregroundStyle(.black)
+                VStack {
+                    HStack(alignment: .center) {
+                        Circle()
+                            .fill(Color("ColorPeachyCream"))
+                            .frame(width: 80, height: 80)
+                            .overlay {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .font(.system(size: 72))
+                                    .foregroundStyle(.black)
+                            }
+                            .padding(.trailing, 15)
+                        VStack(alignment: .trailing) {
+                            Text("Kaveen Prabodhya")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(.white)
+                            Text("kaveen@gmail.com")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.white)
+                                .tint(.white)
                         }
-                        .padding(.trailing, 15)
-                    VStack(alignment: .trailing) {
-                        Text("Kaveen Prabodhya")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.white)
-                        Text("kaveen@gmail.com")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.white)
-                            .tint(.white)
                     }
                 }
+                .frame(maxHeight: .infinity, alignment: .center)
             })
             {
                 VStack {

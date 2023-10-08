@@ -9,7 +9,7 @@ import Foundation
 
 struct BudgetTransaction: Identifiable, Codable {
     let id: UUID
-    let category: TransactionCategory
+    let type: TransactionCategory
     let transaction: Transaction
 }
 
@@ -33,10 +33,9 @@ struct Transaction: Identifiable, Codable {
 
 struct RecurringTransaction: Codable {
     let frequency: String
-    let date: String
+    let date: Date
 }
 
 struct Attachment: Codable {
-    let type: String
-    let url: URL
+    let name: String
 }

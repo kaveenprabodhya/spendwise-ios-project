@@ -162,7 +162,7 @@ struct DetailBudgetView: View {
             }
         }
         .sheet(isPresented: $isSheetRemovePresented, content: {
-            SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented)
+            SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented, action: {})
         })
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -203,6 +203,7 @@ struct DetailBudgetView: View {
 
 struct SheetViewOfRemove: View {
     @Binding var isSheetRemovePresented: Bool
+    let action: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -220,7 +221,7 @@ struct SheetViewOfRemove: View {
                 .padding(.bottom, 30)
             HStack {
                 Button {
-                    
+                    self.action()
                 } label: {
                 }
                 .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 164, height: 56, label: "Yes", cornerRadius: 16))

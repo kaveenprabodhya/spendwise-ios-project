@@ -36,7 +36,9 @@ struct BudgetView: View {
             }
         }
         .onAppear{
-            viewModel.fetchBudgetData()
+            if let currentUser = UserManager.shared.getCurrentUser() {
+                viewModel.fetchBudgetData(currentUser: currentUser)
+            }
             if selectedTab == .monthly || selectedTab == .weekly{
                 date = DateFormatter().monthSymbols[Calendar.current.component(.month, from: Date()) - 1]
             } else if selectedTab == .yearly {
@@ -419,7 +421,9 @@ struct BottomBudgetSheet: View {
                     }.padding(.vertical, 5)
                 }
                 .onAppear {
-                    viewModel.fetchAmountSpentForLast7Days()
+                    if let currentUser = UserManager.shared.getCurrentUser() {
+                        viewModel.fetchAmountSpentForLast7Days(currentUser: currentUser)
+                    }
                 }
             }
         }

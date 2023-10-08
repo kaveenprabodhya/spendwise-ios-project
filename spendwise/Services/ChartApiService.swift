@@ -9,8 +9,8 @@ import Foundation
 
 
 class ChartApiService {
-    static func fetchAmountSpentForLast7Days(completion: @escaping (Result<[SpentAmountForPreviousSevenDays], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/charts/spentAmountForPrevoiusSevenDays") else {
+    static func fetchAmountSpentForLast7Days(currentUser: User, completion: @escaping (Result<[SpentAmountForPreviousSevenDays], NetworkError>) -> Void) {
+        guard let url = URL(string: "https://your-api-url/user-id/charts/spentAmountForPrevoiusSevenDays") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -55,7 +55,7 @@ class ChartApiService {
     }
     
     static func fetchPreviousMonthSpentAmountRelatedToCurrentPeriod(currentUser: User, completion: @escaping (Result<PreviousMonthSpentAmountRelatedToCurrentPeriod, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/charts/previousMonthSpentAmountRelatedToCurrentPeriod") else {
+        guard let url = URL(string: "https://your-api-url/user-id/charts/previousMonthSpentAmountRelatedToCurrentPeriod") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -100,7 +100,7 @@ class ChartApiService {
     }
     
     static func fetchOngoingWeekExpenseAndIncomeByDay(currentUser: User, completion: @escaping (Result<[OngoingWeekExpensesByDay], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/charts/ongoingWeekExpenseAndIncomeByDay") else {
+        guard let url = URL(string: "https://your-api-url/user-id/charts/ongoingWeekExpenseAndIncomeByDay") else {
             completion(.failure(.invalidURL))
             return
         }

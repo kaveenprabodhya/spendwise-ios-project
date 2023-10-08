@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct NewTransactionView: View {
+    var budgetTransaction: BudgetTransaction?
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var budgetViewModel: BudgetViewModel = BudgetViewModel()
     @ObservedObject var transactionViewModel:TransactionViewModel = TransactionViewModel()
@@ -29,11 +30,11 @@ struct NewTransactionView: View {
         NavigationStack {
             VStack{
                 CustomContainerBodyView(
-                    gradientHeight: 240,
-                    sheetHeight: 637,
+                    gradientHeight: 200,
+                    sheetHeight: 687,
                     gradientColors: getGradientForType(typeSelectedOption: transactionViewModel.typeSelectedOption),
                     headerContent: {
-                        TransactionHeaderView(inputAmount: $transactionViewModel.inputAmount)
+                        TransactionHeaderView(inputAmount: $transactionViewModel.inputAmount, transactionViewModel: transactionViewModel)
                     }){
                         TransactionBodyView(
                             budgetViewModel: budgetViewModel,
@@ -41,6 +42,31 @@ struct NewTransactionView: View {
                         )
                     }
             }
+            .onAppear(perform: {
+                if let budgetTransaction = budgetTransaction {
+                    transactionViewModel.inputAmount = String(budgetTransaction.transaction.amount)
+                    transactionViewModel.typeSelectedOption = transactionViewModel.getTransactionType(type: budgetTransaction.type)
+                    transactionViewModel.budgetTypeSelectedOption = transactionViewModel.getBudgetType(type: budgetTransaction.transaction.budgetType)
+                    transactionViewModel.pickdate =  transactionViewModel.formatDate(date: budgetTransaction.transaction.date)
+                    transactionViewModel.descriptionVal = budgetTransaction.transaction.description
+                    if budgetTransaction.type == .expense {
+                        transactionViewModel.categorySelectedOption = budgetTransaction.transaction.budgetCategory
+                        transactionViewModel.locationVal = budgetTransaction.transaction.location
+                        transactionViewModel.walletSecletedOption = budgetTransaction.transaction.paymentMethod
+                    }
+                    if !budgetTransaction.transaction.attachment.name.isEmpty {
+                        transactionViewModel.avatarImage = Image("\(budgetTransaction.transaction.attachment.name)")
+                        transactionViewModel.isAddAttachmentSuccess = true
+                    }
+                    if !budgetTransaction.transaction.recurring.frequency.isEmpty {
+                        transactionViewModel.frequencySelectedOption = budgetTransaction.transaction.recurring.frequency
+                        transactionViewModel.endAfter = transactionViewModel.formatDate(date: budgetTransaction.transaction.recurring.date)
+                        transactionViewModel.isRepeatTransactionSuccess = true
+                        
+                    }
+                    
+                }
+            })
             .ignoresSafeArea(edges: .bottom)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -62,19 +88,42 @@ struct NewTransactionView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        transactionViewModel.submit()
-                    } label: {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color("ColorDarkBlue"))
-                            .frame(width: 78, height: 32)
-                            .overlay {
-                                HStack(alignment: .center) {
-                                    Text("Create")
-                                        .foregroundStyle(.white)
-                                    .fontWeight(.medium)
-                                }
+                    if let budgetTransaction = budgetTransaction {
+                        Button {
+                            if let currentUser = UserManager.shared.getCurrentUser() {
+                                transactionViewModel.update(currentUser: currentUser, transaction: budgetTransaction)
                             }
+                            transactionViewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""), transaction: budgetTransaction)
+                        } label: {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color("ColorDarkBlue"))
+                                .frame(width: 78, height: 32)
+                                .overlay {
+                                    HStack(alignment: .center) {
+                                        Text("Edit")
+                                            .foregroundStyle(.white)
+                                            .fontWeight(.medium)
+                                    }
+                                }
+                        }
+                    } else {
+                        Button {
+                            if let currentUser = UserManager.shared.getCurrentUser() {
+                                transactionViewModel.submit(currentUser: currentUser)
+                            }
+                            transactionViewModel.submit(currentUser: User(id: UUID(), name: "", email: "", password: ""))
+                        } label: {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color("ColorDarkBlue"))
+                                .frame(width: 78, height: 32)
+                                .overlay {
+                                    HStack(alignment: .center) {
+                                        Text("Create")
+                                            .foregroundStyle(.white)
+                                            .fontWeight(.medium)
+                                    }
+                                }
+                        }
                     }
                 }
             }
@@ -84,23 +133,33 @@ struct NewTransactionView: View {
 
 struct TransactionHeaderView: View {
     @Binding var inputAmount: String
+    @ObservedObject var transactionViewModel: TransactionViewModel
+    
     var body: some View {
         VStack {
             Text("How Much?")
                 .foregroundColor(.white)
                 .font(.system(size: 24, weight: .semibold))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            HStack(alignment: .bottom) {
-                Text("LKR")
-                    .foregroundColor(.white)
-                    .font(.system(size: 64, weight: .semibold))
-                BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, textInputVal: $inputAmount)
-                    .padding(.vertical, 15)
-            }
+                HStack(alignment: .bottom) {
+                    Text("LKR")
+                        .foregroundColor(.white)
+                        .font(.system(size: 64, weight: .semibold))
+                    VStack {
+                        BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, textInputVal: $inputAmount)
+                            .padding(.bottom, transactionViewModel.errorInputAmount != nil ? 2 : 16)
+                        if let error = transactionViewModel.errorInputAmount {
+                            Text("\(error)")
+                                .foregroundStyle(transactionViewModel.typeSelectedOption.isEmpty ? Color("ColorCherryRed") : .white)
+                                .font(.system(size: 12, weight: .semibold))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                }
         }
+        .frame(maxHeight: .infinity, alignment: .center)
+        .padding(.bottom, 40)
         .padding()
-        .padding(.top, 15)
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -117,21 +176,33 @@ struct TransactionBodyView: View {
                 sheetLabel: "Pick Trtansaction Type",
                 placeholderString: "Select Transaction",
                 options: transactionOptions,
+                fontColor: transactionViewModel.errorType ? Color("ColorCherryRed") : .black,
+                iconColor: transactionViewModel.errorType ? Color("ColorCherryRed") : .black, 
+                placeholderStringColor: transactionViewModel.errorType ? Color("ColorCherryRed") : .black,
                 placeholderStringFontSize: 20,
                 height: 54,
-                sheetHeight: transactionOptions.count > 3 ? nil : 281
+                sheetHeight: transactionOptions.count > 3 ? nil : 281,
+                strokeColor: transactionViewModel.errorType ? Color("ColorCherryRed") : .black
             ){}
                 .padding(.top, 12)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
-            if let error = transactionViewModel.errorInputAmount {
+                .onChange(of: transactionViewModel.typeSelectedOption) { newSelectedOption in
+                    if newSelectedOption.localizedCaseInsensitiveContains("income") {
+                        transactionViewModel.categorySelectedOption = ""
+                        transactionViewModel.locationVal = ""
+                        transactionViewModel.walletSecletedOption = ""
+                    }
+                    transactionViewModel.errorType = false
+                }
+//            if let error = transactionViewModel.errorType {
 //                Text("\(error)")
 //                    .foregroundStyle(Color("ColorCherryRed"))
-//                    .font(.system(size: 16, weight: .semibold))
-//                    .padding(.bottom, 16)
+//                    .font(.system(size: 12, weight: .semibold))
+//                    .padding(.bottom, 3)
 //                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(.horizontal, 30)
-            }
+//                    .padding(.horizontal, 20)
+//            }
             if transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense") {
                 SelectOptionView(
                     label: "",
@@ -139,11 +210,26 @@ struct TransactionBodyView: View {
                     sheetLabel: "Pick your Category",
                     placeholderString: "Select Category",
                     options: budgetViewModel.budgetCategoryArray,
+                    fontColor: transactionViewModel.errorCategory ? Color("ColorCherryRed") : .black,
+                    iconColor: transactionViewModel.errorCategory ? Color("ColorCherryRed") : .black,
+                    placeholderStringColor: transactionViewModel.errorCategory ? Color("ColorCherryRed") : .black,
                     placeholderStringFontSize: 20,
-                    height: 54
+                    height: 54,
+                    strokeColor: transactionViewModel.errorCategory ? Color("ColorCherryRed") : .black
                 ){}
                     .padding(.vertical, 5)
                     .padding(.horizontal, 15)
+                    .onChange(of: transactionViewModel.categorySelectedOption) { newSelectedOption in
+                        transactionViewModel.errorCategory = false
+                    }
+//                if let error = transactionViewModel.errorCategory {
+//                    Text("\(error)")
+//                        .foregroundStyle(Color("ColorCherryRed"))
+//                        .font(.system(size: 12, weight: .semibold))
+//                        .padding(.bottom, 3)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding(.horizontal, 20)
+//                }
             }
             let budgetTypeOptions = ["Weekly", "Monthly", "Yearly"]
             SelectOptionView(
@@ -152,34 +238,54 @@ struct TransactionBodyView: View {
                 sheetLabel: "Pick your Budget Type",
                 placeholderString: "Select Budget Type", 
                 options: budgetTypeOptions,
+                fontColor: transactionViewModel.errorBudgetType ? Color("ColorCherryRed") : .black,
+                iconColor: transactionViewModel.errorBudgetType ? Color("ColorCherryRed") : .black,
+                placeholderStringColor: transactionViewModel.errorBudgetType ? Color("ColorCherryRed") : .black,
                 placeholderStringFontSize: 20,
                 height: 54,
-                sheetHeight: budgetTypeOptions.count > 3 ? nil : 291
+                sheetHeight: budgetTypeOptions.count > 3 ? nil : 291,
+                strokeColor: transactionViewModel.errorBudgetType ? Color("ColorCherryRed") : .black
             ){}
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
+                .onChange(of: transactionViewModel.budgetTypeSelectedOption) { newSelectedOption in
+                    transactionViewModel.errorBudgetType = false
+                }
+//            if let error = transactionViewModel.errorBudgetType {
+//                Text("\(error)")
+//                    .foregroundStyle(Color("ColorCherryRed"))
+//                    .font(.system(size: 12, weight: .semibold))
+//                    .padding(.bottom, 3)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.horizontal, 20)
+//            }
+            
             SelectOptionView<String, VStack>(
                 label: "",
                 selectedOption: $transactionViewModel.pickdate,
                 sheetLabel: "Date",
-                placeholderString: "Select Date",
+                placeholderString: "\(currentDate())",
+                fontColor: transactionViewModel.errorDate ? Color("ColorCherryRed") : .black,
+                iconColor: transactionViewModel.errorDate ? Color("ColorCherryRed") : .black,
+                placeholderStringColor: transactionViewModel.errorDate ? Color("ColorCherryRed") : .black,
                 placeholderStringFontSize: 20,
                 height: 54,
+                strokeColor: transactionViewModel.errorDate ? Color("ColorCherryRed") : .black,
                 dismiss: true,
                 content: {
                     VStack(alignment: .center, spacing: 10) {
                         DatePicker("", selection: $transactionViewModel.selectedDate2, displayedComponents: .date)
                             .datePickerStyle(.wheel).foregroundStyle(.white)
                             .onChange(of: transactionViewModel.selectedDate2) { newDate in
-                                transactionViewModel.pickdate = formatDate(date: newDate)
+                                transactionViewModel.pickdate = transactionViewModel.formatDate(date: newDate)
                             }
                             .onAppear {
-                                transactionViewModel.pickdate = formatDate(date: Date())
+                                transactionViewModel.pickdate = transactionViewModel.formatDate(date: Date())
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                         
                         Spacer()
-                        Text("\(formatDate(date: transactionViewModel.selectedDate2))")
+                        Text("\(transactionViewModel.formatDate(date: transactionViewModel.selectedDate2))")
                             .font(.system(size: 20))
                             .fontWeight(.medium)
                             .foregroundStyle(.black)
@@ -189,16 +295,29 @@ struct TransactionBodyView: View {
             })
             .padding(.vertical, 5)
             .padding(.horizontal, 15)
+            .onChange(of: transactionViewModel.pickdate) { newSelectedOption in
+                transactionViewModel.errorDate = false
+            }
+//            if let error = transactionViewModel.errorDate {
+//                Text("\(error)")
+//                    .foregroundStyle(Color("ColorCherryRed"))
+//                    .font(.system(size: 12, weight: .semibold))
+//                    .padding(.bottom, 3)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.horizontal, 20)
+//            }
             RoundedRectangle(cornerRadius: 15)
-                .stroke(.black, lineWidth: 2)
+                .stroke(transactionViewModel.errorDescription ? Color("ColorCherryRed") : .black, lineWidth: 2)
                 .frame(height: 54)
                 .overlay {
                     VStack {
                         BottomLineTextFieldView(
                             label: "",
                             placeholder: "Description",
-                            fontColor: .black,
-                            textFieldFontSize: 20, 
+                            fontColor: transactionViewModel.errorDescription ? Color("ColorCherryRed") : .black,
+                            bottomLineColor: transactionViewModel.errorDescription ? Color("ColorCherryRed") : .black,
+                            placeholderColor: transactionViewModel.errorDescription ? Color("ColorCherryRed") : .black,
+                            textFieldFontSize: 20,
                             placeholderFontSize: 20,
                             textInputVal: $transactionViewModel.descriptionVal
                         )
@@ -207,19 +326,83 @@ struct TransactionBodyView: View {
                 }
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
-            SelectOptionView(
-                label: "",
-                selectedOption: $transactionViewModel.walletSecletedOption,
-                sheetLabel: "Pick your Wallet Type",
-                placeholderString: "Select Wallet",
-                options: ["Cash", "Paypal", "Apple", "Samsung Pay", "Amazon Pay"],
-                placeholderStringFontSize: 20,
-                height: 54
-            ){}
-                .padding(.vertical, 5)
-                .padding(.horizontal, 15)
+                .onChange(of: transactionViewModel.descriptionVal) { newSelectedOption in
+                    transactionViewModel.errorDescription = false
+                }
+//            if let error = transactionViewModel.errorDescription {
+//                Text("\(error)")
+//                    .foregroundStyle(Color("ColorCherryRed"))
+//                    .font(.system(size: 12, weight: .semibold))
+//                    .padding(.bottom, 3)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.horizontal, 20)
+//            }
+            if transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense") {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(transactionViewModel.errorLocation ? Color("ColorCherryRed") : .black, lineWidth: 2)
+                    .frame(height: 54)
+                    .overlay {
+                        VStack {
+                            BottomLineTextFieldView(
+                                label: "",
+                                placeholder: "Location",
+                                fontColor: transactionViewModel.errorLocation ? Color("ColorCherryRed") : .black,
+                                bottomLineColor: transactionViewModel.errorLocation ? Color("ColorCherryRed") : .black,
+                                placeholderColor: transactionViewModel.errorLocation ? Color("ColorCherryRed") : .black,
+                                textFieldFontSize: 20,
+                                placeholderFontSize: 20,
+                                textInputVal: $transactionViewModel.locationVal
+                            )
+                        }
+                        .padding(.horizontal, 15)
+                    }
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 15)
+                    .onChange(of: transactionViewModel.locationVal) { newSelectedOption in
+                        transactionViewModel.errorLocation = false
+                    }
+//            if let error = transactionViewModel.errorLocation {
+//                Text("\(error)")
+//                    .foregroundStyle(Color("ColorCherryRed"))
+//                    .font(.system(size: 12, weight: .semibold))
+//                    .padding(.bottom, 3)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .padding(.horizontal, 20)
+//            }
+            }
+            if transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense") {
+                SelectOptionView(
+                    label: "",
+                    selectedOption: $transactionViewModel.walletSecletedOption,
+                    sheetLabel: "Pick your Wallet Type",
+                    placeholderString: "Select Wallet",
+                    options: ["Cash", "Paypal", "Apple", "Samsung Pay", "Amazon Pay"],
+                    fontColor: transactionViewModel.errorWallet ? Color("ColorCherryRed") : .black,
+                    iconColor: transactionViewModel.errorWallet ? Color("ColorCherryRed") : .black,
+                    placeholderStringColor: transactionViewModel.errorWallet ? Color("ColorCherryRed") : .black,
+                    placeholderStringFontSize: 20,
+                    height: 54,
+                    strokeColor: transactionViewModel.errorWallet ? Color("ColorCherryRed") : .black
+                ){}
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 15)
+                    .onChange(of: transactionViewModel.walletSecletedOption) { newSelectedOption in
+                        transactionViewModel.errorWallet = false
+                    }
+//                if let error = transactionViewModel.errorWallet {
+//                    Text("\(error)")
+//                        .foregroundStyle(Color("ColorCherryRed"))
+//                        .font(.system(size: 12, weight: .semibold))
+//                        .padding(.bottom, 3)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding(.horizontal, 20)
+//                }
+            }
             if !transactionViewModel.isAddAttachmentSuccess {
-                Spacer()
+                if !transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense")
+                {
+                    Spacer()
+                }
                 Button(action: {
                     transactionViewModel.addAttachment = true
                 }, label: {
@@ -236,10 +419,17 @@ struct TransactionBodyView: View {
                             }
                         }
                 })
-                .padding(.vertical, 6)
                 .padding(.horizontal, 15)
-                Spacer()
+                .padding(.vertical, transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense") ? 26 : 0)
+                if !transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense")
+                {
+                    Spacer()
+                }
             } else {
+                if !transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense")
+                {
+                    Spacer()
+                }
                 ZStack {
                     if let avatarImg = transactionViewModel.avatarImage {
                         avatarImg
@@ -268,8 +458,10 @@ struct TransactionBodyView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
                 .padding(.vertical, 5)
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+                if !transactionViewModel.typeSelectedOption.localizedCaseInsensitiveContains("expense")
+                {
+                    Spacer()
+                }
             }
             if !transactionViewModel.isRepeatTransactionSuccess {
                 VStack(spacing: 0) {
@@ -309,14 +501,14 @@ struct TransactionBodyView: View {
                         }.padding(.trailing, 15)
                         VStack {
                             Text("End After").fontWeight(.medium).frame(maxWidth: .infinity, alignment: .leading)
-                            Text("\(formatDate(date: transactionViewModel.selectedDate))")
+                            Text("\(transactionViewModel.formatDate(date: transactionViewModel.selectedDate))")
                                 .lineLimit(1)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         VStack {
                             Button {
-                                
+                                transactionViewModel.repeatTransaction = true
                             } label: {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color("ColorAzureBlue"))
@@ -385,11 +577,19 @@ struct TransactionBodyView: View {
                 ){}
                     .padding(.vertical, 6)
                     .padding(.horizontal, 15)
+                if let error = transactionViewModel.errorFrequency {
+                    Text("\(error)")
+                        .foregroundStyle(Color("ColorCherryRed"))
+                        .font(.system(size: 12, weight: .semibold))
+                        .padding(.bottom, 3)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                }
                 SelectOptionView<String, VStack>(
                     label: "",
                     selectedOption: $transactionViewModel.endAfter,
                     sheetLabel: "Date",
-                    placeholderString: "End After",
+                    placeholderString: "\(currentDate())",
                     iconColor: .white,
                     placeholderStringColor: .white,
                     placeholderStringFontSize: 20,
@@ -400,14 +600,14 @@ struct TransactionBodyView: View {
                         DatePicker("", selection: $transactionViewModel.selectedDate, displayedComponents: .date)
                             .datePickerStyle(.wheel).foregroundStyle(.white)
                             .onChange(of: transactionViewModel.selectedDate) { newDate in
-                                transactionViewModel.endAfter = formatDate(date: newDate)
+                                transactionViewModel.endAfter = transactionViewModel.formatDate(date: newDate)
                             }
                             .onAppear {
-                                transactionViewModel.endAfter = formatDate(date: Date())
+                                transactionViewModel.endAfter = transactionViewModel.formatDate(date: Date())
                             }
                         
                         Spacer()
-                        Text("\(formatDate(date: transactionViewModel.selectedDate))")
+                        Text("\(transactionViewModel.formatDate(date: transactionViewModel.selectedDate))")
                             .font(.system(size: 20))
                             .fontWeight(.medium)
                             .foregroundStyle(.black)
@@ -418,8 +618,10 @@ struct TransactionBodyView: View {
                 .padding(.horizontal, 15)
                 .padding(.bottom, 15)
                 Button(action: {
-                    transactionViewModel.repeatTransaction = false
-                    transactionViewModel.isRepeatTransactionSuccess = true
+                    if transactionViewModel.validateRepeat() {
+                        transactionViewModel.repeatTransaction = false
+                        transactionViewModel.isRepeatTransactionSuccess = true
+                    }
                 }, label: {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color("ColorVividBlue"))
@@ -443,11 +645,10 @@ struct TransactionBodyView: View {
         }
     }
     
-    func formatDate(date: Date) -> String {
+    func currentDate() -> String {
         let dateFormatter = DateFormatter()
-        //        dateFormatter.dateFormat = "dd/MM/yyyy"
         dateFormatter.dateFormat = "dd - MMMM - yyyy"
-        return dateFormatter.string(from: date)
+        return dateFormatter.string(from: Date())
     }
     
 }
@@ -484,6 +685,7 @@ struct CustomImageButtonStyle: ButtonStyle {
 
 struct NewIncomeView_Previews: PreviewProvider {
     static var previews: some View {
-        NewTransactionView()
+        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: "successful-alert"), recurring: RecurringTransaction(frequency: "monthly", date: Date())))
+        NewTransactionView(budgetTransaction: transaction)
     }
 }

@@ -35,6 +35,7 @@ struct CustomContainerBodyView<HeaderContent: View, BodyContent: View>: View {
                     .frame(width: geometry.size.width, height: gradientHeight)
                     .overlay {
                         headerContent
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     }
             }
             ZStack(alignment: .top) {

@@ -17,29 +17,35 @@ class TransactionViewModel: ObservableObject {
     @Published var descriptionVal: String = ""
     @Published var walletSecletedOption: String = ""
     @Published var frequencySelectedOption: String = ""
-    @Published var endAfterSecletedOption: String = ""
-    @Published var selectedDate = Date()
+    @Published var pickdate: String = ""
     @Published var selectedDate2 = Date()
+    @Published var selectedDate = Date()
+    @Published var endAfter: String = ""
+    @Published var locationVal: String = ""
     @Published var avatarImage: Image?
     @Published var avatarItem: PhotosPickerItem?
     @Published var repeatTransaction: Bool = false
     @Published var addAttachment: Bool = false
-    @Published var isSuccess: Bool = false
     @Published var isRepeatTransactionSuccess: Bool = false
     @Published var isAddAttachmentSuccess: Bool = false
-    @Published var endAfter: String = ""
-    @Published var pickdate: String = ""
     @Published var errorInputAmount: String? = nil
-    @Published var errorCategory: String? = nil
-    @Published var errorBudgetType: String? = nil
-    @Published var errorDescription: String? = nil
-    @Published var errorWallet: String? = nil
+    @Published var errorType: Bool = false
+    @Published var errorCategory: Bool = false
+    @Published var errorBudgetType: Bool = false
+    @Published var errorDate: Bool = false
+    @Published var errorDescription: Bool = false
+    @Published var errorWallet: Bool = false
+    @Published var errorLocation: Bool = false
     @Published var errorFrequency: String? = nil
-    @Published var errorEndAfter: String? = nil
+    @Published var errorEndAfter: Bool = false
+    @Published var onSubmitSuccess: Bool = false
+    @Published var onDeleteSuccess: Bool = false
+    @Published var updatedTransaction: Bool = false
+    
     @Published var transactionArray: [BudgetTransaction] = [
         BudgetTransaction(
             id: UUID(),
-            category: .expense,
+            type: .expense,
             transaction: Transaction(
                 id: UUID(),
                 date: Date.now,
@@ -49,12 +55,12 @@ class TransactionViewModel: ObservableObject {
                 description: "Buy some cloths",
                 paymentMethod: "Wallet",
                 location: "RV",
-                attachment: Attachment(type: "", url: URL(fileURLWithPath: "")),
-                recurring: RecurringTransaction(frequency: "", date: ""))
+                attachment: Attachment(name: ""),
+                recurring: RecurringTransaction(frequency: "", date: Date()))
         ),
         BudgetTransaction(
             id: UUID(),
-            category: .income,
+            type: .income,
             transaction: Transaction(
                 id: UUID(),
                 date: Date.now,
@@ -64,12 +70,12 @@ class TransactionViewModel: ObservableObject {
                 description: "Buy some grocery",
                 paymentMethod: "Wallet",
                 location: "Supermarket",
-                attachment: Attachment(type: "", url: URL(fileURLWithPath: "")),
-                recurring: RecurringTransaction(frequency: "", date: ""))
+                attachment: Attachment(name: ""),
+                recurring: RecurringTransaction(frequency: "", date: Date()))
         ),
         BudgetTransaction(
             id: UUID(),
-            category: .income,
+            type: .income,
             transaction: Transaction(
                 id: UUID(),
                 date: Date.now,
@@ -79,8 +85,8 @@ class TransactionViewModel: ObservableObject {
                 description: "Buy some grocery",
                 paymentMethod: "Wallet",
                 location: "Supermarket",
-                attachment: Attachment(type: "", url: URL(fileURLWithPath: "")),
-                recurring: RecurringTransaction(frequency: "", date: ""))
+                attachment: Attachment(name: ""),
+                recurring: RecurringTransaction(frequency: "", date: Date()))
         )
     ]
     
@@ -173,7 +179,7 @@ class TransactionViewModel: ObservableObject {
             print("Year: \(year)")
             for transaction in transactions {
                 print("Transaction ID: \(transaction.id)")
-                print("Category: \(transaction.category)")
+                print("Category: \(transaction.type)")
                 // Print other transaction details as needed
             }
             print("------")
@@ -181,7 +187,7 @@ class TransactionViewModel: ObservableObject {
     }
     
     func filterTransactions(by category: TransactionCategory) -> [BudgetTransaction] {
-        return transactionArray.filter { $0.category == category }
+        return transactionArray.filter { $0.type == category }
     }
     
     func formattedTime(from date: Date) -> String {
@@ -190,8 +196,8 @@ class TransactionViewModel: ObservableObject {
         return formatter.string(from: date)
     }
     
-    func fetchAllTransactionData() {
-        TransactionApiService.fetchAllTransactionDataForUser { result in
+    func fetchAllTransactionData(currentUser: User) {
+        TransactionApiService.fetchAllTransactionDataForUser(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let transactionItems):
@@ -207,43 +213,234 @@ class TransactionViewModel: ObservableObject {
         return fieldName.isEmpty
     }
     
-    func submit() {
+    func validateIsEmpty() -> Bool {
         let amount = isFieldEmpty(inputAmount)
+        let type = isFieldEmpty(typeSelectedOption)
         let category = isFieldEmpty(categorySelectedOption)
+        let date = isFieldEmpty(pickdate)
         let budgetType = isFieldEmpty(budgetTypeSelectedOption)
         let description = isFieldEmpty(descriptionVal)
         let wallet = isFieldEmpty(walletSecletedOption)
+        let location = isFieldEmpty(locationVal)
         
-        let emptyMessage = "Don't leave empty fields"
         if amount {
-            errorInputAmount = emptyMessage
+            errorInputAmount = "Amount is required."
+        }
+        else if !validateNumberFormat() {
+            errorInputAmount = "Invalid Amount"
         }
         else {
             errorInputAmount = nil
         }
-        if category {
-            errorCategory = emptyMessage
+        
+        if type {
+            errorType = true
         }
         else {
-            errorCategory = nil
+            errorType = false
         }
+        
+        if typeSelectedOption.localizedCaseInsensitiveContains("expense")
+        {
+            if category {
+                errorCategory = true
+            }
+            else {
+                errorCategory = false
+            }
+        }
+        
         if budgetType {
-            errorBudgetType = emptyMessage
+            errorBudgetType = true
         }
         else {
-            errorBudgetType = nil
+            errorBudgetType = false
         }
+        
+        if date {
+            errorDate = true
+        }
+        else {
+            errorDate = false
+        }
+        
         if  description {
-            errorDescription = emptyMessage
+            errorDescription = true
         }
         else {
-            errorDescription = nil
+            errorDescription = false
         }
-        if wallet {
-            errorWallet = emptyMessage
+        
+        if typeSelectedOption.localizedCaseInsensitiveContains("expense")
+        {
+            if  location {
+                errorLocation = true
+            }
+            else {
+                errorLocation = false
+            }
+        }
+        
+        if typeSelectedOption.localizedCaseInsensitiveContains("expense")
+        {
+            if wallet {
+                errorWallet = true
+            }
+            else {
+                errorWallet = false
+            }
+        }
+        
+        if amount || budgetType || date || description {
+            return false
+        }
+        
+        if typeSelectedOption.localizedCaseInsensitiveContains("expense")
+        {
+            if wallet || category || location {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func validateNumberFormat() -> Bool {
+        return Double(inputAmount) != nil
+    }
+
+    
+    func validateRepeat() -> Bool {
+        let frequency = isFieldEmpty(frequencySelectedOption)
+        
+        if frequency {
+            errorFrequency = "Type is required."
+            return false
         }
         else {
-            errorWallet = nil
+            errorFrequency = nil
+        }
+        return true
+    }
+    
+    func getBudgetTypeOption(rawValue: String) -> BudgetTypeOption? {
+        switch rawValue {
+        case "Monthly":
+            return .monthly
+        case "Yearly":
+            return .yearly
+        case "Weekly":
+            return .weekly
+        default:
+            return nil
+        }
+    }
+    
+    func getBudgetType(type: BudgetTypeOption) -> String {
+        switch type {
+        case .monthly:
+            return "Monthly"
+        case .yearly:
+            return "Yearly"
+        case .weekly:
+            return "Weekly"
+        }
+    }
+    
+    func getTransactionType(type: TransactionCategory) -> String {
+        switch type {
+        case .expense:
+            return "Expense"
+        case .income:
+            return "Income"
+        }
+    }
+    func formatDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd - MMMM - yyyy"
+        return dateFormatter.string(from: date)
+    }
+    
+    func submit(currentUser: User) {
+        let validationResult = validateIsEmpty()
+        if !validationResult {
+            return
+        }
+        print("\(self.pickdate)")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let datePick = dateFormatter.date(from: self.pickdate)
+        
+        print("\(self.pickdate) - \(String(describing: datePick))")
+
+        if let budgetType = getBudgetTypeOption(rawValue: self.budgetTypeSelectedOption) {
+            if let date = datePick {
+                if let amount = Double(self.inputAmount) {
+                    if let endAfter = dateFormatter.date(from: self.endAfter) {
+                        let transaction = BudgetTransaction(
+                            id: UUID(),
+                            type: (self.typeSelectedOption == "income") ? .income : .expense,
+                            transaction: Transaction(
+                                id: UUID(),
+                                date: date,
+                                budgetType: budgetType,
+                                budgetCategory: self.categorySelectedOption,
+                                amount: amount,
+                                description: self.descriptionVal,
+                                paymentMethod: self.walletSecletedOption,
+                                location: self.locationVal,
+                                attachment: Attachment(name: ""),
+                                recurring: RecurringTransaction(
+                                    frequency: self.frequencySelectedOption,
+                                    date: endAfter
+                                )
+                            )
+                        )
+                    TransactionApiService.createTransaction(currentUser: currentUser, transaction: transaction) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(_):
+                                self.onSubmitSuccess = true
+                            case .failure(let error):
+                                print("Error fetching data: \(error)")
+                            }
+                        }
+                    }
+                }
+                } else {
+                    print("double cast error")
+                }
+            } else {
+                print("date pick error")
+            }
+        } else {
+            print("budget type error")
+        }
+    }
+    
+    func deleteTransaction(currentUser: User, transactionId: UUID) {
+        TransactionApiService.deleteTransaction(currentUser: currentUser, transactionId: transactionId){ result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self.onDeleteSuccess = true
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func update(currentUser: User, transaction: BudgetTransaction) {
+        TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self.updatedTransaction = true
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
         }
     }
 }

@@ -10,6 +10,9 @@ import SwiftUI
 struct TransactionDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isSheetRemovePresented: Bool = false
+    @State var isEditClicked: Bool = false
+    @ObservedObject var transactionViewModel: TransactionViewModel = TransactionViewModel()
+    var budgetTransaction: BudgetTransaction
     
     var body: some View {
         NavigationStack {
@@ -17,12 +20,12 @@ struct TransactionDetailView: View {
                 CustomContainerBodyView(gradientHeight: 240, sheetHeight: 647, gradientColors: [Color("ColorForestGreen"), Color("ColorTeal")], headerContent: {
                     VStack(alignment: .center) {
                         VStack(spacing: 0) {
-                            Text("LKR 20000")
+                            Text("LKR \(formatCurrency(value: budgetTransaction.transaction.amount))")
                                 .font(.system(size: 48, weight: .bold))
                                 .foregroundStyle(.white)
                                 .padding(.top, 20)
-                                .padding(.bottom, 15)
-                        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                                .padding(.bottom, 85)
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
                 }){
                     VStack {
@@ -37,7 +40,7 @@ struct TransactionDetailView: View {
                                             Text("Type")
                                                 .font(.system(size: 14, weight: .semibold))
                                                 .foregroundStyle(.white)
-                                            Text("Expense")
+                                            Text("\(transactionViewModel.getTransactionType(type: budgetTransaction.type))")
                                                 .font(.system(size: 18, weight: .bold))
                                                 .foregroundStyle(.white)
                                         }
@@ -46,7 +49,7 @@ struct TransactionDetailView: View {
                                             Text("Category")
                                                 .font(.system(size: 14, weight: .semibold))
                                                 .foregroundStyle(.white)
-                                            Text("Shopping")
+                                            Text("\(budgetTransaction.transaction.budgetCategory)")
                                                 .font(.system(size: 18, weight: .bold))
                                                 .foregroundStyle(.white)
                                         }
@@ -55,7 +58,7 @@ struct TransactionDetailView: View {
                                             Text("Wallet")
                                                 .font(.system(size: 14, weight: .semibold))
                                                 .foregroundStyle(.white)
-                                            Text("Apple")
+                                            Text("\(budgetTransaction.transaction.paymentMethod)")
                                                 .font(.system(size: 18, weight: .bold))
                                                 .foregroundStyle(.white)
                                         }
@@ -74,7 +77,7 @@ struct TransactionDetailView: View {
                             .padding(.horizontal, 15)
                             .padding(.vertical, 10)
                         VStack {
-                            Text("1 - Jun - 2019 16:20")
+                            Text("\(formatDate(date: budgetTransaction.transaction.date))")
                                 .font(.system(size: 20, weight: .medium))
                                 .foregroundStyle(.black)
                                 .padding(.vertical, 10)
@@ -84,7 +87,7 @@ struct TransactionDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal, 15)
                                 .padding(.bottom, 10)
-                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+                            Text("\(budgetTransaction.transaction.description)")
                                 .foregroundStyle(.black)
                                 .font(.system(size: 18, weight: .semibold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -96,19 +99,35 @@ struct TransactionDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal, 15)
                                 .padding(.bottom, 10)
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(.systemGray4))
-                                .frame(width: 368, height: 248)
-                                .overlay {
-                                    Image("successful-alert")
-                                        .resizable()
-                                        .scaledToFit()
-                                }
+                            if !budgetTransaction.transaction.attachment.name.isEmpty {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(.systemGray4))
+                                    .frame(width: 368, height: 248)
+                                    .overlay {
+                                        Image("successful-alert")
+                                            .resizable()
+                                            .scaledToFit()
+                                    }
+                            } else {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(.systemGray4))
+                                    .frame(width: 368, height: 248)
+                                    .overlay {
+                                        Image(systemName: "photo.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .foregroundStyle(.white)
+                                            .frame(width: 112 , height: 112)
+                                    }
+                            }
                             Spacer()
                             Button(action: {
-                                
+                                isEditClicked = true
                             }, label: {})
                             .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Edit", cornerRadius: 16, iconName: "square.and.pencil"))
+                            .navigationDestination(isPresented: $isEditClicked) {
+                                NewTransactionView(budgetTransaction: budgetTransaction)
+                            }
                             Spacer()
                         }
                         Spacer()
@@ -116,7 +135,12 @@ struct TransactionDetailView: View {
                 }
             }
             .sheet(isPresented: $isSheetRemovePresented, content: {
-                SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented)
+                SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented, action: {
+                    if let currentUser = UserManager.shared.getCurrentUser() {
+                        transactionViewModel.deleteTransaction(currentUser: currentUser, transactionId: budgetTransaction.id)
+                    }
+                    isSheetRemovePresented = false
+                })
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -153,6 +177,12 @@ struct TransactionDetailView: View {
             }
         }
     }
+    
+    func formatDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd - MMMM - yyyy HH:mm"
+        return dateFormatter.string(from: date)
+    }
 }
 
 struct Line: Shape {
@@ -166,6 +196,7 @@ struct Line: Shape {
 
 struct TransactionDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailView()
+        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: ""), recurring: RecurringTransaction(frequency: "", date: Date())))
+        TransactionDetailView(budgetTransaction: transaction)
     }
 }
