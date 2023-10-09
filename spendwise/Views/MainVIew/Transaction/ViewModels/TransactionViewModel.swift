@@ -291,7 +291,7 @@ class TransactionViewModel: ObservableObject {
             }
         }
         
-        if amount || budgetType || date || description {
+        if amount || !validateNumberFormat() || budgetType || date || description {
             return false
         }
         
@@ -308,7 +308,6 @@ class TransactionViewModel: ObservableObject {
     func validateNumberFormat() -> Bool {
         return Double(inputAmount) != nil
     }
-
     
     func validateRepeat() -> Bool {
         let frequency = isFieldEmpty(frequencySelectedOption)
@@ -355,6 +354,7 @@ class TransactionViewModel: ObservableObject {
             return "Income"
         }
     }
+    
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd - MMMM - yyyy"
@@ -431,16 +431,56 @@ class TransactionViewModel: ObservableObject {
         }
     }
     
-    func update(currentUser: User, transaction: BudgetTransaction) {
-        TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(_):
-                    self.updatedTransaction = true
-                case .failure(let error):
-                    print("Error fetching data: \(error)")
+    func update(currentUser: User) {
+        let validationResult = validateIsEmpty()
+        if !validationResult {
+            return
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let datePick = dateFormatter.date(from: self.pickdate)
+        if let budgetType = getBudgetTypeOption(rawValue: self.budgetTypeSelectedOption) {
+            if let date = datePick {
+                if let amount = Double(self.inputAmount) {
+                    if let endAfter = dateFormatter.date(from: self.endAfter) {
+                        let transaction = BudgetTransaction(
+                            id: UUID(),
+                            type: (self.typeSelectedOption == "income") ? .income : .expense,
+                            transaction: Transaction(
+                                id: UUID(),
+                                date: date,
+                                budgetType: budgetType,
+                                budgetCategory: self.categorySelectedOption,
+                                amount: amount,
+                                description: self.descriptionVal,
+                                paymentMethod: self.walletSecletedOption,
+                                location: self.locationVal,
+                                attachment: Attachment(name: ""),
+                                recurring: RecurringTransaction(
+                                    frequency: self.frequencySelectedOption,
+                                    date: endAfter
+                                )
+                            )
+                        )
+                        TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success(_):
+                                    self.updatedTransaction = true
+                                case .failure(let error):
+                                    print("Error fetching data: \(error)")
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    print("double cast error")
                 }
+            } else {
+                print("date pick error")
             }
+        } else {
+            print("budget type error")
         }
     }
 }

@@ -104,7 +104,7 @@ struct TransactionDetailView: View {
                                     .fill(Color(.systemGray4))
                                     .frame(width: 368, height: 248)
                                     .overlay {
-                                        Image("successful-alert")
+                                        Image("\(budgetTransaction.transaction.attachment.name)")
                                             .resizable()
                                             .scaledToFit()
                                     }

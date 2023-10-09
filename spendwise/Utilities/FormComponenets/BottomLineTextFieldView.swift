@@ -12,10 +12,15 @@ struct BottomLineTextFieldView: View {
     var placeholder: String
     var fontColor: Color?
     var bottomLineColor: Color?
+    var bottomLinePadding: CGFloat?
     var placeholderColor: Color?
     var labelSize: CGFloat?
     var textFieldFontSize: CGFloat?
     var placeholderFontSize: CGFloat?
+    var textFieldHeight: CGFloat?
+    var textFieldWidth: CGFloat?
+    var textFieldWeight: Font.Weight?
+    var alignCetner: Bool
     @Binding var textInputVal: String
     
     var body: some View {
@@ -27,22 +32,27 @@ struct BottomLineTextFieldView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 6)
             }
-            TextField(
-                "",
-                text: $textInputVal,
-                prompt: Text("\(placeholder)")
-                    .font(.system(size: placeholderFontSize != nil ? placeholderFontSize! : 24, weight: .medium))
-                    .foregroundColor(placeholderColor != nil ? placeholderColor! : .black)
-            )
+            GeometryReader(content: { geometry in
+                TextField(
+                    "",
+                    text: $textInputVal,
+                    prompt: Text("\(placeholder)")
+                        .font(.system(size: placeholderFontSize != nil ? placeholderFontSize! : 24, weight: .medium))
+                        .foregroundColor(placeholderColor != nil ? placeholderColor! : .black)
+                )
+                .multilineTextAlignment(alignCetner ? .center : .leading)
+                .frame(width: textFieldWidth != nil ? textFieldWidth! : geometry.size.width, height: textFieldHeight != nil ? textFieldHeight! : geometry.size.height)
                 .foregroundColor(fontColor != nil ? fontColor! : .black)
-                .textFieldStyle(BottomLineTextFieldStyle(bottomLineColor: bottomLineColor))
-                .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24))
+                .textFieldStyle(BottomLineTextFieldStyle(bottomLineColor: bottomLineColor, bottomLinePadding: bottomLinePadding))
+                .font(.system(size: textFieldFontSize != nil ? textFieldFontSize! : 24, weight: textFieldWeight != nil ? textFieldWeight! : .medium))
+            })
         }
     }
 }
 
 struct BottomLineTextFieldStyle: TextFieldStyle {
     var bottomLineColor: Color?
+    var bottomLinePadding: CGFloat?
     
     func _body(configuration: TextField<_Label>) -> some View {
         VStack {
@@ -51,7 +61,7 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
                     Rectangle()
                         .frame(height: 2, alignment: .bottom)
                         .foregroundColor(bottomLineColor != nil ? bottomLineColor! : .black)
-                        .padding(.top, 34)
+                        .padding(.top, bottomLinePadding != nil ? bottomLinePadding! : 34)
                 )
         }
     }
@@ -59,7 +69,7 @@ struct BottomLineTextFieldStyle: TextFieldStyle {
 
 struct BottomLineTextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomLineTextFieldView(label: "", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, placeholderColor: .green, labelSize: 20, textFieldFontSize: 32, textInputVal: .constant(""))
+        BottomLineTextFieldView(label: "", placeholder: "Type....", fontColor: .blue, bottomLineColor: .blue, bottomLinePadding: 64, placeholderColor: .green, labelSize: 20, textFieldFontSize: 32, alignCetner: false, textInputVal: .constant(""))
             .padding()
     }
 }

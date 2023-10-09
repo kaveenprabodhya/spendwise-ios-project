@@ -77,11 +77,11 @@ struct BudgetChartView: View {
                                             if budget.budgetType.type == type {
                                                 let progress = budget.currentAmountSpent / budget.allocatedAmount
                                                 let progressVal = min(1.0, max(0.0, progress))
-                                                ForEach(budget.category) { category in
+//                                                ForEach(budget.category) { category in
                                                     VStack {
-                                                        CategoryProgressView(progressValue: Float(progressVal), categoryName: category.name)
+                                                        CategoryProgressView(progressValue: Float(progressVal), categoryName: budget.category.name)
                                                     }
-                                                }
+//                                                }
                                             }
                                         }
                                     }
@@ -184,36 +184,34 @@ struct BudgetChartView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetChartView(filterBudgetArray: [
             Budget(
-                id: UUID(),
-                budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
+                id: UUID(), name: "",
+                budgetType: BudgetType(type: .monthly, date: .monthOnly(10), limit: 2500),
                 category:
-                    [
                         BudgetCategory(
                             id: UUID(),
                             name: "Shopping",
                             primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
-                        )
-                    ],
+                        ),
                 allocatedAmount: 400000.00,
                 currentAmountSpent: 100000.00,
                 numberOfDaysSpent: 8,
-                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+                transactions: []
             ),
             Budget(
-                id: UUID(),
+                id: UUID(), name: "",
                 budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
                 category:
-                    [
                         BudgetCategory(
                             id: UUID(),
                             name: "Entertainment",
                             primaryBackgroundColor: "ColorGoldenrod", iconName: ""
-                        )
-                    ],
+                        ),
                 allocatedAmount: 100000.00,
                 currentAmountSpent: 10600.00,
                 numberOfDaysSpent: 8,
-                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+                footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+                transactions: []
             ),], type: .monthly)
     }
 }

@@ -110,7 +110,7 @@ struct PageTabView: View {
     func printBudgets(budget: [Budget]) {
         for budget in budget {
             print(budget.budgetType.type)
-            print(budget.category[0].name)
+            print(budget.category.name)
             print(budget.allocatedAmount)
         }
     }
@@ -347,16 +347,16 @@ struct BottomBudgetSheet: View {
                                         EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets){ budget in
-                                            ForEach(budget.category) { category in
+//                                            ForEach(budget.category) { category in
                                                 OverallBudgetCategoryCardView(
-                                                    primaryBackgroundColor: category.primaryBackgroundColor,
-                                                    budgetCategoryName: category.name,
+                                                    primaryBackgroundColor: budget.category.primaryBackgroundColor,
+                                                    budgetCategoryName: budget.category.name,
                                                     amountAllocated: budget.allocatedAmount,
                                                     amountSpent: budget.currentAmountSpent,
                                                     numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                    footerMessage: budget.footerMessage
+                                                    footerMessage: budget.footerMessage, budget: budget
                                                 )
-                                            }
+//                                            }
                                         }
                                     }
                                 }
@@ -374,16 +374,16 @@ struct BottomBudgetSheet: View {
                                         EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets) { budget in
-                                            ForEach(budget.category) { category in
+//                                            ForEach(budget.category) { category in
                                                 OverallBudgetCategoryCardView(
-                                                    primaryBackgroundColor: category.primaryBackgroundColor,
-                                                    budgetCategoryName: category.name,
+                                                    primaryBackgroundColor: budget.category.primaryBackgroundColor,
+                                                    budgetCategoryName: budget.category.name,
                                                     amountAllocated: budget.allocatedAmount,
                                                     amountSpent: budget.currentAmountSpent,
                                                     numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                    footerMessage: budget.footerMessage
+                                                    footerMessage: budget.footerMessage, budget: budget
                                                 )
-                                            }
+//                                            }
                                         }
                                     }
                                 }
@@ -402,16 +402,16 @@ struct BottomBudgetSheet: View {
                                         EmptyScreenImageView()
                                     } else {
                                         ForEach(filteredBudgets) { budget in
-                                            ForEach(budget.category) { category in
+//                                            ForEach(budget.category) { category in
                                                 OverallBudgetCategoryCardView(
-                                                    primaryBackgroundColor: category.primaryBackgroundColor,
-                                                    budgetCategoryName: category.name,
+                                                    primaryBackgroundColor: budget.category.primaryBackgroundColor,
+                                                    budgetCategoryName: budget.category.name,
                                                     amountAllocated: budget.allocatedAmount,
                                                     amountSpent: budget.currentAmountSpent,
                                                     numberOfDaysSpent: budget.numberOfDaysSpent,
-                                                    footerMessage: budget.footerMessage
+                                                    footerMessage: budget.footerMessage, budget: budget
                                                 )
-                                            }
+//                                            }
                                         }
                                     }
                                 }

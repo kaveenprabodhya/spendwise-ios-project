@@ -88,12 +88,12 @@ struct NewTransactionView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    if let budgetTransaction = budgetTransaction {
+                    if budgetTransaction != nil {
                         Button {
                             if let currentUser = UserManager.shared.getCurrentUser() {
-                                transactionViewModel.update(currentUser: currentUser, transaction: budgetTransaction)
+                                transactionViewModel.update(currentUser: currentUser)
                             }
-                            transactionViewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""), transaction: budgetTransaction)
+                            transactionViewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""))
                         } label: {
                             RoundedRectangle(cornerRadius: 16)
                                 .fill(Color("ColorDarkBlue"))
@@ -146,7 +146,7 @@ struct TransactionHeaderView: View {
                         .foregroundColor(.white)
                         .font(.system(size: 64, weight: .semibold))
                     VStack {
-                        BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, textInputVal: $inputAmount)
+                        BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, alignCetner: false, textInputVal: $inputAmount)
                             .padding(.bottom, transactionViewModel.errorInputAmount != nil ? 2 : 16)
                         if let error = transactionViewModel.errorInputAmount {
                             Text("\(error)")
@@ -319,10 +319,10 @@ struct TransactionBodyView: View {
                             placeholderColor: transactionViewModel.errorDescription ? Color("ColorCherryRed") : .black,
                             textFieldFontSize: 20,
                             placeholderFontSize: 20,
-                            textInputVal: $transactionViewModel.descriptionVal
+                            alignCetner: false, textInputVal: $transactionViewModel.descriptionVal
                         )
                     }
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 12)
                 }
                 .padding(.vertical, 5)
                 .padding(.horizontal, 15)
@@ -351,10 +351,10 @@ struct TransactionBodyView: View {
                                 placeholderColor: transactionViewModel.errorLocation ? Color("ColorCherryRed") : .black,
                                 textFieldFontSize: 20,
                                 placeholderFontSize: 20,
-                                textInputVal: $transactionViewModel.locationVal
+                                alignCetner: false, textInputVal: $transactionViewModel.locationVal
                             )
                         }
-                        .padding(.horizontal, 15)
+                        .padding(.horizontal, 12)
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 15)
@@ -685,7 +685,8 @@ struct CustomImageButtonStyle: ButtonStyle {
 
 struct NewIncomeView_Previews: PreviewProvider {
     static var previews: some View {
-        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: "successful-alert"), recurring: RecurringTransaction(frequency: "monthly", date: Date())))
-        NewTransactionView(budgetTransaction: transaction)
+//        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: "successful-alert"), recurring: RecurringTransaction(frequency: "monthly", date: Date())))
+//        NewTransactionView(budgetTransaction: transaction)
+        NewTransactionView()
     }
 }

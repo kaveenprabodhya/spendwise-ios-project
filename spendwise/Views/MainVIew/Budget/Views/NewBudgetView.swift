@@ -9,13 +9,8 @@ import SwiftUI
 
 struct NewBudgetView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedBudgetTypeOption = ""
-    @State private var selectedBudgetCategoryOption = ""
-    @State private var inputValue = ""
-    @State var isPickDates: Bool = false
-    @State private var showGreeting = false
-    @State private var openFrequency = false
     @ObservedObject var viewModel = BudgetViewModel()
+    var budget: Budget?
     
     var body: some View {
         NavigationStack {
@@ -28,13 +23,48 @@ struct NewBudgetView: View {
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 30)
+                            .padding(.bottom, 20)
                             .padding(.horizontal, 15)
-                        
-                        BottomLineTextFieldView(label: "Name of Budget", placeholder: "", textInputVal: $inputValue)
-                            .padding(.bottom, 12)
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(viewModel.errorInputName ? Color("ColorCherryRed") : .black, lineWidth: 2)
+                            .frame(height: 64)
+                            .overlay {
+                                BottomLineTextFieldView(
+                                    label: "",
+                                    placeholder: "Name of Budget",
+                                    bottomLineColor: viewModel.errorInputName ? Color("ColorCherryRed") : .black,
+                                    bottomLinePadding: 54,
+                                    placeholderColor: viewModel.errorInputName ? Color("ColorCherryRed") : .black,
+                                    textFieldFontSize: 20,
+                                    placeholderFontSize: 20,
+                                    textFieldHeight: 34,
+                                    alignCetner: false, textInputVal: $viewModel.inputNameValue
+                                )
+                                    .padding(.horizontal, 12)
+                                    .padding(.top, 10)
+                            }
+                            .padding(.vertical, 5)
                             .padding(.horizontal, 15)
-                        
-                        SelectOptionView(label: "Pick your Budget Type", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Budget Type", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20) {}
+                        SelectOptionView(
+                            label: "Pick your Budget Type",
+                            selectedOption: $viewModel.selectedBudgetTypeOption,
+                            sheetLabel: "Select Your Budget Type",
+                            placeholderString: "Select Type", 
+                            options : ["Monthly", "Weekly", "Yearly"], 
+                            iconColor: viewModel.errorSelectedBudgetType ? Color("ColorCherryRed") : .black,
+                            placeholderStringColor: viewModel.errorSelectedBudgetType ? Color("ColorCherryRed") : .black,
+                            placeholderStringFontSize: 20,
+                            sheetHeight: 291,
+                            cornerRadius: 25,
+                            strokeColor: viewModel.errorSelectedBudgetType ? Color("ColorCherryRed") : .black
+                        ) {}
+                            .onChange(of: viewModel.selectedBudgetTypeOption) { newSelectedOption in
+                                viewModel.errorSelectedBudgetType = false
+                                if !viewModel.datePicked.isEmpty {
+                                    viewModel.datePicked = ""
+                                    viewModel.errorDatePicked = true
+                                }
+                            }
                             .padding(.vertical, 6)
                             .padding(.horizontal, 15)
                         VStack {
@@ -43,80 +73,105 @@ struct NewBudgetView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             Button {
                                 withAnimation {
-                                    self.isPickDates.toggle()
+                                    if !viewModel.selectedBudgetTypeOption.isEmpty {
+                                        viewModel.isPickDates.toggle()
+                                    } else {
+                                        viewModel.errorSelectedBudgetType = true
+                                    }
                                 }
                             } label: {
                                 HStack {
-                                    Text("Pick your dates")
+                                    let datePicked = viewModel.datePicked.isEmpty ? "Pick your dates" : viewModel.datePicked
+                                    Text("\(datePicked)")
+                                        .foregroundStyle(viewModel.errorDatePicked ? Color("ColorCherryRed") : .black)
                                         .font(.system(size: 20, weight:  .medium))
                                     Spacer()
                                     Image(systemName: "calendar")
-                                        .foregroundColor(Color("ColorVividBlue"))
+                                        .foregroundColor(viewModel.errorDatePicked ? Color("ColorCherryRed") : Color("ColorVividBlue"))
                                         .font(.system(size: 28, weight:  .medium))
                                 }
                             }
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15)
-                                    .stroke(.black, lineWidth: 2)
+                                    .stroke(viewModel.errorDatePicked ? Color("ColorCherryRed") : .black, lineWidth: 2)
                             }
-                            .sheet(isPresented: $isPickDates) {
+                            .onChange(of: viewModel.datePicked) { newSelectedOption in
+                                viewModel.errorDatePicked = false
+                            }
+                            .sheet(isPresented: $viewModel.isPickDates) {
                                 VStack(spacing: 0) {
-                                    VStack(spacing: 0) {
-                                        Button {
-                                            self.isPickDates = false
-                                        } label: {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(Color("ColorMistyLavender"))
-                                                    .frame(width: 40, height: 40)
-                                                Image(systemName: "chevron.down")
-                                                    .foregroundColor(Color("ColorVividBlue"))
-                                                    .font(.system(size: 24, weight:  .medium))
-                                            }
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.bottom, 38)
                                     VStack(spacing: 0) {
                                         Text("Select Your budget cycle")
                                             .font(.system(size: 28, weight: .semibold))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, 5)
+                                    .padding(5)
                                     VStack(spacing: 0) {
                                         HStack {
                                             Text("Enable Frequency")
                                                 .font(.system(size: 18, weight:  .medium))
                                             Spacer()
-                                            CustomToggleView(isOn: $openFrequency)
+                                            CustomToggleView(isOn: $viewModel.openFrequency)
                                         }
                                     }
                                     .padding()
-                                    if openFrequency {
+                                    if viewModel.openFrequency {
                                         VStack {
-                                            SelectOptionView(label: "Frequency", selectedOption: $selectedBudgetTypeOption, sheetLabel: "Select Your Frequency", placeholderString: "Select Type", options : ["Monthly", "Weekly", "Yearly"]){}
+                                            SelectOptionView(
+                                                label: "Frequency",
+                                                selectedOption: $viewModel.selectedFrequencyOption,
+                                                sheetLabel: "Select Your Frequency",
+                                                placeholderString: "Select Type",
+                                                options : ["Monthly", "Weekly", "Yearly"], placeholderStringFontSize: 20, 
+                                                fontSize: 18,
+                                                height: 44,
+                                                sheetHeight: 291,
+                                                cornerRadius: 25
+                                            ){}
                                         }
                                     }
-                                    MultiDatePickerExample()
+                                    MultiDatePickerView(viewModel: viewModel)
                                         .padding(.vertical, 8)
                                     Spacer()
                                     Button {
-                                        
+                                        if viewModel.dateRange.isEmpty && 
+                                            viewModel.selectedBudgetTypeOption.localizedCaseInsensitiveContains("weekly"){
+                                            viewModel.datePicked = ""
+                                            viewModel.errorDatePicked = true
+                                            viewModel.isRangeNotSelected = true
+                                        } else {
+                                            viewModel.isPickDates = false
+                                        }
                                     } label: {
-                                        
                                     }
-                                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Set Cycle", cornerRadius: 35))
+                                    .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 363, height: 48, label: "Set Cycle", cornerRadius: 35))
 
                                 }
+                                .presentationDragIndicator(.visible)
                                 .padding()
                             }
                         }.padding()
                         
-                        SelectOptionView(label: "Pick your Budget Category", selectedOption: $selectedBudgetCategoryOption, sheetLabel: "Select Your Budget Category", placeholderString: "Select Category", options : viewModel.budgetCategoryArray, placeholderStringFontSize: 20) {}
+                        SelectOptionView(
+                            label: "Pick your Budget Category",
+                            selectedOption: $viewModel.selectedBudgetCategoryOption,
+                            sheetLabel: "Select Your Budget Category",
+                            placeholderString: "Select Category",
+                            options : viewModel.budgetCategoryArray,
+                            iconColor: viewModel.errorSelectedBudgetCategory ? Color("ColorCherryRed") : .black,
+                            placeholderStringColor: viewModel.errorSelectedBudgetCategory ? Color("ColorCherryRed") : .black,
+                            placeholderStringFontSize: 20,
+                            strokeColor: viewModel.errorSelectedBudgetCategory ? Color("ColorCherryRed") : .black
+                        ) {}
+                            .onChange(of: viewModel.selectedBudgetCategoryOption) { newSelectedOption in
+                                viewModel.errorSelectedBudgetCategory = false
+                            }
                             .padding(.vertical, 6)
                             .padding(.horizontal, 15)
+                        
                             Spacer()
+                        
                         VStack(spacing: 0) {
                             Text("Receive Alert")
                                 .font(.system(size: 18, weight:  .medium))
@@ -124,19 +179,36 @@ struct NewBudgetView: View {
                             HStack {
                                 Text("Receive alert when it reaches some point.")
                                 Spacer()
-                                CustomToggleView(isOn: $showGreeting)
+                                CustomToggleView(isOn: $viewModel.showGreeting)
                             }
                         }.padding()
                         Spacer()
                         
-                        NavigationLink(destination: SecondView(inputValueOfName: $inputValue, selectedBudgetTypeOption: $selectedBudgetTypeOption, selectedBudgetCategoryOption: $selectedBudgetCategoryOption), label: {
-                            Text("")
-                        }).buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Continue", cornerRadius: 16))
-                        
+                        Button {
+                            if viewModel.onBeforeContinueValidation() {
+                                viewModel.isOnContinue = true
+                            }
+                        } label: {
+                        }
+                        .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Continue", cornerRadius: 16))
+                        .navigationDestination(isPresented: $viewModel.isOnContinue) {
+                            SecondView(viewModel: viewModel)
+                        }
                         Spacer()
                     }
                 }
             }
+            .onAppear(perform: {
+                if let budget = budget {
+                    viewModel.inputNameValue = budget.name
+                    viewModel.selectedBudgetTypeOption = viewModel.getBudgetType(type: budget.budgetType.type)
+                    if let dateVal = budget.budgetType.date.stringValue() {
+                        viewModel.datePicked = dateVal
+                    }
+                    viewModel.selectedBudgetCategoryOption = budget.category.name
+                    viewModel.textInputAmountVal = String(budget.allocatedAmount)
+                }
+            })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -161,49 +233,165 @@ struct NewBudgetView: View {
     }
 }
 
-struct MultiDatePickerExample: View {
-    @Environment(\.calendar) var calendar
-    @Environment(\.timeZone) var timeZone
+struct MultiDatePickerView: View {
+    @ObservedObject var viewModel: BudgetViewModel
     
-    @State private var dates: Set<DateComponents> = []
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     
-    var body: some View {
-        let currentDate = calendar.date(from: DateComponents(timeZone: timeZone))!
-        let currentMonth = calendar.component(.month, from: currentDate)
-        
-        // Calculate the maximum selectable date range based on budget type
-        let maxSelectableRange: Range<Date> = {
-            if isMonthlyBudgetType() {
-                // If budget type is monthly, allow any range within the current month
-                let startOfMonth = calendar.date(from: DateComponents(timeZone: timeZone, year: calendar.component(.year, from: currentDate), month: currentMonth, day: 1))!
-                let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
-                return startOfMonth..<endOfMonth
-            } else {
-                // If budget type is weekly, limit the range to 1-7 days
-                let maxEndDate = calendar.date(byAdding: DateComponents(day: 7), to: currentDate)!
-                return currentDate..<maxEndDate
-            }
-        }()
-        
-        return MultiDatePicker("Dates Available", selection: $dates, in: maxSelectableRange)
-            .fixedSize()
+    var currentYear: Int {
+        Calendar.current.component(.year, from: Date())
     }
     
-    // Replace this with your actual logic for determining the budget type
-    func isMonthlyBudgetType() -> Bool {
-        // You should implement logic to determine if the budget type is monthly or weekly
-        // For this example, we assume it's monthly
-        return true
+    var years: [String] {
+        (0..<10).map { String(currentYear + $0) }
+    }
+    
+    var body: some View {
+        VStack {
+            if viewModel.selectedBudgetTypeOption.localizedCaseInsensitiveContains("monthly"){
+                VStack {
+                    Picker(selection: $viewModel.selectedMonthIndex, label: Text("Select a Month")) {
+                        ForEach(0..<12) { index in
+                            Text(self.months[index]).tag(index)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .labelsHidden() // Hide the label for cleaner UI
+                    .padding()
+                    
+                    Text("You selected: \(months[viewModel.selectedMonthIndex])")
+                        .padding()
+                }
+                .onDisappear {
+                    viewModel.datePicked = months[viewModel.selectedMonthIndex]
+                }
+            }
+            
+            if viewModel.selectedBudgetTypeOption.localizedCaseInsensitiveContains("yearly"){
+                VStack {
+                    Picker(selection: $viewModel.selectedYearlyIndex, label: Text("Select a Year")) {
+                        ForEach(0..<10) { index in
+                            Text(self.years[index]).tag(index)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .labelsHidden() // Hide the label for cleaner UI
+                    .padding()
+                    
+                    Text("You selected: \(years[viewModel.selectedYearlyIndex])")
+                        .padding()
+                }
+                .onDisappear {
+                    viewModel.datePicked = years[viewModel.selectedYearlyIndex]
+                }
+            }
+            
+            if viewModel.selectedBudgetTypeOption.localizedCaseInsensitiveContains("weekly"){
+                VStack {
+                    Picker(selection: $viewModel.selectedWeeklyMonthIndex, label: Text("Select a Month")) {
+                        ForEach(0..<12) { index in
+                            Text(self.months[index]).tag(index)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .labelsHidden() // Hide the label for cleaner UI
+                    .padding()
+                    
+                    Text("You selected: \(months[viewModel.selectedWeeklyMonthIndex])")
+                        .padding()
+                   
+                }
+                .onDisappear {
+                    if !viewModel.dateRange.isEmpty {
+                        viewModel.datePicked = "\(months[viewModel.selectedWeeklyMonthIndex]), \(viewModel.dateRange)"
+                    }
+                }
+                CalendarView(selectedMonth: viewModel.selectedWeeklyMonthIndex + 1, viewModel: viewModel)
+            }
+        }
     }
 }
 
+struct CalendarView: View {
+    let calendar = Calendar.current
+    let selectedMonth: Int
+    @ObservedObject var viewModel: BudgetViewModel
+    
+    func generateCalendarGridItems(month: Int) -> [String] {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: Date())
+        // Get the date for the given year and month
+        guard let dateForMonth = calendar.date(from: DateComponents(year: year, month: month)),
+            let daysInMonth = calendar.range(of: .day, in: .month, for: dateForMonth)?.count else {
+                fatalError("Failed to calculate days in the selected month.")
+        }
+        
+        // Get the first day of the month and its weekday
+        let firstDayOfMonth = calendar.date(from: DateComponents(year: year, month: month, day: 1))!
+        let weekday = calendar.component(.weekday, from: firstDayOfMonth)
+        
+        // Prepare the grid items
+        var gridItems: [String] = []
+        
+        // Add empty cells for days before the first day of the month
+        gridItems.append(contentsOf: Array(repeating: "", count: weekday - 1))
+        
+        // Add day numbers to the grid
+        gridItems.append(contentsOf: (1...daysInMonth).map { String($0) })
+        
+        return gridItems
+    }
+    
+    var body: some View {
+        
+        let gridItems = generateCalendarGridItems(month: selectedMonth)
+        return LazyVGrid(columns: Array(repeating: GridItem(), count: 7), content: {
+            Text("S").frame(width: 40, height: 40)
+            Text("M").frame(width: 40, height: 40)
+            Text("T").frame(width: 40, height: 40)
+            Text("W").frame(width: 40, height: 40)
+            Text("T").frame(width: 40, height: 40)
+            Text("F").frame(width: 40, height: 40)
+            Text("S").frame(width: 40, height: 40)
+            
+            ForEach(gridItems, id: \.self) { gridItem in
+                if gridItem.isEmpty {
+                    Text("")
+                        .frame(width: 40, height: 40)
+                } else {
+                    Button {
+                        guard let day = Int(gridItem) else { return }
+                        viewModel.didSelectDate(day)
+                    } label: {
+                        Text(gridItem)
+                            .frame(width: 40, height: 40)
+                            .border(Color.black, width: 1)
+                            .background(
+                                (viewModel.startDate == Int(gridItem) || viewModel.endDate == Int(gridItem))
+                                ? Color.blue.opacity(0.3)
+                                : Color.clear
+                            )
+                    }
+                }
+            }
+        })
+        .padding()
+    }
+}
+
+
+extension DateFormatter {
+    static var shortDateFormat: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter
+    }
+}
+
+
 struct SecondView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var inputValueOfName: String
-    @Binding var selectedBudgetTypeOption: String
-    @Binding var selectedBudgetCategoryOption: String
-    @State var textInputAmountVal: String = ""
-    @State var isSubmissionSuccess: Bool = false
+    @ObservedObject var viewModel: BudgetViewModel
     
     var body: some View {
         NavigationStack {
@@ -214,13 +402,26 @@ struct SecondView: View {
                         Text("Set Amount")
                             .font(.system(size: 22, weight: .medium))
                         VStack(spacing: 0) {
-                            BottomLineTextFieldView(label: "", placeholder: "0.00", textInputVal: $textInputAmountVal)
+                            BottomLineTextFieldView(
+                                label: "",
+                                placeholder: "0.00",
+                                alignCetner: true,
+                                textInputVal: $viewModel.textInputAmountVal
+                            )
                                 .keyboardType(.decimalPad)
                                 .frame(width: 150)
+                            if let error = viewModel.errorInputAmount {
+                                Text("\(error)")
+                                    .foregroundStyle(Color("ColorCherryRed"))
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .padding(.bottom, 3)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 20)
+                            }
                         }.padding()
                         HStack (spacing: 10) {
                             Button {
-                                
+                                viewModel.textInputAmountVal = "150000"
                             } label: {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color("ColorMistyLavender"))
@@ -232,19 +433,19 @@ struct SecondView: View {
                                     }
                             }
                             Button {
-                                
+                                viewModel.textInputAmountVal = "25000"
                             } label: {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color("ColorMistyLavender"))
                                     .frame(height: 46)
                                     .overlay {
-                                        Text("\(formatCurrency(value: 1500))")
+                                        Text("\(formatCurrency(value: 25000))")
                                             .font(.system(size: 18, weight: .medium))
                                             .foregroundColor(Color("ColorVividBlue"))
                                     }
                             }
                             Button {
-                                
+                                viewModel.textInputAmountVal = "15000"
                             } label: {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color("ColorMistyLavender"))
@@ -259,7 +460,13 @@ struct SecondView: View {
                         .padding()
                         Spacer()
                         Button("", action: {
-                            isSubmissionSuccess = true
+                            if viewModel.validateInputAmount() {
+                                if let currentUser = UserManager.shared.getCurrentUser() {
+                                    viewModel.submit(currentUser: currentUser)
+                                }
+                                viewModel.submit(currentUser: User(id: UUID(), name: "", email: "", password: ""))
+                            }
+                            
                         })
                         .buttonStyle(
                             CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Create", cornerRadius: 16)
@@ -268,7 +475,7 @@ struct SecondView: View {
                     }.padding()
                 }
             }
-            .navigationDestination(isPresented: $isSubmissionSuccess) {
+            .navigationDestination(isPresented: $viewModel.isSubmissionSuccess) {
                 ContentView(index: 3)
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -361,6 +568,22 @@ struct CustomToggleView: View {
 
 struct NewBudgetView_Previews: PreviewProvider {
     static var previews: some View {
-        NewBudgetView()
+//        NewBudgetView()
+        let budget = Budget(
+            id: UUID(), name: "name",
+            budgetType: BudgetType(type: .yearly, date: .yearOnly(2024), limit: 8000),
+            category:
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Rent/Mortage",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
+            allocatedAmount: 52362.00,
+            currentAmountSpent: 12283.00,
+            numberOfDaysSpent: 8,
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            transactions: []
+        )
+        NewBudgetView(budget: budget)
     }
 }

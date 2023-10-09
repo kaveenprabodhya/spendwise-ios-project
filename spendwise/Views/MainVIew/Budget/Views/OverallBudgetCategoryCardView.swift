@@ -14,6 +14,7 @@ struct OverallBudgetCategoryCardView: View {
     var amountSpent: Double
     var numberOfDaysSpent: Int
     var footerMessage: FooterMessage
+    var budget: Budget
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -37,7 +38,7 @@ struct OverallBudgetCategoryCardView: View {
                             )
                         Spacer()
                         NavigationLink {
-                            DetailBudgetView()
+                            DetailBudgetView(budget: budget)
                         } label: {
                             Image(systemName: "arrow.forward.circle")
                                 .font(.system(size: 28, weight: .semibold))
@@ -110,6 +111,27 @@ struct OverallBudgetCategoryCardView: View {
 
 struct OverallBudgetCategoryCardView_Previews: PreviewProvider {
     static var previews: some View {
-        OverallBudgetCategoryCardView(primaryBackgroundColor: "ColorSecondTealGreen", budgetCategoryName: "Vacation", amountAllocated: 10000000, amountSpent: 3526001, numberOfDaysSpent: 12, footerMessage: FooterMessage(message: "Hello, .... ^_-", warning: false))
+        let budget = Budget(
+            id: UUID(), name: "",
+            budgetType: BudgetType(
+                type: .monthly,
+                date: .monthOnly(9),
+                limit: 300),
+            category: BudgetCategory(
+                id: UUID(),
+                name: "Shopping",
+                primaryBackgroundColor: "ColorVividBlue",
+                iconName: "cart"
+            ),
+            allocatedAmount: 300000000,
+            currentAmountSpent: 3000000000,
+            numberOfDaysSpent: 2,
+            footerMessage: FooterMessage(
+                message: "Cool! let's keep your expense below the budget",
+                warning: false
+            ),
+            transactions: []
+        )
+        OverallBudgetCategoryCardView(primaryBackgroundColor: "ColorSecondTealGreen", budgetCategoryName: "Vacation", amountAllocated: 10000000, amountSpent: 3526001, numberOfDaysSpent: 12, footerMessage: FooterMessage(message: "Hello, .... ^_-", warning: false), budget: budget)
     }
 }

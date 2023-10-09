@@ -9,6 +9,45 @@ import SwiftUI
 
 class BudgetViewModel: ObservableObject {
     @Published var amountSpentForLast7Days: [SpentAmountForPreviousSevenDays] = []
+    @Published var isSheetRemovePresented: Bool = false
+    @Published var capsuleWidth: CGFloat = 0
+    @Published var categoryNameWidth: CGFloat = 0
+    
+    @Published var selectedBudgetTypeOption: String = ""
+    @Published var selectedBudgetCategoryOption: String = ""
+    @Published var selectedFrequencyOption: String = ""
+    @Published var inputNameValue: String = ""
+    @Published var datePicked: String = ""
+    @Published var isPickDates: Bool = false
+    @Published var showGreeting = false
+    @Published var openFrequency = false
+    @Published var isOnContinue = false
+    
+    @Published var errorInputName: Bool = false
+    @Published var errorSelectedBudgetType: Bool = false
+    @Published var errorDatePicked: Bool = false
+    @Published var errorSelectedBudgetCategory: Bool = false
+    @Published var errorInputAmount: String? = ""
+    
+    @Published var dateRange: String = ""
+    @Published var isRangeNotSelected: Bool = false
+    @Published var startDate: Int? = nil
+    @Published var endDate: Int? = nil
+    @Published var selectedDate = Date()
+    @Published var selectedWeeklyMonthIndex = 0
+    @Published var selectedYearlyIndex = 0
+    @Published var selectedMonthIndex = 0
+    @Published var selectedWeeklyMonth = ""
+    @Published var selectedMonth = ""
+    @Published var selectedYear = ""
+    
+    @Published var textInputAmountVal: String = ""
+    @Published var isSubmissionSuccess: Bool = false
+    
+    @Published var onSubmitSuccess: Bool = false
+    @Published var onDeleteSuccess: Bool = false
+    @Published var updatedTransaction: Bool = false
+    
     @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     @Published var budgetCategoryArray: [BudgetCategory]  =
     [
@@ -124,228 +163,214 @@ class BudgetViewModel: ObservableObject {
     @Published var budgetArray:[Budget] =
     [
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Shopping",
+                    primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
+                ),
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: true)
+            footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Shopping",
-                        primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Shopping",
+                    primaryBackgroundColor: "ColorGoldenrod", iconName: "cart"
+                ),
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(8), limit: 2500),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Entertainment",
-                        primaryBackgroundColor: "ColorGoldenrod", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Entertainment",
+                    primaryBackgroundColor: "ColorGoldenrod", iconName: ""
+                ),
             allocatedAmount: 100000.00,
             currentAmountSpent: 10600.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(9), limit: 2500),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Dining",
-                        primaryBackgroundColor: "ColorGoldenrod", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Dining",
+                    primaryBackgroundColor: "ColorGoldenrod", iconName: ""
+                ),
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true)
+            footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Transportation",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 546321.00,
             currentAmountSpent: 96532.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .yearly, date: .yearOnly(2025), limit: 8000),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Transportation",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Transportation",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 546321.00,
             currentAmountSpent: 96532.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .yearly, date: .yearOnly(2023), limit: 8000),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Rent/Mortage",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 52362.00,
             currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .yearly, date: .yearOnly(2024), limit: 8000),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Rent/Mortage",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Rent/Mortage",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 52362.00,
             currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false)
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(10, 15, 22), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Groceries",
-                        primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Groceries",
+                    primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
+                ),
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(10, 23, 27), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Rent",
-                        primaryBackgroundColor: "ColorLavenderPurple", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Rent",
+                    primaryBackgroundColor: "ColorLavenderPurple", iconName: ""
+                ),
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(10, 1, 7), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Vacation",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(9, 1, 7), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Groceries",
-                        primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Groceries",
+                    primaryBackgroundColor: "ColorSecondTealGreen", iconName: ""
+                ),
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(5, 15, 22), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Vacation",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 458000.00,
             currentAmountSpent: 10000.00,
             numberOfDaysSpent: 12,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
         Budget(
-            id: UUID(),
+            id: UUID(), name: "",
             budgetType: BudgetType(type: .weekly, date: .dateRange(7, 15, 22), limit: 1200),
             category:
-                [
-                    BudgetCategory(
-                        id: UUID(),
-                        name: "Vacation",
-                        primaryBackgroundColor: "ColorVividBlue", iconName: ""
-                    )
-                ],
+                BudgetCategory(
+                    id: UUID(),
+                    name: "Vacation",
+                    primaryBackgroundColor: "ColorVividBlue", iconName: ""
+                ),
             allocatedAmount: 458000.00,
             currentAmountSpent: 10000.00,
             numberOfDaysSpent: 12,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true)
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            transactions: []
         ),
     ]
     
@@ -534,9 +559,7 @@ class BudgetViewModel: ObservableObject {
         for (_, weeklyBudgets) in budgetByWeek {
             for (_, budgetArray) in weeklyBudgets {
                 for budget in budgetArray {
-                    if let categoryName = budget.category.first?.name {
-                        result["\(categoryName)"] = budget.category.first?.primaryBackgroundColor ?? ""
-                    }
+                    result["\(budget.category.name)"] = budget.category.primaryBackgroundColor
                 }
             }
         }
@@ -554,7 +577,7 @@ class BudgetViewModel: ObservableObject {
                     let month = components[0]
                     let weekDescription = components[1]
                     
-                    if let categoryName = budget.first?.category.first?.name {
+                    if let categoryName = budget.first?.category.name {
                         if var monthArray = result[month] {
                             // Create a new dictionary for the budget category and dateRange
                             let budgetDict = [categoryName: weekDescription]
@@ -682,6 +705,227 @@ class BudgetViewModel: ObservableObject {
                 switch result {
                 case .success(let overview):
                     self.overview = overview
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func formatDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd - MMMM - yyyy"
+        return dateFormatter.string(from: date)
+    }
+    
+    func formatDate2(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MMMM/yyyy"
+        return dateFormatter.string(from: date)
+    }
+    
+    func getTransactionType(type: TransactionCategory) -> String {
+        switch type {
+        case .expense:
+            return "Expense"
+        case .income:
+            return "Income"
+        }
+    }
+    
+    private func isFieldEmpty(_ fieldName: String) -> Bool {
+        return fieldName.isEmpty
+    }
+    
+    func onBeforeContinueValidation() -> Bool {
+        let name = isFieldEmpty(inputNameValue)
+        let budgetType = isFieldEmpty(selectedBudgetTypeOption)
+        let date = isFieldEmpty(datePicked)
+        let category = isFieldEmpty(selectedBudgetCategoryOption)
+        
+        if name {
+            errorInputName = true
+        }
+        else {
+            errorInputName = false
+        }
+        
+        if budgetType {
+            errorSelectedBudgetType = true
+        }
+        else {
+            errorSelectedBudgetType = false
+        }
+        
+        if date {
+            errorDatePicked = true
+        }
+        else {
+            errorDatePicked = false
+        }
+        
+        if category {
+            errorSelectedBudgetCategory = true
+        }
+        else {
+            errorSelectedBudgetCategory = false
+        }
+        
+        if name || budgetType || date || category {
+            return false
+        }
+        return true
+    }
+    
+    func validateInputAmount() -> Bool {
+        let amount = isFieldEmpty(textInputAmountVal)
+        if amount {
+            errorInputAmount = "Amount is required."
+        }
+        else if !validateNumberFormat() {
+            errorInputAmount = "Invalid Amount"
+        }
+        else {
+            errorInputAmount = nil
+        }
+        
+        if amount || !validateNumberFormat() {
+            return false
+        }
+        
+        return true
+    }
+    
+    func validateNumberFormat() -> Bool {
+        return Double(textInputAmountVal) != nil
+    }
+    
+    func didSelectDate(_ day: Int) {
+        if let start = startDate, let end = endDate {
+            // Reset selection if both start and end dates are already selected
+            startDate = nil
+            endDate = nil
+            print(start, end)
+        } else if startDate == nil {
+            // Set start date if it's nil
+            startDate = day
+        } else if endDate == nil && day > startDate! && day <= startDate! + 7 {
+            // Set end date if start date is already selected and the selected date is after start date
+            endDate = day
+        }
+        
+        // Update date range
+        if let start = startDate, let end = endDate {
+            dateRange = "\(start)-\(end)"
+        } else if let start = startDate {
+            dateRange = "\(start)-\(start)"
+        } else {
+            dateRange = ""
+        }
+    }
+    
+    func getBudgetType(type: BudgetTypeOption) -> String {
+        switch type {
+        case .monthly:
+            return "Monthly"
+        case .yearly:
+            return "Yearly"
+        case .weekly:
+            return "Weekly"
+        }
+    }
+    
+    func getBudgetTypeOption(rawValue: String) -> BudgetTypeOption? {
+        switch rawValue {
+        case "Monthly":
+            return .monthly
+        case "Yearly":
+            return .yearly
+        case "Weekly":
+            return .weekly
+        default:
+            return nil
+        }
+    }
+    
+    func getBudgetDateFromString(_ string: String) -> BudgetDateOption? {
+        let components = string.components(separatedBy: ", ")
+        guard let firstComponent = components.first else {
+            return nil
+        }
+        
+        if let year = Int(firstComponent) {
+            return .yearOnly(year)
+        } else if let month = DateFormatter().monthSymbols.firstIndex(of: firstComponent) {
+            if components.count == 1 {
+                return .monthOnly(month + 1)
+            } else {
+                let dateComponents = components[1].components(separatedBy: "-").compactMap { Int($0) }
+                if dateComponents.count == 2 {
+                    return .dateRange(month + 1, dateComponents[0], dateComponents[1])
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    func filterCategory(byName name: String) -> BudgetCategory? {
+        return budgetCategoryArray.first { $0.name == name }
+    }
+    
+    func submit(currentUser: User) {
+        print("called")
+        if let filteredCategory = filterCategory(byName: selectedBudgetCategoryOption) {
+            if let budgetType = getBudgetTypeOption(rawValue: selectedBudgetTypeOption) {
+                if let budgetDate = getBudgetDateFromString(datePicked) {
+                    if let inputAmount = Double(textInputAmountVal) {
+                        print("success")
+                        let budget = Budget(
+                            id: UUID(), name: inputNameValue,
+                            budgetType: BudgetType(type: budgetType, date: budgetDate, limit: 4000),
+                            category: filteredCategory,
+                            allocatedAmount: inputAmount,
+                            currentAmountSpent: 0,
+                            numberOfDaysSpent: 0,
+                            footerMessage: FooterMessage(message: "", warning: false),
+                            transactions: []
+                        )
+                        BudgetApiService.createBudget(currentUser: currentUser, budget: budget) { result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success(_):
+                                    self.isSubmissionSuccess = true
+                                case .failure(let error):
+                                    print("Error fetching data: \(error)")
+                                }
+                            }
+                        }
+                    } else {
+                        print("Budget input amount cast error")
+                    }
+                } else {
+                    print("Budget Date conversion error")
+                }
+            } else {
+                print("Budget Type conversion error")
+            }
+        } else {
+            print("Category not found")
+        }
+        
+    }
+    
+    func update(currentUser: User) {
+        
+    }
+    
+    func delete(currentUser: User, budgetId: UUID) {
+        BudgetApiService.deleteBudget(currentUser: currentUser, budgetId: budgetId){ result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self.onDeleteSuccess = true
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }
