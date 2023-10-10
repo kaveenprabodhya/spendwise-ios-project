@@ -20,11 +20,18 @@ struct TransactionView: View {
     @State var sortByLowest: Bool = false
     @State var sortByNewest: Bool = false
     @State var sortByOldest: Bool = false
+    @State var index: Int = 0
     @State private var checkedStates: [Bool] =  Array(repeating: false, count: 18)
     @ObservedObject var transactionViewModel: TransactionViewModel = TransactionViewModel()
     @ObservedObject var budgetViewModel: BudgetViewModel = BudgetViewModel()
     
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
+//    @State var index: Int = 0
+    
+    var currentMonth: Int {
+       Calendar.current.component(.month, from: Date()) - 1
+    }
     
     var body: some View {
         NavigationStack {
@@ -86,9 +93,15 @@ struct TransactionView: View {
             }
             TabView() {
                 if sortedBy == "Weekly" {
-                    WeeklyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
+                    WeeklyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months, index: $index)
+                        .onAppear {
+                            index = currentMonth
+                        }
                 } else if sortedBy == "Monthly" {
-                    MonthlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months)
+                    MonthlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel, months: months, index: $index)
+                        .onAppear {
+                            index = currentMonth
+                        }
                 } else if sortedBy == "Yearly" {
                     YearlyTransactions(transactionViewModel: transactionViewModel, budgetViewModel: budgetViewModel)
                 }
@@ -250,7 +263,6 @@ struct TransactionView: View {
                                     let trueCount = checkedStates.reduce(0) { (count, value) in
                                         return count + (value ? 1 : 0)
                                     }
-                                    
                                     defaultVal = trueCount
                                     isOnCategoryClicked = false
                                 } label: {}
@@ -297,7 +309,7 @@ struct MonthlyTransactions: View {
     @ObservedObject var transactionViewModel: TransactionViewModel
     @ObservedObject var budgetViewModel: BudgetViewModel
     var months: [String]
-    @State var index: Int = 0
+    @Binding var index: Int
     
     var body: some View {
         VStack {
@@ -321,7 +333,7 @@ struct WeeklyTransactions: View {
     @ObservedObject var transactionViewModel: TransactionViewModel
     @ObservedObject var budgetViewModel: BudgetViewModel
     var months: [String]
-    @State var index: Int = 0
+    @Binding var index: Int
     
     var body: some View {
         VStack {

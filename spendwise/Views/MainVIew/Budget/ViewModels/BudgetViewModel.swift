@@ -46,6 +46,7 @@ class BudgetViewModel: ObservableObject {
     @Published var onSubmitSuccess: Bool = false
     @Published var onDeleteSuccess: Bool = false
     @Published var onUpdateSuccess: Bool = false
+    @Published var onFailure: Bool = false
     
     @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     @Published var budgetCategoryArray: [BudgetCategory]  =
@@ -54,113 +55,114 @@ class BudgetViewModel: ObservableObject {
             id: UUID(),
             name: "Shopping",
             primaryBackgroundColor: "ColorShopping",
-            iconName: "cart"
+            iconName: "cart.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Transportation",
             primaryBackgroundColor: "ColorTransportation",
-            iconName: ""
+            iconName: "car.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Groceries",
             primaryBackgroundColor: "ColorGroceries",
-            iconName: "basket"
+            iconName: "cart.badge.plus"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Dining Out",
             primaryBackgroundColor: "ColorDiningOut",
-            iconName: ""
+            iconName: "fork.knife.circle.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Rent/Mortgage",
             primaryBackgroundColor: "ColorRentAndMortgage",
-            iconName: ""
+            iconName: "house.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Utilities",
             primaryBackgroundColor: "ColorUtilities",
-            iconName: ""
+            iconName: "bolt.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Healthcare",
             primaryBackgroundColor: "ColorHealthcare",
-            iconName: ""
+            iconName: "staroflife.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Savings/Investments",
             primaryBackgroundColor: "ColorSavingsAndInvestments",
-            iconName: ""
+            iconName: "dollarsign.circle.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Clothing",
             primaryBackgroundColor: "ColorClothing",
-            iconName: ""
+            iconName: "bag.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Travel",
             primaryBackgroundColor: "ColorTravel",
-            iconName: ""
+            iconName: "airplane"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Maintenance",
             primaryBackgroundColor: "ColorMaintenance",
-            iconName: ""
+            iconName: "wrench.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Gifts/Donations",
             primaryBackgroundColor: "ColorGiftsAndDonations",
-            iconName: ""
+            iconName: "gift.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Subscriptions",
             primaryBackgroundColor: "ColorSubscriptions",
-            iconName: ""
+            iconName: "newspaper.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Miscellaneous",
             primaryBackgroundColor: "ColorMiscellaneous",
-            iconName: ""
+            iconName: "ellipsis.circle.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Taxes",
             primaryBackgroundColor: "ColorTaxes",
-            iconName: ""
+            iconName: "doc.text.below.ecg.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Entertainment",
             primaryBackgroundColor: "ColorEntertainment",
-            iconName: ""
+            iconName: "tv.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Debt Repayment",
             primaryBackgroundColor: "ColorDebtRepayment",
-            iconName: ""
+            iconName: "creditcard.fill"
         ),
         BudgetCategory(
             id: UUID(),
             name: "Education",
             primaryBackgroundColor: "ColorEducation",
-            iconName: ""
+            iconName: "book.fill"
         )
     ]
-    @Published var budgetArray:[Budget] =
-    [
+
+    @Published var budgetArray:[Budget] = []
+    /*[
         Budget(
             id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
@@ -371,7 +373,7 @@ class BudgetViewModel: ObservableObject {
             footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
             transactions: []
         ),
-    ]
+    ]*/
     
     var yearlyBudgets: [Budget] {
         budgetArray.filter { $0.budgetType.type == .yearly }
@@ -948,9 +950,11 @@ class BudgetViewModel: ObservableObject {
                         BudgetApiService.createBudget(currentUser: currentUser, budget: budget) { result in
                             DispatchQueue.main.async {
                                 switch result {
-                                case .success(_):
+                                case .success(let createdBudget):
                                     self.onSubmitSuccess = true
+                                    self.budgetArray.append(createdBudget)
                                 case .failure(let error):
+                                    self.onFailure = true
                                     print("Error fetching data: \(error)")
                                 }
                             }
@@ -990,9 +994,17 @@ class BudgetViewModel: ObservableObject {
                         BudgetApiService.updateBudget(currentUser: currentUser, budget: budget) { result in
                             DispatchQueue.main.async {
                                 switch result {
-                                case .success(_):
+                                case .success(let updatedBudget):
+                                    if let index = self.budgetArray.firstIndex(where: { $0.id == updatedBudget.id }) {
+                                        // Replace the old budget with the updated budget in the budgetArray
+                                        self.budgetArray[index] = updatedBudget
+                                    } else {
+                                        // If the budget was not found, append the updated budget to the array
+                                        self.budgetArray.append(updatedBudget)
+                                    }
                                     self.onUpdateSuccess = true
                                 case .failure(let error):
+                                    self.onFailure = true
                                     print("Error fetching data: \(error)")
                                 }
                             }
@@ -1017,8 +1029,13 @@ class BudgetViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
+                    if let index = self.budgetArray.firstIndex(where: { $0.id == budgetId }) {
+                        // Remove the budget object from the budgetArray
+                        self.budgetArray.remove(at: index)
+                    }
                     self.onDeleteSuccess = true
                 case .failure(let error):
+                    self.onFailure = true
                     print("Error fetching data: \(error)")
                 }
             }

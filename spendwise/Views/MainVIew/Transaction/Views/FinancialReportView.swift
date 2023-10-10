@@ -92,12 +92,17 @@ struct FinancialReportView: View {
             }
             .padding(.horizontal, 16)
             VStack(alignment: .leading) {
-                Text("Total Amount")
-                    .font(.system(size: 24, weight: .medium))
+                HStack {
+                    Text("Total Amount")
+                        .font(.system(size: 24, weight: .medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    Spacer()
+                    Text("\(formatCurrency(value: 352000))")
+                        .font(.system(size: 18, weight: .medium))
+                }.padding(.horizontal, 15)
             }
             .padding(.horizontal, 15)
-            .padding(.vertical, 10)
+            .padding(.top, 20)
             VStack {
                 TabView(selection: $selectedGraphTab) {
                     if selectedGraphTab == .lineChart {
@@ -109,7 +114,9 @@ struct FinancialReportView: View {
                         )
                     }
                     if selectedGraphTab == .pieChart {
-                        PieChartView()
+                        VStack {
+                            PieChartView()
+                        }.padding(.leading, 10)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -230,7 +237,7 @@ struct FinancialReportView: View {
 struct IncomeTabView: View {
     var body: some View {
         ScrollView() {
-            TransactionListItem(iconName: "cart", transactionName: "Shopping", transactionAmount: 123.00, transactionDescription: "Buy some cloths", transactionTime: "16:00", transactionType: .income)
+            TransactionListItem(iconName: "cart", iconColor: .yellow, transactionName: "Shopping", transactionAmount: 123.00, transactionDescription: "Buy some cloths", transactionTime: "16:00", transactionType: .income)
         }
     }
 }
@@ -254,7 +261,7 @@ struct PieChartView: View {
             HStack {
                 VStack {
                     DonutChart(data: [300, 500, 200], colors: [.red, .green, .blue])
-                        .frame(width: 250, height: 200)
+                        .frame(width: 250, height: 230)
                 }
                 VStack {
                     ForEach(categoryData, id: \.category) { item in
@@ -398,6 +405,9 @@ struct DonutChart: View {
                 Circle()
                     .fill(Color.white)
                     .frame(width: radius * 1.3, height: radius * 1.3)
+                    .overlay {
+                        Text("Expenses")
+                    }
             }
         }
     }

@@ -43,6 +43,7 @@ class TransactionViewModel: ObservableObject {
     @Published var onSubmitSuccess: Bool = false
     @Published var onDeleteSuccess: Bool = false
     @Published var onUpdateSuccess: Bool = false
+    @Published var onFailure: Bool = false
     
     @Published var transactionArray: [BudgetTransaction] = [
         BudgetTransaction(
@@ -401,10 +402,12 @@ class TransactionViewModel: ObservableObject {
                     TransactionApiService.createTransaction(currentUser: currentUser, transaction: transaction) { result in
                         DispatchQueue.main.async {
                             switch result {
-                            case .success(_):
+                            case .success(let createdTransaction):
                                 self.onSubmitSuccess = true
+                                self.transactionArray.append(createdTransaction)
                             case .failure(let error):
                                 print("Error fetching data: \(error)")
+                                self.onFailure = true
                             }
                         }
                     }
@@ -425,9 +428,14 @@ class TransactionViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
+                    if let index = self.transactionArray.firstIndex(where: { $0.id == transactionId }) {
+                        // Remove the transaction object from the transactions array
+                        self.transactionArray.remove(at: index)
+                    }
                     self.onDeleteSuccess = true
                 case .failure(let error):
                     print("Error fetching data: \(error)")
+                    self.onFailure = true
                 }
             }
         }
@@ -467,10 +475,15 @@ class TransactionViewModel: ObservableObject {
                         TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
                             DispatchQueue.main.async {
                                 switch result {
-                                case .success(_):
+                                case .success(let updatedTransaction):
+                                    if let index = self.transactionArray.firstIndex(where: { $0.id == updatedTransaction.id }) {
+                                        // Replace the old transaction with the updated transaction in the transactions array
+                                        self.transactionArray[index] = updatedTransaction
+                                    }
                                     self.onUpdateSuccess = true
                                 case .failure(let error):
                                     print("Error fetching data: \(error)")
+                                    self.onFailure = true
                                 }
                             }
                         }

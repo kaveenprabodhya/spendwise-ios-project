@@ -493,8 +493,18 @@ struct SecondView: View {
                             )
                         }
                         Spacer()
-                    }.padding()
+                    }
+                    .padding()
                 }
+            }
+            .alert(isPresented: $viewModel.onFailure) {
+                Alert(
+                    title: Text("Something Went Wrong"),
+                    message: Text("An error occurred while processing your request."),
+                    dismissButton: .default(Text("OK")) {
+                        // Handle dismiss action if needed
+                    }
+                )
             }
             .navigationDestination(isPresented: $viewModel.onSubmitSuccess) {
                 ContentView(isVisibleAlert: true, alertType: .create, index: 3)
