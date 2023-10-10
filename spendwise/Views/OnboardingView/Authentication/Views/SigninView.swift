@@ -15,7 +15,6 @@ struct SigninView: View {
     @State private var isSecure: Bool = true
     @State private var isForgetPasswordOn: Bool = false
     @ObservedObject var viewModel: AuthViewModel = AuthViewModel()
-    @ObservedObject var keyboard = KeyboardResponder()
     
     var body: some View {
         VStack {

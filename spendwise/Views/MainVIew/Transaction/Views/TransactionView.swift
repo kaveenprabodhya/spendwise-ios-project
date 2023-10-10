@@ -263,11 +263,11 @@ struct TransactionView: View {
                         .padding(.horizontal, 35)
                         Spacer()
                         Button {
-                            
-                        } label: {
-                            
-                        }
-                        .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply", cornerRadius: 25))
+                            withAnimation {
+                                isOnFilterClicked = false
+                            }
+                        } label: {}
+                        .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 383, height: 56, label: "Apply Filters", cornerRadius: 25))
                     }
                 }
                 Spacer()

@@ -28,13 +28,15 @@ struct AccountView: View {
                             }
                             .padding(.trailing, 15)
                         VStack(alignment: .trailing) {
-                            Text("Kaveen Prabodhya")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundStyle(.white)
-                            Text("kaveen@gmail.com")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(.white)
-                                .tint(.white)
+                            if let currentUser = UserManager.shared.getCurrentUser() {
+                                Text("\(currentUser.name)")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.white)
+                                Text("\(currentUser.email)")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundStyle(.white)
+                                    .tint(.white)
+                            }
                         }
                     }
                 }

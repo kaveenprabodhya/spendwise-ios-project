@@ -113,6 +113,7 @@ class BudgetApiService {
     }
     
     static func createBudget(currentUser: User, budget: Budget, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        print("inside create budget")
         guard let url = URL(string: "https://your-api-url/user-id/budgets") else {
             completion(.failure(.invalidURL))
             return
@@ -120,6 +121,7 @@ class BudgetApiService {
     }
     
     static func updateBudget(currentUser: User, budget: Budget, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        print("inside update budget")
         guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id") else {
             completion(.failure(.invalidURL))
             return
@@ -127,6 +129,7 @@ class BudgetApiService {
     }
     
     static func deleteBudget(currentUser: User, budgetId: UUID, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        print("inside delete budget")
         guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id") else {
             completion(.failure(.invalidURL))
             return
@@ -134,6 +137,7 @@ class BudgetApiService {
     }
     
     static func getTransactionForBudget(currentUser: User, budgetId: UUID, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
+        print("inside get trnasaction for budget budget")
         guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id/transactions") else {
             completion(.failure(.invalidURL))
             return

@@ -6,47 +6,73 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
+    @ObservedObject var viewModel: AccountViewModel = AccountViewModel()
     @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         VStack {
             RoundedRectangle(cornerRadius: 60)
                 .fill(Color("ColorPeachyCream"))
                 .frame(width: 140, height: 130)
                 .overlay {
-                    Image(systemName: "person.crop.circle.fill")
-                        .font(.system(size: 112))
+                    if let avatarImg = viewModel.avatarImage {
+                        avatarImg
+                            .resizable()
+                            .scaledToFill()
+                            .background(.red)
+                            .frame(width: 112, height: 112)
+                            .clipShape(Circle())
+                    } else {
+                        Image(systemName: "person.crop.circle.fill")
+                            .font(.system(size: 112))
+                    }
                 }
                 .overlay {
-                    Button(action: {
-                        
-                    }, label: {
-                        ZStack {
-                            Circle()
-                                .fill(.white)
-                                .frame(width: 56, height: 53)
-                            Circle()
-                                .fill(Color("ColorVividBlue"))
-                                .frame(width: 46, height: 43)
-                            Image(systemName: "camera")
-                                .foregroundStyle(.white)
-                                .font(.system(size: 18, weight: .medium))
+                    VStack {
+                        PhotosPicker("", selection: $viewModel.avatarItem, matching: .images)
+                                .buttonStyle(
+                                    CustomProfileImageButtonStyle(
+                                        iconName: "camera",
+                                        color: Color("ColorVividBlue"),
+                                        outerCircleWidth: 56,
+                                        outerCircleHeight: 53,
+                                        innerCircleWidth: 46,
+                                        innerCircleHeight: 43
+                                    )
+                                )
+                            .offset(x: 40, y: 40)
+                    }
+                    .onChange(of: viewModel.avatarItem) { _ in
+                        Task {
+                            if let data = try? await viewModel.avatarItem?.loadTransferable(type: Data.self) {
+                                if let uiImage = UIImage(data: data) {
+                                    viewModel.avatarImage = Image(uiImage: uiImage)
+                                    return
+                                }
+                            }
+                            
+                            print("Failed")
                         }
-                    })
-                    
-                    .offset(x: 40, y: 40)
+                    }
                 }
                 .padding(.vertical, 90)
             VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Text("Name")
-                    Text("Kaveen Prabodhya")
-                }
-                .padding(.bottom, 48)
-                VStack(alignment: .leading) {
-                    Text("Email")
-                    Text("kaveen@gmail.com")
+                if let currentUser = UserManager.shared.getCurrentUser() {
+                    VStack(alignment: .leading) {
+                        Text("Name")
+                        Text("\(currentUser.name)")
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                    .padding(.bottom, 48)
+                    VStack(alignment: .leading) {
+                        Text("Email")
+                        Text("\(currentUser.email)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.white)
+                    }
                 }
             }
             .padding(.horizontal, 55)
@@ -73,6 +99,35 @@ struct ProfileView: View {
                 
             }
         }
+    }
+}
+
+struct CustomProfileImageButtonStyle: ButtonStyle {
+    var iconName: String
+    var color: Color
+    var outerCircleWidth: CGFloat
+    var outerCircleHeight: CGFloat
+    var innerCircleWidth: CGFloat
+    var innerCircleHeight: CGFloat
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+//            .frame(width: width, height: height)
+            .padding()
+            .overlay(
+                ZStack {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: outerCircleWidth, height: outerCircleHeight)
+                    Circle()
+                        .fill(color)
+                        .frame(width: innerCircleWidth, height: innerCircleHeight)
+                    Image(systemName: iconName)
+                        .foregroundStyle(.white)
+                        .font(.system(size: 18, weight: .medium))
+                }
+            )
+            .scaleEffect(configuration.isPressed ? 0.9 : 1)
     }
 }
 

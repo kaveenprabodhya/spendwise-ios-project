@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct DetailBudgetView: View {
-    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
+    @Environment(\.dismiss) private var dismiss
     
     var budget: Budget
     
@@ -151,7 +151,15 @@ struct DetailBudgetView: View {
                 }
             }
             .sheet(isPresented: $viewModel.isSheetRemovePresented, content: {
-                SheetViewOfRemove(isSheetRemovePresented: $viewModel.isSheetRemovePresented, action: {})
+                SheetViewOfRemove(isSheetRemovePresented: $viewModel.isSheetRemovePresented, action: {
+                    if let currentUser = UserManager.shared.getCurrentUser() {
+                        viewModel.delete(currentUser: currentUser, budgetId: budget.id)
+                        viewModel.isSheetRemovePresented = false
+                    }
+                })
+            })
+            .navigationDestination(isPresented: $viewModel.onDeleteSuccess, destination: {
+                ContentView(isVisibleAlert: true, alertType: .delete, index: 3)
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -369,7 +377,7 @@ struct BudgetSpendingCardView: View {
 struct DetailBudgetView_Previews: PreviewProvider {
     static var previews: some View {
         let budget = Budget(
-            id: UUID(), name: "",
+            id: UUID(), name: "name",
             budgetType: BudgetType(
                 type: .monthly,
                 date: .monthOnly(9),

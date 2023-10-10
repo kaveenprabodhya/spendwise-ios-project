@@ -11,12 +11,12 @@ struct CustomAlertView: View {
     var imageName: String
     var iconName: String
     var message: String
-    @Binding var isVisibleAlert: Bool
+    @Binding var isVisibleAlert: Bool?
     
     var body: some View {
         ZStack {
-            Color.black.opacity(0.3).onTapGesture(perform: {
-                isVisibleAlert = true
+            Color.black.opacity(0.37).onTapGesture(perform: {
+                isVisibleAlert = false
             })
             VStack {
                 RoundedRectangle(cornerRadius: 16)
@@ -31,15 +31,13 @@ struct CustomAlertView: View {
                                     .frame(width: 28, height: 28)
                                     .overlay {
                                         Button(action: {
+                                            isVisibleAlert = false
                                         }, label: {
                                             Image(systemName: "xmark")
                                                 .font(.system(size: 14, weight: .medium))
                                                 .foregroundStyle(.white)
                                         })
                                     }
-                                    .onTapGesture(perform: {
-                                        isVisibleAlert = true
-                                    })
                                     .padding(.trailing, 12)
                                     .padding(.vertical, 8)
                             }
@@ -69,5 +67,5 @@ struct CustomAlertView: View {
 }
 
 #Preview {
-    CustomAlertView(isVisibleAlert: .constant(true))
+    CustomAlertView(imageName: "successful-alert", iconName: "checkmark.circle.fill", message: "added", isVisibleAlert: .constant(true))
 }

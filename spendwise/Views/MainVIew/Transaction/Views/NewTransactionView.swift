@@ -100,12 +100,15 @@ struct NewTransactionView: View {
                                 .frame(width: 78, height: 32)
                                 .overlay {
                                     HStack(alignment: .center) {
-                                        Text("Edit")
+                                        Text("Update")
                                             .foregroundStyle(.white)
                                             .fontWeight(.medium)
                                     }
                                 }
                         }
+                        .navigationDestination(isPresented: $transactionViewModel.onUpdateSuccess, destination: {
+                            ContentView(isVisibleAlert: true, alertType: .update, index: 2)
+                        })
                     } else {
                         Button {
                             if let currentUser = UserManager.shared.getCurrentUser() {
@@ -124,6 +127,9 @@ struct NewTransactionView: View {
                                     }
                                 }
                         }
+                        .navigationDestination(isPresented: $transactionViewModel.onSubmitSuccess, destination: {
+                            ContentView(isVisibleAlert: true, alertType: .create, index: 2)
+                        })
                     }
                 }
             }
@@ -145,16 +151,24 @@ struct TransactionHeaderView: View {
                     Text("LKR")
                         .foregroundColor(.white)
                         .font(.system(size: 64, weight: .semibold))
-                    VStack {
-                        BottomLineTextFieldView(label: "", placeholder: "0.00", fontColor: .white, bottomLineColor: .white, placeholderColor: .white, alignCetner: false, textInputVal: $inputAmount)
-                            .padding(.bottom, transactionViewModel.errorInputAmount != nil ? 2 : 16)
+                    VStack(spacing: 0) {
                         if let error = transactionViewModel.errorInputAmount {
                             Text("\(error)")
                                 .foregroundStyle(transactionViewModel.typeSelectedOption.isEmpty ? Color("ColorCherryRed") : .white)
                                 .font(.system(size: 12, weight: .semibold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    }
+                        BottomLineTextFieldView(
+                            label: "",
+                            placeholder: "0.00",
+                            fontColor: .white,
+                            bottomLineColor: .white,
+                            placeholderColor: .white,
+                            textFieldHeight: 54,
+                            alignCetner: false,
+                            textInputVal: $inputAmount
+                        ).frame(height: 60)
+                    }.frame(maxHeight: .infinity, alignment: .bottom)
                 }
         }
         .frame(maxHeight: .infinity, alignment: .center)

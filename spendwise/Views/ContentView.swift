@@ -10,7 +10,9 @@ import SwiftUI
 struct ContentView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
     @AppStorage("started") var isAlreadyStarted: Bool = false
-    @State var selectedTab:Int = 1
+    @State var isVisibleAlert: Bool? = false
+    var alertType: AlertTypeOption? = nil
+    @State var selectedTab: Int = 1
     var index: Int?
     
     var body: some View {
@@ -43,6 +45,23 @@ struct ContentView: View {
                     .onAppear{
                         if let currentIndex = index {
                             selectedTab = currentIndex
+                        }
+                    }
+                }
+                if let visible = isVisibleAlert {
+                    if visible {
+                        ZStack {
+                            if let type = alertType {
+                                if type.rawValue.localizedCaseInsensitiveContains("create") {
+                                    CustomAlertView(imageName: "successful-alert", iconName: "checkmark.circle.fill", message: "Successfully added.", isVisibleAlert: $isVisibleAlert)
+                                }
+                                if type.rawValue.localizedCaseInsensitiveContains("update") {
+                                    CustomAlertView(imageName:  "update-alert", iconName: "checkmark.circle.fill", message: "Successfully updated.", isVisibleAlert: $isVisibleAlert)
+                                }
+                                if type.rawValue.localizedCaseInsensitiveContains("delete") {
+                                    CustomAlertView(imageName: "deleted-alert", iconName: "checkmark.circle.fill", message: "Successfully deleted.", isVisibleAlert: $isVisibleAlert)
+                                }
+                            }
                         }
                     }
                 }

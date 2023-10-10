@@ -138,9 +138,13 @@ struct TransactionDetailView: View {
                 SheetViewOfRemove(isSheetRemovePresented: $isSheetRemovePresented, action: {
                     if let currentUser = UserManager.shared.getCurrentUser() {
                         transactionViewModel.deleteTransaction(currentUser: currentUser, transactionId: budgetTransaction.id)
+                        isSheetRemovePresented = false
                     }
                     isSheetRemovePresented = false
                 })
+            })
+            .navigationDestination(isPresented: $transactionViewModel.onDeleteSuccess, destination: {
+                ContentView(isVisibleAlert: true, alertType: .delete, index: 2)
             })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

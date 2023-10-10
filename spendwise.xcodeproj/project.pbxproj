@@ -41,7 +41,6 @@
 		9453FFE82AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */; };
 		945C97042ACCFBA20063B759 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945C97032ACCFBA20063B759 /* RegisterViewModel.swift */; };
 		9465250D2ACC5AEE0083A2C7 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465250C2ACC5AEE0083A2C7 /* AuthViewModel.swift */; };
-		9465250F2ACC5EC10083A2C7 /* KeyBoardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465250E2ACC5EC10083A2C7 /* KeyBoardHelper.swift */; };
 		94672F252AA900C40076EE60 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94672F242AA900C40076EE60 /* TabBar.swift */; };
 		94672F272AA901C20076EE60 /* BottomNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */; };
 		946AADA02AA347A800474ABE /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AAD9F2AA347A800474ABE /* SigninView.swift */; };
@@ -62,6 +61,8 @@
 		946AADD22AA369E900474ABE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD12AA369E900474ABE /* Constants.swift */; };
 		946AADD42AA3D33000474ABE /* CurvedSideRectangleViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */; };
 		946E4E042ACDB96000E20AD0 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946E4E032ACDB96000E20AD0 /* UserManager.swift */; };
+		94737FA72AD545BB0002E311 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94737FA62AD545BB0002E311 /* AccountViewModel.swift */; };
+		94737FAD2AD5526E0002E311 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94737FAC2AD5526E0002E311 /* CustomAlertView.swift */; };
 		9485A35E2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9485A35D2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift */; };
 		94F610242AC8DDDE0081528D /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F610232AC8DDDE0081528D /* OnboardingView.swift */; };
 		94F89DA72AC0B9B3000D2233 /* BottomLineTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F89DA62AC0B9B3000D2233 /* BottomLineTextFieldView.swift */; };
@@ -125,7 +126,6 @@
 		9453FFE72AA20B9000A193DB /* spendwiseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spendwiseUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		945C97032ACCFBA20063B759 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		9465250C2ACC5AEE0083A2C7 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		9465250E2ACC5EC10083A2C7 /* KeyBoardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBoardHelper.swift; sourceTree = "<group>"; };
 		94672F242AA900C40076EE60 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		94672F262AA901C20076EE60 /* BottomNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavigationBarView.swift; sourceTree = "<group>"; };
 		946AAD9F2AA347A800474ABE /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
@@ -146,6 +146,8 @@
 		946AADD12AA369E900474ABE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		946AADD32AA3D33000474ABE /* CurvedSideRectangleViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurvedSideRectangleViewShape.swift; sourceTree = "<group>"; };
 		946E4E032ACDB96000E20AD0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		94737FA62AD545BB0002E311 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		94737FAC2AD5526E0002E311 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		9485A35D2ABC8C2A0007D5AF /* OverallBudgetCategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverallBudgetCategoryCardView.swift; sourceTree = "<group>"; };
 		94F610232AC8DDDE0081528D /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		94F89DA62AC0B9B3000D2233 /* BottomLineTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomLineTextFieldView.swift; sourceTree = "<group>"; };
@@ -190,7 +192,6 @@
 			children = (
 				946AADD12AA369E900474ABE /* Constants.swift */,
 				941328E42AAE1C9B00C50DFA /* CurrencyFormatter.swift */,
-				9465250E2ACC5EC10083A2C7 /* KeyBoardHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -426,6 +427,7 @@
 		946AADA92AA349F100474ABE /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				94737FA82AD545C40002E311 /* ViewModels */,
 				946525062ACC51F70083A2C7 /* Views */,
 			);
 			path = Account;
@@ -443,6 +445,7 @@
 		946AADAB2AA34B9B00474ABE /* MainVIew */ = {
 			isa = PBXGroup;
 			children = (
+				94737FA92AD552100002E311 /* Alerts */,
 				946AADAE2AA34C8700474ABE /* Notifications */,
 				946AADAA2AA34A5100474ABE /* Transaction */,
 				946AADA92AA349F100474ABE /* Account */,
@@ -492,6 +495,22 @@
 				94192AF82AB11CD200864CBF /* RoundedRectProgressViewStyle.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		94737FA82AD545C40002E311 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				94737FA62AD545BB0002E311 /* AccountViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		94737FA92AD552100002E311 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				94737FAC2AD5526E0002E311 /* CustomAlertView.swift */,
+			);
+			path = Alerts;
 			sourceTree = "<group>";
 		};
 		94F89DA52AC0AD9F000D2233 /* FormComponenets */ = {
@@ -638,7 +657,6 @@
 				9408EDF62AD1724100F5042C /* TransactionApiService.swift in Sources */,
 				9408EDFC2AD172CD00F5042C /* ChartApiService.swift in Sources */,
 				941328E52AAE1C9B00C50DFA /* CurrencyFormatter.swift in Sources */,
-				9465250F2ACC5EC10083A2C7 /* KeyBoardHelper.swift in Sources */,
 				94672F252AA900C40076EE60 /* TabBar.swift in Sources */,
 				946AADC52AA3636600474ABE /* NewBudgetView.swift in Sources */,
 				9449589A2AA280E80000DD47 /* WelcomeView.swift in Sources */,
@@ -656,6 +674,7 @@
 				9453FFCD2AA20B8900A193DB /* ContentView.swift in Sources */,
 				946AADD22AA369E900474ABE /* Constants.swift in Sources */,
 				945C97042ACCFBA20063B759 /* RegisterViewModel.swift in Sources */,
+				94737FA72AD545BB0002E311 /* AccountViewModel.swift in Sources */,
 				946AADC92AA363CF00474ABE /* BudgetView.swift in Sources */,
 				946AADBF2AA3630100474ABE /* AccountView.swift in Sources */,
 				94F89DA92AC0BE44000D2233 /* SelectOptionView.swift in Sources */,
@@ -682,6 +701,7 @@
 				9443A0082AAB81BC00902E88 /* Budget.swift in Sources */,
 				941328E22AADCA8500C50DFA /* UnevenRoundedRectangleViewShape.swift in Sources */,
 				946AADBB2AA3614E00474ABE /* NewTransactionView.swift in Sources */,
+				94737FAD2AD5526E0002E311 /* CustomAlertView.swift in Sources */,
 				944010AE2AA4DD1700648E4A /* WeeklyBarChartView.swift in Sources */,
 				946AADA22AA347D800474ABE /* SignupView.swift in Sources */,
 				946AADD42AA3D33000474ABE /* CurvedSideRectangleViewShape.swift in Sources */,

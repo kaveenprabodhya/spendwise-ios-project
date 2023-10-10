@@ -17,7 +17,7 @@ class TransactionViewModel: ObservableObject {
     @Published var descriptionVal: String = ""
     @Published var walletSecletedOption: String = ""
     @Published var frequencySelectedOption: String = ""
-    @Published var pickdate: String = ""
+    @Published var pickdate: String = "\(Calendar.current.component(.day, from: Date()).description + " - " + Calendar.current.monthSymbols[Calendar.current.component(.month, from: Date()) - 1] + " - " + Calendar.current.component(.year, from: Date()).description)"
     @Published var selectedDate2 = Date()
     @Published var selectedDate = Date()
     @Published var endAfter: String = ""
@@ -28,6 +28,7 @@ class TransactionViewModel: ObservableObject {
     @Published var addAttachment: Bool = false
     @Published var isRepeatTransactionSuccess: Bool = false
     @Published var isAddAttachmentSuccess: Bool = false
+    
     @Published var errorInputAmount: String? = nil
     @Published var errorType: Bool = false
     @Published var errorCategory: Bool = false
@@ -38,9 +39,10 @@ class TransactionViewModel: ObservableObject {
     @Published var errorLocation: Bool = false
     @Published var errorFrequency: String? = nil
     @Published var errorEndAfter: Bool = false
+    
     @Published var onSubmitSuccess: Bool = false
     @Published var onDeleteSuccess: Bool = false
-    @Published var updatedTransaction: Bool = false
+    @Published var onUpdateSuccess: Bool = false
     
     @Published var transactionArray: [BudgetTransaction] = [
         BudgetTransaction(
@@ -466,7 +468,7 @@ class TransactionViewModel: ObservableObject {
                             DispatchQueue.main.async {
                                 switch result {
                                 case .success(_):
-                                    self.updatedTransaction = true
+                                    self.onUpdateSuccess = true
                                 case .failure(let error):
                                     print("Error fetching data: \(error)")
                                 }

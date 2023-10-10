@@ -14,7 +14,7 @@ struct BudgetView: View {
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
     
     var body: some View {
-        
+        NavigationStack {
         ZStack {
             TabView(selection: $selectedTab){
                 PageTabView(selectedTab: $selectedTab, currentPage: $currentPage, date: $date, viewModel: viewModel)
@@ -46,6 +46,7 @@ struct BudgetView: View {
             }
         }
         .navigationBarHidden(true)
+    }
     }
 }
 

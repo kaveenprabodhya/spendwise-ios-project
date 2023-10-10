@@ -26,3 +26,9 @@ struct OngoingWeekExpensesByDay: Identifiable, Codable {
     let amount: Double
     let shortDay: String
 }
+
+enum AlertTypeOption: String {
+    case create = "create"
+    case update = "update"
+    case delete = "delete"
+}

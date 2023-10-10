@@ -42,11 +42,10 @@ class BudgetViewModel: ObservableObject {
     @Published var selectedYear = ""
     
     @Published var textInputAmountVal: String = ""
-    @Published var isSubmissionSuccess: Bool = false
     
     @Published var onSubmitSuccess: Bool = false
     @Published var onDeleteSuccess: Bool = false
-    @Published var updatedTransaction: Bool = false
+    @Published var onUpdateSuccess: Bool = false
     
     @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     @Published var budgetCategoryArray: [BudgetCategory]  =
@@ -777,6 +776,61 @@ class BudgetViewModel: ObservableObject {
         return true
     }
     
+    func valdiateDateForSelectedBudgetType() -> Bool {
+        if selectedBudgetTypeOption.localizedCaseInsensitiveContains("monthly") {
+            if !validateMonthInput(datePicked) {
+                errorDatePicked = true
+                return false
+            } else {
+                errorDatePicked = false
+            }
+        }
+        
+        if selectedBudgetTypeOption.localizedCaseInsensitiveContains("weekly") {
+            if !validateWeeklyInput(datePicked) {
+                errorDatePicked = true
+                return false
+            } else {
+                errorDatePicked = false
+            }
+        }
+        
+        if selectedBudgetTypeOption.localizedCaseInsensitiveContains("yearly") {
+            if !validateYearlyInput(datePicked) {
+                errorDatePicked = true
+                return false
+            } else {
+                errorDatePicked = false
+            }
+        }
+        
+        return true
+    }
+    
+    func validateMonthInput(_ input: String) -> Bool {
+        let monthRegex = "^(January|February|March|April|May|June|July|August|September|October|November|December)$"
+
+        let monthPredicate = NSPredicate(format: "SELF MATCHES %@", monthRegex)
+
+        return monthPredicate.evaluate(with: input)
+    }
+    
+    func validateWeeklyInput(_ input: String) -> Bool {
+        let dateRangeRegex = "^(January|February|March|April|May|June|July|August|September|October|November|December),\\s\\d{1,2}-\\d{1,2}$"
+
+        let dateRangePredicate = NSPredicate(format: "SELF MATCHES %@", dateRangeRegex)
+
+        return dateRangePredicate.evaluate(with: input)
+    }
+    
+    func validateYearlyInput(_ input: String) -> Bool {
+        let yearRegex = "^\\d{4}$"
+
+        let yearPredicate = NSPredicate(format: "SELF MATCHES %@", yearRegex)
+
+        return yearPredicate.evaluate(with: input)
+    }
+    
     func validateInputAmount() -> Bool {
         let amount = isFieldEmpty(textInputAmountVal)
         if amount {
@@ -874,8 +928,8 @@ class BudgetViewModel: ObservableObject {
         return budgetCategoryArray.first { $0.name == name }
     }
     
-    func submit(currentUser: User) {
-        print("called")
+    func create(currentUser: User) {
+        print("called create")
         if let filteredCategory = filterCategory(byName: selectedBudgetCategoryOption) {
             if let budgetType = getBudgetTypeOption(rawValue: selectedBudgetTypeOption) {
                 if let budgetDate = getBudgetDateFromString(datePicked) {
@@ -895,7 +949,7 @@ class BudgetViewModel: ObservableObject {
                             DispatchQueue.main.async {
                                 switch result {
                                 case .success(_):
-                                    self.isSubmissionSuccess = true
+                                    self.onSubmitSuccess = true
                                 case .failure(let error):
                                     print("Error fetching data: \(error)")
                                 }
@@ -917,10 +971,48 @@ class BudgetViewModel: ObservableObject {
     }
     
     func update(currentUser: User) {
-        
+        print("called update")
+        if let filteredCategory = filterCategory(byName: selectedBudgetCategoryOption) {
+            if let budgetType = getBudgetTypeOption(rawValue: selectedBudgetTypeOption) {
+                if let budgetDate = getBudgetDateFromString(datePicked) {
+                    if let inputAmount = Double(textInputAmountVal) {
+                        print("success")
+                        let budget = Budget(
+                            id: UUID(), name: inputNameValue,
+                            budgetType: BudgetType(type: budgetType, date: budgetDate, limit: 4000),
+                            category: filteredCategory,
+                            allocatedAmount: inputAmount,
+                            currentAmountSpent: 0,
+                            numberOfDaysSpent: 0,
+                            footerMessage: FooterMessage(message: "", warning: false),
+                            transactions: []
+                        )
+                        BudgetApiService.updateBudget(currentUser: currentUser, budget: budget) { result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success(_):
+                                    self.onUpdateSuccess = true
+                                case .failure(let error):
+                                    print("Error fetching data: \(error)")
+                                }
+                            }
+                        }
+                    } else {
+                        print("Budget input amount cast error")
+                    }
+                } else {
+                    print("Budget Date conversion error")
+                }
+            } else {
+                print("Budget Type conversion error")
+            }
+        } else {
+            print("Category not found")
+        }
     }
     
     func delete(currentUser: User, budgetId: UUID) {
+        print("called delete")
         BudgetApiService.deleteBudget(currentUser: currentUser, budgetId: budgetId){ result in
             DispatchQueue.main.async {
                 switch result {

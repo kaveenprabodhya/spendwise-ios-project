@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct NewBudgetView: View {
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject var viewModel = BudgetViewModel()
     var budget: Budget?
+    @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
@@ -60,7 +60,7 @@ struct NewBudgetView: View {
                         ) {}
                             .onChange(of: viewModel.selectedBudgetTypeOption) { newSelectedOption in
                                 viewModel.errorSelectedBudgetType = false
-                                if !viewModel.datePicked.isEmpty {
+                                if !viewModel.datePicked.isEmpty && budget == nil {
                                     viewModel.datePicked = ""
                                     viewModel.errorDatePicked = true
                                 }
@@ -185,14 +185,14 @@ struct NewBudgetView: View {
                         Spacer()
                         
                         Button {
-                            if viewModel.onBeforeContinueValidation() {
+                            if viewModel.onBeforeContinueValidation() && viewModel.valdiateDateForSelectedBudgetType() {
                                 viewModel.isOnContinue = true
                             }
                         } label: {
                         }
                         .buttonStyle(CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Continue", cornerRadius: 16))
                         .navigationDestination(isPresented: $viewModel.isOnContinue) {
-                            SecondView(viewModel: viewModel)
+                            SecondView(viewModel: viewModel, budget: budget)
                         }
                         Spacer()
                     }
@@ -392,6 +392,7 @@ extension DateFormatter {
 struct SecondView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: BudgetViewModel
+    var budget: Budget?
     
     var body: some View {
         NavigationStack {
@@ -459,25 +460,48 @@ struct SecondView: View {
                         }
                         .padding()
                         Spacer()
-                        Button("", action: {
-                            if viewModel.validateInputAmount() {
-                                if let currentUser = UserManager.shared.getCurrentUser() {
-                                    viewModel.submit(currentUser: currentUser)
+                        if budget != nil {
+                            Button("", action: {
+                                if viewModel.validateInputAmount() {
+                                    if let currentUser = UserManager.shared.getCurrentUser() {
+                                        viewModel.update(currentUser: currentUser)
+                                        viewModel.onUpdateSuccess = true
+                                    }
+                                    viewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""))
+                                    viewModel.onUpdateSuccess = true
                                 }
-                                viewModel.submit(currentUser: User(id: UUID(), name: "", email: "", password: ""))
-                            }
-                            
-                        })
-                        .buttonStyle(
-                            CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Create", cornerRadius: 16)
-                        )
+                                
+                            })
+                            .buttonStyle(
+                                CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Update", cornerRadius: 16)
+                            )
+                        }
+                        else {
+                            Button("", action: {
+                                if viewModel.validateInputAmount() {
+                                    if let currentUser = UserManager.shared.getCurrentUser() {
+                                        viewModel.create(currentUser: currentUser)
+                                        viewModel.onSubmitSuccess = true
+                                    }
+                                    viewModel.create(currentUser: User(id: UUID(), name: "", email: "", password: ""))
+                                    viewModel.onSubmitSuccess = true
+                                }
+                                
+                            })
+                            .buttonStyle(
+                                CustomButtonStyle(fillColor: "ColorVividBlue", width: 403, height: 68, label: "Create", cornerRadius: 16)
+                            )
+                        }
                         Spacer()
                     }.padding()
                 }
             }
-            .navigationDestination(isPresented: $viewModel.isSubmissionSuccess) {
-                ContentView(index: 3)
+            .navigationDestination(isPresented: $viewModel.onSubmitSuccess) {
+                ContentView(isVisibleAlert: true, alertType: .create, index: 3)
             }
+            .navigationDestination(isPresented: $viewModel.onUpdateSuccess, destination: {
+                ContentView(isVisibleAlert: true, alertType: .update, index: 3)
+            })
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -575,7 +599,7 @@ struct NewBudgetView_Previews: PreviewProvider {
             category:
                 BudgetCategory(
                     id: UUID(),
-                    name: "Rent/Mortage",
+                    name: "Rent/Mortgage",
                     primaryBackgroundColor: "ColorVividBlue", iconName: ""
                 ),
             allocatedAmount: 52362.00,
