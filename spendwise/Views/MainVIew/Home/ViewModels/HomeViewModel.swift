@@ -10,12 +10,12 @@ import Foundation
 class HomeViewModel: ObservableObject {
     @Published var prevoiusMonthlyAverage: PreviousMonthSpentAmountRelatedToCurrentPeriod = PreviousMonthSpentAmountRelatedToCurrentPeriod(id: UUID(), amount: 0.00)
     @Published var ongoingWeekExpensesAndIncome: [OngoingWeekExpensesByDay]  = [
-        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 1200.0, shortDay: "monday"),
-        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 1200.0, shortDay: "monday"),
-        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 1200.0, shortDay: "wednesday"),
-        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 1200.0, shortDay: "monday"),
-        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 1200.0, shortDay: "monday"),
-        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 1200.0, shortDay: "thursday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 0.0, shortDay: "monday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 0.0, shortDay: "monday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount:0.0, shortDay: "wednesday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 0.0, shortDay: "monday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 0.0, shortDay: "monday"),
+        OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 0.0, shortDay: "thursday"),
     ]
     @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     

@@ -399,18 +399,20 @@ class TransactionViewModel: ObservableObject {
                                 )
                             ), userId: currentUser.id
                         )
-                    TransactionApiService.createTransaction(currentUser: currentUser, transaction: transaction) { result in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .success(let createdTransaction):
-                                self.onSubmitSuccess = true
-                                self.transactionArray.append(createdTransaction)
-                            case .failure(let error):
-                                print("Error fetching data: \(error)")
-                                self.onFailure = true
-                            }
-                        }
-                    }
+                        self.onSubmitSuccess = true
+                        self.transactionArray.append(transaction)
+//                    TransactionApiService.createTransaction(currentUser: currentUser, transaction: transaction) { result in
+//                        DispatchQueue.main.async {
+//                            switch result {
+//                            case .success(let createdTransaction):
+//                                self.onSubmitSuccess = true
+//                                self.transactionArray.append(createdTransaction)
+//                            case .failure(let error):
+//                                print("Error fetching data: \(error)")
+//                                self.onFailure = true
+//                            }
+//                        }
+//                    }
                 }
                 } else {
                     print("double cast error")
@@ -425,19 +427,20 @@ class TransactionViewModel: ObservableObject {
     
     func deleteTransaction(currentUser: User, transactionId: UUID) {
         TransactionApiService.deleteTransaction(currentUser: currentUser, transactionId: transactionId){ result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(_):
-                    if let index = self.transactionArray.firstIndex(where: { $0.id == transactionId }) {
-                        // Remove the transaction object from the transactions array
-                        self.transactionArray.remove(at: index)
-                    }
-                    self.onDeleteSuccess = true
-                case .failure(let error):
-                    print("Error fetching data: \(error)")
-                    self.onFailure = true
-                }
+            if let index = self.transactionArray.firstIndex(where: { $0.id == transactionId }) {
+                // Remove the transaction object from the transactions array
+                self.transactionArray.remove(at: index)
             }
+            self.onDeleteSuccess = true
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success(_):
+//                    print("success")
+//                case .failure(let error):
+//                    print("Error fetching data: \(error)")
+//                    self.onFailure = true
+//                }
+//            }
         }
     }
     
@@ -453,7 +456,7 @@ class TransactionViewModel: ObservableObject {
             if let date = datePick {
                 if let amount = Double(self.inputAmount) {
                     if let endAfter = dateFormatter.date(from: self.endAfter) {
-                        let transaction = BudgetTransaction(
+                        let updatedTransaction = BudgetTransaction(
                             id: UUID(),
                             type: (self.typeSelectedOption == "income") ? .income : .expense,
                             transaction: Transaction(
@@ -472,21 +475,26 @@ class TransactionViewModel: ObservableObject {
                                 )
                             ), userId: currentUser.id
                         )
-                        TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let updatedTransaction):
-                                    if let index = self.transactionArray.firstIndex(where: { $0.id == updatedTransaction.id }) {
-                                        // Replace the old transaction with the updated transaction in the transactions array
-                                        self.transactionArray[index] = updatedTransaction
-                                    }
-                                    self.onUpdateSuccess = true
-                                case .failure(let error):
-                                    print("Error fetching data: \(error)")
-                                    self.onFailure = true
-                                }
-                            }
+                        if let index = self.transactionArray.firstIndex(where: { $0.id == updatedTransaction.id }) {
+                            // Replace the old transaction with the updated transaction in the transactions array
+                            self.transactionArray[index] = updatedTransaction
                         }
+                        self.onUpdateSuccess = true
+//                        TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
+//                            DispatchQueue.main.async {
+//                                switch result {
+//                                case .success(let updatedTransaction):
+//                                    if let index = self.transactionArray.firstIndex(where: { $0.id == updatedTransaction.id }) {
+//                                        // Replace the old transaction with the updated transaction in the transactions array
+//                                        self.transactionArray[index] = updatedTransaction
+//                                    }
+//                                    self.onUpdateSuccess = true
+//                                case .failure(let error):
+//                                    print("Error fetching data: \(error)")
+//                                    self.onFailure = true
+//                                }
+//                            }
+//                        }
                     }
                 } else {
                     print("double cast error")

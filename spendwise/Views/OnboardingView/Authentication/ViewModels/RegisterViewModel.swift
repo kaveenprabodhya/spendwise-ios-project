@@ -19,6 +19,7 @@ class RegisterViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
+    @Published var onFailure: Bool = false
     
     func register() {
         let isNameEmpty = isFieldEmpty(name)
@@ -70,11 +71,14 @@ class RegisterViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
+                    print("success")
                     self.user = user
                     self.isAuthenticated = true
                     self.errorMessage = nil
                 case .failure(let error):
+                    print("error")
                     self.user = nil
+                    self.onFailure = true
                     self.isAuthenticated = false
                     self.errorMessage = error.localizedDescription
                 }

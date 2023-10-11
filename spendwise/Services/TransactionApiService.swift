@@ -9,7 +9,7 @@ import Foundation
 
 class TransactionApiService {
     static func fetchAllTransactionDataForUser(currentUser: User, completion: @escaping (Result<[BudgetTransaction], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/transactions/") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/transactions/") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -54,7 +54,7 @@ class TransactionApiService {
     }
     
     static func createTransaction(currentUser: User, transaction: BudgetTransaction, completion: @escaping (Result<BudgetTransaction, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/transactions") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/transactions") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -133,7 +133,7 @@ class TransactionApiService {
     }
     
     static func updateTransaction(currentUser: User, transaction: BudgetTransaction, completion: @escaping (Result<BudgetTransaction, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/transactions/transaction-id") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/transactions/transaction-id") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -210,7 +210,7 @@ class TransactionApiService {
     }
     
     static func deleteTransaction(currentUser: User, transactionId: UUID, completion: @escaping (Result<HTTPURLResponse, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/transactions/transaction-id") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/transactions/transaction-id") else {
             completion(.failure(.invalidURL))
             return
         }

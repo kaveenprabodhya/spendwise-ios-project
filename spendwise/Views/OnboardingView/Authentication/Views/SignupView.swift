@@ -74,6 +74,7 @@ struct SignupView: View {
                                         .foregroundStyle(Color("ColorSteelGray"))
                                         .font(.system(size: 20, weight: .medium))
                                 }
+                                .autocapitalization(.none)
                                 .foregroundStyle(Color("ColorSteelGray"))
                                 
                             }
@@ -99,6 +100,7 @@ struct SignupView: View {
                                             .foregroundStyle(Color("ColorSteelGray"))
                                             .font(.system(size: 20, weight: .medium))
                                     }
+                                    .autocapitalization(.none)
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
                                 } else {
@@ -107,6 +109,7 @@ struct SignupView: View {
                                             .foregroundStyle(Color("ColorSteelGray"))
                                             .font(.system(size: 20, weight: .medium))
                                     }
+                                    .autocapitalization(.none)
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
                                 }
@@ -139,6 +142,7 @@ struct SignupView: View {
                                             .foregroundStyle(Color("ColorSteelGray"))
                                             .font(.system(size: 20, weight: .medium))
                                     }
+                                    .autocapitalization(.none)
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
                                 } else {
@@ -147,6 +151,7 @@ struct SignupView: View {
                                             .foregroundStyle(Color("ColorSteelGray"))
                                             .font(.system(size: 20, weight: .medium))
                                     }
+                                    .autocapitalization(.none)
                                     .foregroundStyle(Color("ColorSteelGray"))
                                     .font(.system(size: 20, weight: .medium))
                                 }
@@ -219,6 +224,15 @@ struct SignupView: View {
                     .buttonStyle(GrowButton())
                     .navigationDestination(isPresented: $isSigninSuccess) {
                         ContentView()
+                    }
+                    .alert(isPresented: $viewModel.onFailure) {
+                        Alert(
+                            title: Text("Authenticator"),
+                            message: Text("Invalid email or password."),
+                            dismissButton: .default(Text("OK")) {
+                                // Handle dismiss action if needed
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal, 15)

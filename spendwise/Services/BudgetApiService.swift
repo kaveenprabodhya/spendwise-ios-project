@@ -115,7 +115,7 @@ class BudgetApiService {
     
     static func createBudget(currentUser: User, budget: Budget, completion: @escaping (Result<Budget, NetworkError>) -> Void) {
         print("inside create budget")
-        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrenderom/\(currentUser.id)/budgets") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -185,10 +185,12 @@ class BudgetApiService {
                     let budgetOverview = try decoder.decode(Budget.self, from: data)
                     completion(.success(budgetOverview))
                 } catch {
+                    print("decode error")
                     // Handle data decoding error
                     completion(.failure(.decodingError))
                 }
             default:
+                print("unkonwn")
                 // Handle other HTTP status codes
                 completion(.failure(.unknownError))
             }

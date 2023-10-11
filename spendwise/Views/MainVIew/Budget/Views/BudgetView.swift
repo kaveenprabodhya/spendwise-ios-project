@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetView: View {
-    @State private var selectedTab: BudgetTypeOption = .weekly
+    @State private var selectedTab: BudgetTypeOption = .monthly
     @State private var currentPage: Int = 0
     @State var date: String = ""
     @ObservedObject var viewModel: BudgetViewModel = BudgetViewModel()

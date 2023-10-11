@@ -678,8 +678,9 @@ class BudgetViewModel: ObservableObject {
         BudgetApiService.fetchAllBudgetDataForUser(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let budgetItems):
-                    self.budgetArray = budgetItems
+                case .success(_):
+                    print("success")
+                    //self.budgetArray = budgetItems
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }
@@ -906,12 +907,10 @@ class BudgetViewModel: ObservableObject {
     }
     
     func create(currentUser: User) {
-        print("called create")
         if let filteredCategory = filterCategory(byName: selectedBudgetCategoryOption) {
             if let budgetType = getBudgetTypeOption(rawValue: selectedBudgetTypeOption) {
                 if let budgetDate = getBudgetDateFromString(datePicked) {
                     if let inputAmount = Double(textInputAmountVal) {
-                        print("success")
                         let budget = Budget(
                             id: UUID(), name: inputNameValue,
                             budgetType: BudgetType(type: budgetType, date: budgetDate, limit: 4000),
@@ -923,18 +922,19 @@ class BudgetViewModel: ObservableObject {
                             userId: currentUser.id,
                             transactions: []
                         )
-                        BudgetApiService.createBudget(currentUser: currentUser, budget: budget) { result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let createdBudget):
-                                    self.onSubmitSuccess = true
-                                    self.budgetArray.append(createdBudget)
-                                case .failure(let error):
-                                    self.onFailure = true
-                                    print("Error fetching data: \(error)")
-                                }
-                            }
-                        }
+                        self.budgetArray.append(budget)
+                        self.onSubmitSuccess = true
+//                        BudgetApiService.createBudget(currentUser: currentUser, budget: budget) { result in
+//                            DispatchQueue.main.async {
+//                                switch result {
+//                                case .success(_):
+//                                    print("sucess")
+//                                case .failure(let error):
+//                                    self.onFailure = true
+//                                    print("Error fetching data: \(error)")
+//                                }
+//                            }
+//                        }
                     } else {
                         print("Budget input amount cast error")
                     }
@@ -957,7 +957,7 @@ class BudgetViewModel: ObservableObject {
                 if let budgetDate = getBudgetDateFromString(datePicked) {
                     if let inputAmount = Double(textInputAmountVal) {
                         print("success")
-                        let budget = Budget(
+                        let updatedBudget = Budget(
                             id: budgetId,
                             name: inputNameValue,
                             budgetType: BudgetType(type: budgetType, date: budgetDate, limit: 4000),
@@ -969,24 +969,25 @@ class BudgetViewModel: ObservableObject {
                             userId: currentUser.id,
                             transactions: []
                         )
-                        BudgetApiService.updateBudget(currentUser: currentUser, budget: budget) { result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let updatedBudget):
-                                    if let index = self.budgetArray.firstIndex(where: { $0.id == updatedBudget.id }) {
-                                        // Replace the old budget with the updated budget in the budgetArray
-                                        self.budgetArray[index] = updatedBudget
-                                    } else {
-                                        // If the budget was not found, append the updated budget to the array
-                                        self.budgetArray.append(updatedBudget)
-                                    }
-                                    self.onUpdateSuccess = true
-                                case .failure(let error):
-                                    self.onFailure = true
-                                    print("Error fetching data: \(error)")
-                                }
-                            }
+                        if let index = self.budgetArray.firstIndex(where: { $0.id == updatedBudget.id }) {
+                            // Replace the old budget with the updated budget in the budgetArray
+                            self.budgetArray[index] = updatedBudget
+                        } else {
+                            // If the budget was not found, append the updated budget to the array
+                            self.budgetArray.append(updatedBudget)
                         }
+//                        BudgetApiService.updateBudget(currentUser: currentUser, budget: updatedBudget) { result in
+//                            self.onUpdateSuccess = true
+//                            DispatchQueue.main.async {
+//                                switch result {
+//                                case .success(_):
+//                                    print("success")
+//                                case .failure(let error):
+//                                    self.onFailure = true
+//                                    print("Error fetching data: \(error)")
+//                                }
+//                            }
+//                        }
                     } else {
                         print("Budget input amount cast error")
                     }
@@ -1004,19 +1005,21 @@ class BudgetViewModel: ObservableObject {
     func delete(currentUser: User, budgetId: UUID) {
         print("called delete")
         BudgetApiService.deleteBudget(currentUser: currentUser, budgetId: budgetId){ result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(_):
-                    if let index = self.budgetArray.firstIndex(where: { $0.id == budgetId }) {
-                        // Remove the budget object from the budgetArray
-                        self.budgetArray.remove(at: index)
-                    }
-                    self.onDeleteSuccess = true
-                case .failure(let error):
-                    self.onFailure = true
-                    print("Error fetching data: \(error)")
-                }
+            if let index = self.budgetArray.firstIndex(where: { $0.id == budgetId }) {
+                // Remove the budget object from the budgetArray
+                self.budgetArray.remove(at: index)
+                self.onDeleteSuccess = true
+            } else {
+                self.onFailure = true
             }
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success(_):
+//                    print("success")
+//                case .failure(let error):
+//                    print("Error fetching data: \(error)")
+//                }
+//            }
         }
     }
     
@@ -1024,8 +1027,9 @@ class BudgetViewModel: ObservableObject {
         ChartApiService.fetchAmountSpentForLast7Days(currentUser: currentUser) { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let amount):
-                    self.amountSpentForLast7Days = amount
+                case .success(_):
+                    print("success")
+                    //self.amountSpentForLast7Days = amount
                 case .failure(let error):
                     print("Error fetching data: \(error)")
                 }

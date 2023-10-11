@@ -9,7 +9,7 @@ import Foundation
 
 class AuthApiService {
     static func authenticate(email: String, password: String, completion: @escaping (Result<User, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/authenticate") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/authenticate") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -50,8 +50,10 @@ class AuthApiService {
                     let decoder = JSONDecoder()
                     let user = try decoder.decode(User.self, from: data!)
                     UserManager.shared.setUser(user)
+                    print("success setting user")
                     completion(.success(user))
                 } catch {
+                    print("decode error")
                     // Error parsing user data
                     completion(.failure(.decodingError))
                 }

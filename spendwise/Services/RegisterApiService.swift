@@ -9,7 +9,7 @@ import Foundation
 
 class RegisterApiService {
     static func register(name: String, email: String, password: String, completion: @escaping (Result<User, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/register") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/register") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -45,7 +45,7 @@ class RegisterApiService {
             }
             
             switch httpResponse.statusCode {
-            case 200:
+            case 201:
                 // Registration successful, parse the user data from the response
                 do {
                     let decoder = JSONDecoder()
@@ -53,6 +53,7 @@ class RegisterApiService {
                     UserManager.shared.setUser(user)
                     completion(.success(user))
                 } catch {
+                    print("decodeError")
                     // Error parsing user data
                     completion(.failure(.decodingError))
                 }

@@ -10,6 +10,7 @@ import Foundation
 class AuthViewModel: ObservableObject {
     @Published var user: User? = nil
     @Published var isAuthenticated: Bool = false
+    @Published var onFailure: Bool = false
     @Published var errorEmail: String? = nil
     @Published var errorPassword: String? = nil
     @Published var errorMessage: String? = nil
@@ -36,11 +37,14 @@ class AuthViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
+                    print("success")
                     self.user = user
                     self.isAuthenticated = true
                     self.errorMessage = nil
                 case .failure(let error):
+                    print("error")
                     self.user = nil
+                    self.onFailure = true
                     self.isAuthenticated = false
                     self.errorMessage = error.localizedDescription
                 }
