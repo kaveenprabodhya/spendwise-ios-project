@@ -159,6 +159,7 @@ struct AccountView: View {
                 HStack {
                     Button {
                         UserManager.shared.setUser(nil)
+                        self.isLogoutClicked = true
                         isOnboardingViewActive = true
                     } label: {
                     }
