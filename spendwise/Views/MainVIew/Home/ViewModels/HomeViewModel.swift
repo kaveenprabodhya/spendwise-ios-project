@@ -17,6 +17,7 @@ class HomeViewModel: ObservableObject {
         OngoingWeekExpensesByDay(id: UUID(), type: .income, amount: 1200.0, shortDay: "monday"),
         OngoingWeekExpensesByDay(id: UUID(), type: .expense, amount: 1200.0, shortDay: "thursday"),
     ]
+    @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
     
     var filteredExpensesByDay: [String: [[TransactionCategory: Double]]] {
         let filteredExpenses = ongoingWeekExpensesAndIncome.filter { expense in
@@ -69,4 +70,18 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchOverallBudgetForUser(currentUser: User) {
+        BudgetApiService.fetchOverallBudgetForUser(currentUser: currentUser) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let overview):
+                    self.overview = overview
+                case .failure(let error):
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
 }

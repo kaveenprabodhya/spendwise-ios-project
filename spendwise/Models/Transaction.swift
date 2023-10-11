@@ -11,6 +11,7 @@ struct BudgetTransaction: Identifiable, Codable {
     let id: UUID
     let type: TransactionCategory
     let transaction: Transaction
+    let userId: UUID
 }
 
 enum TransactionCategory: Codable {

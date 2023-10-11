@@ -44,8 +44,8 @@ struct WeeklyBarChartView: View {
                         let fullday = fullDayName(day)
                         if let dayExpenses = homeViewModel.filteredExpensesByDay[fullday] {
                             let (totalExpenseAmount, totalIncomeAmount) = calculateTotalAmounts(for: dayExpenses)
-                            let incomePercentage = Double(totalIncomeAmount) / Double(viewModel.overview.overallIncomeAmount)
-                            let expensePercentage = Double(totalExpenseAmount) / Double(viewModel.overview.overallExpenseAmount)
+                            let incomePercentage = Double(totalIncomeAmount) / Double(homeViewModel.overview.overallIncomeAmount)
+                            let expensePercentage = Double(totalExpenseAmount) / Double(homeViewModel.overview.overallExpenseAmount)
                             let totalHeight = CGFloat(180)
                             let expenseBarHeight = CGFloat(expensePercentage * 90)
                             let incomeBarHeight = CGFloat(incomePercentage * 90)
@@ -114,7 +114,7 @@ struct WeeklyBarChartView: View {
         }
         .padding()
         .onAppear {
-            printFilteredExpenses(homeViewModel.filteredExpensesByDay)
+//            printFilteredExpenses(homeViewModel.filteredExpensesByDay)
         }
     }
     

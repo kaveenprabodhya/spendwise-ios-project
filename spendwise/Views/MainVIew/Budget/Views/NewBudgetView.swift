@@ -104,9 +104,10 @@ struct NewBudgetView: View {
                                     VStack(spacing: 0) {
                                         Text("Select Your budget cycle")
                                             .font(.system(size: 28, weight: .semibold))
+                                            .frame(maxWidth: .infinity, alignment: .center)
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(5)
+                                    .padding(15)
                                     VStack(spacing: 0) {
                                         HStack {
                                             Text("Enable Frequency")
@@ -464,11 +465,10 @@ struct SecondView: View {
                             Button("", action: {
                                 if viewModel.validateInputAmount() {
                                     if let currentUser = UserManager.shared.getCurrentUser() {
-                                        viewModel.update(currentUser: currentUser)
-                                        viewModel.onUpdateSuccess = true
+                                        if let budget = budget {
+                                            viewModel.update(currentUser: currentUser, budgetId: budget.id)
+                                        }	
                                     }
-                                    viewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""))
-                                    viewModel.onUpdateSuccess = true
                                 }
                                 
                             })
@@ -481,10 +481,7 @@ struct SecondView: View {
                                 if viewModel.validateInputAmount() {
                                     if let currentUser = UserManager.shared.getCurrentUser() {
                                         viewModel.create(currentUser: currentUser)
-                                        viewModel.onSubmitSuccess = true
                                     }
-                                    viewModel.create(currentUser: User(id: UUID(), name: "", email: "", password: ""))
-                                    viewModel.onSubmitSuccess = true
                                 }
                                 
                             })
@@ -602,7 +599,7 @@ struct CustomToggleView: View {
 
 struct NewBudgetView_Previews: PreviewProvider {
     static var previews: some View {
-//        NewBudgetView()
+        NewBudgetView()
         let budget = Budget(
             id: UUID(), name: "name",
             budgetType: BudgetType(type: .yearly, date: .yearOnly(2024), limit: 8000),
@@ -616,8 +613,9 @@ struct NewBudgetView_Previews: PreviewProvider {
             currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
             footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            userId: UUID(),
             transactions: []
         )
-        NewBudgetView(budget: budget)
+//        NewBudgetView(budget: budget)
     }
 }

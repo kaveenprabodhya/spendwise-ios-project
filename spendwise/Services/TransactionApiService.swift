@@ -90,7 +90,8 @@ class TransactionApiService {
                     "frequency": transaction.transaction.recurring.frequency,
                     "date": transaction.transaction.recurring.date
                 ]
-            ]
+            ],
+            "userId": currentUser.id.uuidString
         ]
         
         do {
@@ -167,7 +168,8 @@ class TransactionApiService {
                     "frequency": transaction.transaction.recurring.frequency,
                     "date": transaction.transaction.recurring.date
                 ]
-            ]
+            ],
+            "userId": currentUser.id.uuidString
         ]
         
         do {

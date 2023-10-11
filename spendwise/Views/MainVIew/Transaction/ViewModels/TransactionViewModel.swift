@@ -59,7 +59,7 @@ class TransactionViewModel: ObservableObject {
                 paymentMethod: "Wallet",
                 location: "RV",
                 attachment: Attachment(name: ""),
-                recurring: RecurringTransaction(frequency: "", date: Date()))
+                recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID()
         ),
         BudgetTransaction(
             id: UUID(),
@@ -74,7 +74,7 @@ class TransactionViewModel: ObservableObject {
                 paymentMethod: "Wallet",
                 location: "Supermarket",
                 attachment: Attachment(name: ""),
-                recurring: RecurringTransaction(frequency: "", date: Date()))
+                recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID()
         ),
         BudgetTransaction(
             id: UUID(),
@@ -89,7 +89,7 @@ class TransactionViewModel: ObservableObject {
                 paymentMethod: "Wallet",
                 location: "Supermarket",
                 attachment: Attachment(name: ""),
-                recurring: RecurringTransaction(frequency: "", date: Date()))
+                recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID()
         )
     ]
     
@@ -397,7 +397,7 @@ class TransactionViewModel: ObservableObject {
                                     frequency: self.frequencySelectedOption,
                                     date: endAfter
                                 )
-                            )
+                            ), userId: currentUser.id
                         )
                     TransactionApiService.createTransaction(currentUser: currentUser, transaction: transaction) { result in
                         DispatchQueue.main.async {
@@ -441,7 +441,7 @@ class TransactionViewModel: ObservableObject {
         }
     }
     
-    func update(currentUser: User) {
+    func update(currentUser: User, transactionId: UUID) {
         let validationResult = validateIsEmpty()
         if !validationResult {
             return
@@ -457,7 +457,7 @@ class TransactionViewModel: ObservableObject {
                             id: UUID(),
                             type: (self.typeSelectedOption == "income") ? .income : .expense,
                             transaction: Transaction(
-                                id: UUID(),
+                                id: transactionId,
                                 date: date,
                                 budgetType: budgetType,
                                 budgetCategory: self.categorySelectedOption,
@@ -470,7 +470,7 @@ class TransactionViewModel: ObservableObject {
                                     frequency: self.frequencySelectedOption,
                                     date: endAfter
                                 )
-                            )
+                            ), userId: currentUser.id
                         )
                         TransactionApiService.updateTransaction(currentUser: currentUser, transaction: transaction){ result in
                             DispatchQueue.main.async {

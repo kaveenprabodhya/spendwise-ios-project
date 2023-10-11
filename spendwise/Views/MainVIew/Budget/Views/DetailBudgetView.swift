@@ -396,6 +396,7 @@ struct DetailBudgetView_Previews: PreviewProvider {
                 message: "Cool! let's keep your expense below the budget",
                 warning: false
             ),
+            userId: UUID(),
             transactions: [
                 BudgetTransaction(
                     id: UUID(),
@@ -410,7 +411,7 @@ struct DetailBudgetView_Previews: PreviewProvider {
                         paymentMethod: "Wallet",
                         location: "RV",
                         attachment: Attachment(name: ""),
-                        recurring: RecurringTransaction(frequency: "", date: Date()))
+                        recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID()
                 ),
                 BudgetTransaction(
                     id: UUID(),
@@ -425,7 +426,7 @@ struct DetailBudgetView_Previews: PreviewProvider {
                         paymentMethod: "Wallet",
                         location: "Supermarket",
                         attachment: Attachment(name: ""),
-                        recurring: RecurringTransaction(frequency: "", date: Date()))
+                        recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID()
                 ),
             ]
         )

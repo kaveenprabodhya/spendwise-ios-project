@@ -200,7 +200,7 @@ struct Line: Shape {
 
 struct TransactionDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: ""), recurring: RecurringTransaction(frequency: "", date: Date())))
+        let transaction = BudgetTransaction(id: UUID(), type: .expense, transaction: Transaction(id: UUID(), date: Date(), budgetType: .monthly, budgetCategory: "Shopping", amount: 2000, description: "blah", paymentMethod: "blahhhh", location: "sdsddd", attachment: Attachment(name: ""), recurring: RecurringTransaction(frequency: "", date: Date())), userId: UUID())
         TransactionDetailView(budgetTransaction: transaction)
     }
 }

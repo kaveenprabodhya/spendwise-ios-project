@@ -196,6 +196,7 @@ struct BudgetChartView_Previews: PreviewProvider {
                 currentAmountSpent: 100000.00,
                 numberOfDaysSpent: 8,
                 footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+                userId: UUID(),
                 transactions: []
             ),
             Budget(
@@ -211,6 +212,7 @@ struct BudgetChartView_Previews: PreviewProvider {
                 currentAmountSpent: 10600.00,
                 numberOfDaysSpent: 8,
                 footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+                userId: UUID(),
                 transactions: []
             ),], type: .monthly)
     }

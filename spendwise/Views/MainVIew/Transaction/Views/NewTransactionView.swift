@@ -91,9 +91,10 @@ struct NewTransactionView: View {
                     if budgetTransaction != nil {
                         Button {
                             if let currentUser = UserManager.shared.getCurrentUser() {
-                                transactionViewModel.update(currentUser: currentUser)
+                                if let budgetTransaction = budgetTransaction {
+                                    transactionViewModel.update(currentUser: currentUser, transactionId: budgetTransaction.id)
+                                }
                             }
-                            transactionViewModel.update(currentUser: User(id: UUID(), name: "", email: "", password: ""))
                         } label: {
                             RoundedRectangle(cornerRadius: 16)
                                 .fill(Color("ColorDarkBlue"))
@@ -114,7 +115,6 @@ struct NewTransactionView: View {
                             if let currentUser = UserManager.shared.getCurrentUser() {
                                 transactionViewModel.submit(currentUser: currentUser)
                             }
-                            transactionViewModel.submit(currentUser: User(id: UUID(), name: "", email: "", password: ""))
                         } label: {
                             RoundedRectangle(cornerRadius: 16)
                                 .fill(Color("ColorDarkBlue"))

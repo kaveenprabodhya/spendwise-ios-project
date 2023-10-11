@@ -138,12 +138,12 @@ struct SigninView: View {
                     }
                     Spacer()
                     Button {
-//                        viewModel.authenticate()
+                        viewModel.authenticate()
                         
-//                        if viewModel.isAuthenticated {
+                        if viewModel.isAuthenticated {
                             isOnboardingViewActive = false
                             isSigninSuccess = true
-//                        }
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: 25)
                             .fill(Color("ColorElectricIndigo"))

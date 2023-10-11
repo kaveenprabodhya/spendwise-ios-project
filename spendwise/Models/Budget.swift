@@ -16,6 +16,7 @@ struct Budget: Identifiable, Codable {
     let currentAmountSpent: Double
     let numberOfDaysSpent: Int
     let footerMessage: FooterMessage
+    let userId: UUID
     let transactions: [BudgetTransaction]
 }
 

@@ -48,7 +48,7 @@ class BudgetViewModel: ObservableObject {
     @Published var onUpdateSuccess: Bool = false
     @Published var onFailure: Bool = false
     
-    @Published var overview: BudgetOverViewForUser = BudgetOverViewForUser(id: UUID(), overallAmount: 0.00, overallSpentAmount: 0.00, overallExpenseAmount: 0.00, overallIncomeAmount: 0.00)
+    
     @Published var budgetCategoryArray: [BudgetCategory]  =
     [
         BudgetCategory(
@@ -161,8 +161,8 @@ class BudgetViewModel: ObservableObject {
         )
     ]
 
-    @Published var budgetArray:[Budget] = []
-    /*[
+    @Published var budgetArray:[Budget] = 
+    [
         Budget(
             id: UUID(), name: "",
             budgetType: BudgetType(type: .monthly, date: .monthOnly(11), limit: 2500),
@@ -175,7 +175,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: true),
+            footerMessage: FooterMessage(message: "Cool! let's keep your expense below the budget", warning: true), userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -190,7 +190,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true), userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -205,7 +205,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 100000.00,
             currentAmountSpent: 10600.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -220,7 +220,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 300000.00,
             currentAmountSpent: 100000.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true),
+            footerMessage: FooterMessage(message: "Stay within your yearly budget!", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -235,7 +235,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 546321.00,
             currentAmountSpent: 96532.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -250,7 +250,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 546321.00,
             currentAmountSpent: 96532.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -265,7 +265,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 52362.00,
             currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -280,7 +280,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 52362.00,
             currentAmountSpent: 12283.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),
+            footerMessage: FooterMessage(message: "You’ve exceed the limit!", warning: false),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -295,7 +295,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -310,7 +310,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -325,7 +325,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -340,7 +340,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 785697.00,
             currentAmountSpent: 67480.00,
             numberOfDaysSpent: 8,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -355,7 +355,7 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 458000.00,
             currentAmountSpent: 10000.00,
             numberOfDaysSpent: 12,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
         Budget(
@@ -370,10 +370,10 @@ class BudgetViewModel: ObservableObject {
             allocatedAmount: 458000.00,
             currentAmountSpent: 10000.00,
             numberOfDaysSpent: 12,
-            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),
+            footerMessage: FooterMessage(message: "You are doing really great! ", warning: true),userId: UUID(),
             transactions: []
         ),
-    ]*/
+    ]
     
     var yearlyBudgets: [Budget] {
         budgetArray.filter { $0.budgetType.type == .yearly }
@@ -686,32 +686,7 @@ class BudgetViewModel: ObservableObject {
             }
         }
     }
-    
-    func fetchAmountSpentForLast7Days(currentUser: User) {
-        ChartApiService.fetchAmountSpentForLast7Days(currentUser: currentUser) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let amount):
-                    self.amountSpentForLast7Days = amount
-                case .failure(let error):
-                    print("Error fetching data: \(error)")
-                }
-            }
-        }
-    }
-    
-    func fetchOverallBudgetForUser(currentUser: User) {
-        BudgetApiService.fetchOverallBudgetForUser(currentUser: currentUser) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let overview):
-                    self.overview = overview
-                case .failure(let error):
-                    print("Error fetching data: \(error)")
-                }
-            }
-        }
-    }
+
     
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -945,6 +920,7 @@ class BudgetViewModel: ObservableObject {
                             currentAmountSpent: 0,
                             numberOfDaysSpent: 0,
                             footerMessage: FooterMessage(message: "", warning: false),
+                            userId: currentUser.id,
                             transactions: []
                         )
                         BudgetApiService.createBudget(currentUser: currentUser, budget: budget) { result in
@@ -974,7 +950,7 @@ class BudgetViewModel: ObservableObject {
         
     }
     
-    func update(currentUser: User) {
+    func update(currentUser: User, budgetId: UUID) {
         print("called update")
         if let filteredCategory = filterCategory(byName: selectedBudgetCategoryOption) {
             if let budgetType = getBudgetTypeOption(rawValue: selectedBudgetTypeOption) {
@@ -982,13 +958,15 @@ class BudgetViewModel: ObservableObject {
                     if let inputAmount = Double(textInputAmountVal) {
                         print("success")
                         let budget = Budget(
-                            id: UUID(), name: inputNameValue,
+                            id: budgetId,
+                            name: inputNameValue,
                             budgetType: BudgetType(type: budgetType, date: budgetDate, limit: 4000),
                             category: filteredCategory,
                             allocatedAmount: inputAmount,
                             currentAmountSpent: 0,
                             numberOfDaysSpent: 0,
                             footerMessage: FooterMessage(message: "", warning: false),
+                            userId: currentUser.id,
                             transactions: []
                         )
                         BudgetApiService.updateBudget(currentUser: currentUser, budget: budget) { result in
@@ -1036,6 +1014,19 @@ class BudgetViewModel: ObservableObject {
                     self.onDeleteSuccess = true
                 case .failure(let error):
                     self.onFailure = true
+                    print("Error fetching data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func fetchAmountSpentForLast7Days(currentUser: User) {
+        ChartApiService.fetchAmountSpentForLast7Days(currentUser: currentUser) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let amount):
+                    self.amountSpentForLast7Days = amount
+                case .failure(let error):
                     print("Error fetching data: \(error)")
                 }
             }

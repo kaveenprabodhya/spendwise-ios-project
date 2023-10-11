@@ -23,7 +23,7 @@ enum NetworkError: Error {
 
 class BudgetApiService {
     static func fetchAllBudgetDataForUser(currentUser: User, completion: @escaping (Result<[Budget], NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/budgets") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -54,6 +54,7 @@ class BudgetApiService {
                     // Decode the response data into an array of Budget objects
                     let decoder = JSONDecoder()
                     let budgets = try decoder.decode([Budget].self, from: data)
+                    print(budgets)
                     // Call the completion handler with the decoded data
                     completion(.success(budgets))
                 } catch {
@@ -68,7 +69,7 @@ class BudgetApiService {
     }
     
     static func fetchOverallBudgetForUser(currentUser: User, completion: @escaping (Result<BudgetOverViewForUser, NetworkError>) -> Void) {
-        guard let url = URL(string: "https://your-api-url/user-id/budget/overall") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets/overall") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -114,7 +115,7 @@ class BudgetApiService {
     
     static func createBudget(currentUser: User, budget: Budget, completion: @escaping (Result<Budget, NetworkError>) -> Void) {
         print("inside create budget")
-        guard let url = URL(string: "https://your-api-url/user-id/budgets") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -144,12 +145,14 @@ class BudgetApiService {
                 "message": budget.footerMessage.message,
                 "warning": budget.footerMessage.warning
             ],
+            "userId": budget.userId,
             // Assuming BudgetTransaction conforms to Codable, you can encode transactions here.
             "transactions": budget.transactions
         ]
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+            print(request.httpBody ?? "nil")
         } catch {
             completion(.failure(.invalidData))
             return
@@ -194,7 +197,7 @@ class BudgetApiService {
     
     static func updateBudget(currentUser: User, budget: Budget, completion: @escaping (Result<Budget, NetworkError>) -> Void) {
         print("inside update budget")
-        guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets/budget-id") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -225,6 +228,7 @@ class BudgetApiService {
                 "message": budget.footerMessage.message,
                 "warning": budget.footerMessage.warning
             ],
+            "userId": budget.userId,
             // Assuming BudgetTransaction conforms to Codable, you can encode transactions here.
             "transactions": budget.transactions
         ]
@@ -269,7 +273,7 @@ class BudgetApiService {
     
     static func deleteBudget(currentUser: User, budgetId: UUID, completion: @escaping (Result<HTTPURLResponse, NetworkError>) -> Void) {
         print("inside delete budget")
-        guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets/budget-id") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -300,7 +304,7 @@ class BudgetApiService {
     
     static func getTransactionForBudget(currentUser: User, budgetId: UUID, completion: @escaping (Result<[BudgetTransaction], NetworkError>) -> Void) {
         print("inside get trnasaction for budget budget")
-        guard let url = URL(string: "https://your-api-url/user-id/budgets/budget-id/transactions") else {
+        guard let url = URL(string: "https://app-spendwise-org.onrender.com/\(currentUser.id)/budgets/budget-id/transactions") else {
             completion(.failure(.invalidURL))
             return
         }

@@ -158,6 +158,7 @@ struct AccountView: View {
                     .padding(.bottom, 30)
                 HStack {
                     Button {
+                        UserManager.shared.setUser(nil)
                         isOnboardingViewActive = true
                     } label: {
                     }

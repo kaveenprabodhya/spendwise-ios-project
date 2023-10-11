@@ -55,7 +55,7 @@ struct HomeView: View {
                                     VStack(spacing: 8) {
                                         Text("Your available balance is")
                                             .foregroundColor(.white)
-                                        Text("LKR \(formatCurrency(value: (viewModel.overview.overallAmount)))")
+                                        Text("LKR \(formatCurrency(value: (homeViewModel.overview.overallAmount)))")
                                             .font(.system(size: 28))
                                             .foregroundColor(.white)
                                         if homeViewModel.prevoiusMonthlyAverage.amount > 0 {
@@ -89,7 +89,7 @@ struct HomeView: View {
                                                         Text("Income")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 14))
-                                                        Text("LKR \(formatCurrency(value: viewModel.overview.overallIncomeAmount))")
+                                                        Text("LKR \(formatCurrency(value: homeViewModel.overview.overallIncomeAmount))")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 16))
                                                             .fontWeight(.semibold)
@@ -114,7 +114,7 @@ struct HomeView: View {
                                                         Text("Expense")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 14))
-                                                        Text("LKR \(formatCurrency(value: viewModel.overview.overallExpenseAmount))")
+                                                        Text("LKR \(formatCurrency(value: homeViewModel.overview.overallExpenseAmount))")
                                                             .foregroundColor(Color("ColorSnowWhite"))
                                                             .font(.system(size: 16))
                                                             .fontWeight(.semibold)
@@ -145,20 +145,19 @@ struct HomeView: View {
                                     BudgetChartView(filterBudgetArray: viewModel.budgetArray, type: .yearly)
                                         .tag(2)
                                 }
-                                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                                .frame(width: 400 , height: 350)
+                                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                                .frame(width: 400 , height: 300)
                                 Spacer()
                             }
                     }
                     Spacer()
                 }.padding(.top, 15)
             }
-        }
+        } 
         .onAppear{
             if let currentUser = UserManager.shared.getCurrentUser() {
                 viewModel.fetchBudgetData(currentUser: currentUser)
-                viewModel.fetchAmountSpentForLast7Days(currentUser: currentUser)
-                viewModel.fetchOverallBudgetForUser(currentUser: currentUser)
+                homeViewModel.fetchOverallBudgetForUser(currentUser: currentUser)
                 homeViewModel.fetchPrevoiusMonthlyAverage(currentUser: currentUser)
                 homeViewModel.fetchOngoingWeekExpenseAndIncomeByDay(currentUser: currentUser)
             }

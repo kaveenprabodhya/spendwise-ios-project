@@ -130,6 +130,7 @@ struct OverallBudgetCategoryCardView_Previews: PreviewProvider {
                 message: "Cool! let's keep your expense below the budget",
                 warning: false
             ),
+            userId: UUID(),
             transactions: []
         )
         OverallBudgetCategoryCardView(primaryBackgroundColor: "ColorSecondTealGreen", budgetCategoryName: "Vacation", amountAllocated: 10000000, amountSpent: 3526001, numberOfDaysSpent: 12, footerMessage: FooterMessage(message: "Hello, .... ^_-", warning: false), budget: budget)
